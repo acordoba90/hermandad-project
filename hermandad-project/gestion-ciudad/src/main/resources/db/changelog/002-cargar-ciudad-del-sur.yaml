@@ -1,0 +1,418 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-cargar-ciudad-del-sur
+      author: codex
+      changes:
+        - insert:
+            tableName: ciudades
+            columns:
+              - column:
+                  name: id
+                  value: 70000000-0000-0000-0000-000000000001
+              - column:
+                  name: codigo
+                  value: CIUDAD_DEL_SUR
+              - column:
+                  name: nombre
+                  value: Ciudad del Sur
+              - column:
+                  name: descripcion
+                  value: Ciudad ficticia inspirada en grandes capitales andaluzas, con río, barrios históricos, templos y carrera oficial.
+              - column:
+                  name: activa
+                  valueBoolean: true
+              - column:
+                  name: fecha_creacion
+                  valueDate: 2026-01-01T00:00:00
+              - column:
+                  name: fecha_actualizacion
+                  valueDate: 2026-01-01T00:00:00
+
+        - insert:
+            tableName: mapas_ciudad
+            columns:
+              - column:
+                  name: id
+                  value: 70000000-0000-0000-0000-000000000101
+              - column:
+                  name: ciudad_id
+                  value: 70000000-0000-0000-0000-000000000001
+              - column:
+                  name: codigo
+                  value: MAPA_CIUDAD_DEL_SUR_CENTRO
+              - column:
+                  name: nombre
+                  value: Centro Historico
+              - column:
+                  name: url_recurso
+                  value: /assets/mapas/MAPA_CIUDAD_DEL_SUR_CENTRO.svg
+              - column:
+                  name: ancho
+                  valueNumeric: 1600
+              - column:
+                  name: alto
+                  valueNumeric: 900
+              - column:
+                  name: activo
+                  valueBoolean: true
+              - column:
+                  name: fecha_creacion
+                  valueDate: 2026-01-01T00:00:00
+              - column:
+                  name: fecha_actualizacion
+                  valueDate: 2026-01-01T00:00:00
+
+        - insert:
+            tableName: nodos_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000201 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: codigo, value: IGLESIA_SAN_GABRIEL }
+              - column: { name: nombre, value: Iglesia de San Gabriel }
+              - column: { name: tipo, value: IGLESIA }
+              - column: { name: posicion_x, valueNumeric: 180 }
+              - column: { name: posicion_y, valueNumeric: 260 }
+              - column: { name: distrito, value: Barrio de San Gabriel }
+              - column: { name: anchura_via, value: NORMAL }
+              - column: { name: nivel_publico, valueNumeric: 60 }
+              - column: { name: dificultad, valueNumeric: 2 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: nodos_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000202 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: codigo, value: IGLESIA_AURORA }
+              - column: { name: nombre, value: Iglesia de la Aurora }
+              - column: { name: tipo, value: IGLESIA }
+              - column: { name: posicion_x, valueNumeric: 360 }
+              - column: { name: posicion_y, valueNumeric: 210 }
+              - column: { name: distrito, value: Barrio de la Aurora }
+              - column: { name: anchura_via, value: NORMAL }
+              - column: { name: nivel_publico, valueNumeric: 70 }
+              - column: { name: dificultad, valueNumeric: 2 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: nodos_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000203 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: codigo, value: SOLAR_RIBERA }
+              - column: { name: nombre, value: Solar de la Ribera }
+              - column: { name: tipo, value: SOLAR_CONSTRUIBLE }
+              - column: { name: posicion_x, valueNumeric: 260 }
+              - column: { name: posicion_y, valueNumeric: 620 }
+              - column: { name: distrito, value: Ribera }
+              - column: { name: anchura_via, value: AMPLIA }
+              - column: { name: nivel_publico, valueNumeric: 45 }
+              - column: { name: dificultad, valueNumeric: 1 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: nodos_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000204 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: codigo, value: PLAZA_MAYOR }
+              - column: { name: nombre, value: Plaza Mayor }
+              - column: { name: tipo, value: PLAZA }
+              - column: { name: posicion_x, valueNumeric: 520 }
+              - column: { name: posicion_y, valueNumeric: 360 }
+              - column: { name: distrito, value: Centro Historico }
+              - column: { name: anchura_via, value: AMPLIA }
+              - column: { name: nivel_publico, valueNumeric: 90 }
+              - column: { name: dificultad, valueNumeric: 1 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: nodos_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000205 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: codigo, value: PUENTE_AURORA }
+              - column: { name: nombre, value: Puente de la Aurora }
+              - column: { name: tipo, value: PUENTE }
+              - column: { name: posicion_x, valueNumeric: 760 }
+              - column: { name: posicion_y, valueNumeric: 560 }
+              - column: { name: distrito, value: Ribera }
+              - column: { name: anchura_via, value: AMPLIA }
+              - column: { name: nivel_publico, valueNumeric: 80 }
+              - column: { name: dificultad, valueNumeric: 2 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: nodos_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000206 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: codigo, value: CALLE_ESTRECHA_LUZ }
+              - column: { name: nombre, value: Calle Estrecha de la Luz }
+              - column: { name: tipo, value: CALLE }
+              - column: { name: posicion_x, valueNumeric: 610 }
+              - column: { name: posicion_y, valueNumeric: 260 }
+              - column: { name: distrito, value: Centro Historico }
+              - column: { name: anchura_via, value: ESTRECHA }
+              - column: { name: nivel_publico, valueNumeric: 55 }
+              - column: { name: dificultad, valueNumeric: 4 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: nodos_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000207 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: codigo, value: CATEDRAL_ANTIGUA }
+              - column: { name: nombre, value: Catedral Antigua }
+              - column: { name: tipo, value: CATEDRAL }
+              - column: { name: posicion_x, valueNumeric: 920 }
+              - column: { name: posicion_y, valueNumeric: 330 }
+              - column: { name: distrito, value: Centro Historico }
+              - column: { name: anchura_via, value: AMPLIA }
+              - column: { name: nivel_publico, valueNumeric: 100 }
+              - column: { name: dificultad, valueNumeric: 2 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: nodos_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000208 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: codigo, value: ENTRADA_CARRERA_OFICIAL }
+              - column: { name: nombre, value: Entrada de Carrera Oficial }
+              - column: { name: tipo, value: CARRERA_OFICIAL_ENTRADA }
+              - column: { name: posicion_x, valueNumeric: 1040 }
+              - column: { name: posicion_y, valueNumeric: 430 }
+              - column: { name: distrito, value: Carrera Oficial }
+              - column: { name: anchura_via, value: AMPLIA }
+              - column: { name: nivel_publico, valueNumeric: 100 }
+              - column: { name: dificultad, valueNumeric: 1 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: nodos_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000209 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: codigo, value: SALIDA_CARRERA_OFICIAL }
+              - column: { name: nombre, value: Salida de Carrera Oficial }
+              - column: { name: tipo, value: CARRERA_OFICIAL_SALIDA }
+              - column: { name: posicion_x, valueNumeric: 1220 }
+              - column: { name: posicion_y, valueNumeric: 430 }
+              - column: { name: distrito, value: Carrera Oficial }
+              - column: { name: anchura_via, value: AMPLIA }
+              - column: { name: nivel_publico, valueNumeric: 100 }
+              - column: { name: dificultad, valueNumeric: 1 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: nodos_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000210 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: codigo, value: PLAZA_DEL_RIO }
+              - column: { name: nombre, value: Plaza del Rio }
+              - column: { name: tipo, value: PLAZA }
+              - column: { name: posicion_x, valueNumeric: 1380 }
+              - column: { name: posicion_y, valueNumeric: 570 }
+              - column: { name: distrito, value: Ribera }
+              - column: { name: anchura_via, value: AMPLIA }
+              - column: { name: nivel_publico, valueNumeric: 85 }
+              - column: { name: dificultad, valueNumeric: 1 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+
+        - insert:
+            tableName: conexiones_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000301 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: nodo_origen_id, value: 70000000-0000-0000-0000-000000000201 }
+              - column: { name: nodo_destino_id, value: 70000000-0000-0000-0000-000000000202 }
+              - column: { name: distancia_metros, valueNumeric: 450 }
+              - column: { name: minutos_estimados, valueNumeric: 8 }
+              - column: { name: dificultad, valueNumeric: 2 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: conexiones_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000302 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: nodo_origen_id, value: 70000000-0000-0000-0000-000000000202 }
+              - column: { name: nodo_destino_id, value: 70000000-0000-0000-0000-000000000206 }
+              - column: { name: distancia_metros, valueNumeric: 300 }
+              - column: { name: minutos_estimados, valueNumeric: 6 }
+              - column: { name: dificultad, valueNumeric: 4 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: conexiones_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000303 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: nodo_origen_id, value: 70000000-0000-0000-0000-000000000206 }
+              - column: { name: nodo_destino_id, value: 70000000-0000-0000-0000-000000000204 }
+              - column: { name: distancia_metros, valueNumeric: 220 }
+              - column: { name: minutos_estimados, valueNumeric: 5 }
+              - column: { name: dificultad, valueNumeric: 3 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: conexiones_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000304 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: nodo_origen_id, value: 70000000-0000-0000-0000-000000000204 }
+              - column: { name: nodo_destino_id, value: 70000000-0000-0000-0000-000000000207 }
+              - column: { name: distancia_metros, valueNumeric: 350 }
+              - column: { name: minutos_estimados, valueNumeric: 7 }
+              - column: { name: dificultad, valueNumeric: 2 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: conexiones_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000305 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: nodo_origen_id, value: 70000000-0000-0000-0000-000000000207 }
+              - column: { name: nodo_destino_id, value: 70000000-0000-0000-0000-000000000208 }
+              - column: { name: distancia_metros, valueNumeric: 250 }
+              - column: { name: minutos_estimados, valueNumeric: 5 }
+              - column: { name: dificultad, valueNumeric: 1 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: conexiones_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000306 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: nodo_origen_id, value: 70000000-0000-0000-0000-000000000208 }
+              - column: { name: nodo_destino_id, value: 70000000-0000-0000-0000-000000000209 }
+              - column: { name: distancia_metros, valueNumeric: 900 }
+              - column: { name: minutos_estimados, valueNumeric: 45 }
+              - column: { name: dificultad, valueNumeric: 1 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: conexiones_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000307 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: nodo_origen_id, value: 70000000-0000-0000-0000-000000000209 }
+              - column: { name: nodo_destino_id, value: 70000000-0000-0000-0000-000000000210 }
+              - column: { name: distancia_metros, valueNumeric: 420 }
+              - column: { name: minutos_estimados, valueNumeric: 8 }
+              - column: { name: dificultad, valueNumeric: 1 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: conexiones_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000308 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: nodo_origen_id, value: 70000000-0000-0000-0000-000000000203 }
+              - column: { name: nodo_destino_id, value: 70000000-0000-0000-0000-000000000205 }
+              - column: { name: distancia_metros, valueNumeric: 380 }
+              - column: { name: minutos_estimados, valueNumeric: 7 }
+              - column: { name: dificultad, valueNumeric: 1 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: conexiones_ciudad
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000309 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: nodo_origen_id, value: 70000000-0000-0000-0000-000000000205 }
+              - column: { name: nodo_destino_id, value: 70000000-0000-0000-0000-000000000204 }
+              - column: { name: distancia_metros, valueNumeric: 500 }
+              - column: { name: minutos_estimados, valueNumeric: 10 }
+              - column: { name: dificultad, valueNumeric: 2 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+
+        - insert:
+            tableName: iglesias
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000401 }
+              - column: { name: ciudad_id, value: 70000000-0000-0000-0000-000000000001 }
+              - column: { name: nodo_ciudad_id, value: 70000000-0000-0000-0000-000000000201 }
+              - column: { name: codigo, value: IGLESIA_SAN_GABRIEL }
+              - column: { name: nombre, value: Iglesia de San Gabriel }
+              - column: { name: descripcion, value: Templo de barrio con fuerte arraigo devocional. }
+              - column: { name: capacidad, valueNumeric: 850 }
+              - column: { name: prestigio, valueNumeric: 35 }
+              - column: { name: disponible_como_sede, valueBoolean: true }
+              - column: { name: construible, valueBoolean: false }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: iglesias
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000402 }
+              - column: { name: ciudad_id, value: 70000000-0000-0000-0000-000000000001 }
+              - column: { name: nodo_ciudad_id, value: 70000000-0000-0000-0000-000000000202 }
+              - column: { name: codigo, value: IGLESIA_AURORA }
+              - column: { name: nombre, value: Iglesia de la Aurora }
+              - column: { name: descripcion, value: Iglesia historica junto al antiguo arrabal. }
+              - column: { name: capacidad, valueNumeric: 700 }
+              - column: { name: prestigio, valueNumeric: 40 }
+              - column: { name: disponible_como_sede, valueBoolean: true }
+              - column: { name: construible, valueBoolean: false }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+        - insert:
+            tableName: iglesias
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000403 }
+              - column: { name: ciudad_id, value: 70000000-0000-0000-0000-000000000001 }
+              - column: { name: nodo_ciudad_id, value: 70000000-0000-0000-0000-000000000203 }
+              - column: { name: codigo, value: SOLAR_RIBERA }
+              - column: { name: nombre, value: Solar de la Ribera }
+              - column: { name: descripcion, value: Solar disponible para construir una futura sede. }
+              - column: { name: capacidad, valueNumeric: 500 }
+              - column: { name: prestigio, valueNumeric: 15 }
+              - column: { name: disponible_como_sede, valueBoolean: false }
+              - column: { name: construible, valueBoolean: true }
+              - column: { name: coste_construccion, valueNumeric: 120000.00 }
+              - column: { name: meses_construccion, valueNumeric: 12 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }
+
+        - insert:
+            tableName: carreras_oficiales
+            columns:
+              - column: { name: id, value: 70000000-0000-0000-0000-000000000501 }
+              - column: { name: ciudad_id, value: 70000000-0000-0000-0000-000000000001 }
+              - column: { name: mapa_ciudad_id, value: 70000000-0000-0000-0000-000000000101 }
+              - column: { name: nodo_entrada_id, value: 70000000-0000-0000-0000-000000000208 }
+              - column: { name: nodo_salida_id, value: 70000000-0000-0000-0000-000000000209 }
+              - column: { name: nombre, value: Carrera Oficial de Ciudad del Sur }
+              - column: { name: descripcion, value: Recorrido comun ante palcos y tribuna municipal en el eje historico. }
+              - column: { name: minutos_estimados, valueNumeric: 45 }
+              - column: { name: activa, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-01-01T00:00:00 }
+              - column: { name: fecha_actualizacion, valueDate: 2026-01-01T00:00:00 }

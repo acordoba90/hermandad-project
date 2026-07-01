@@ -1,0 +1,123 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-crear-tablas-personajes
+      author: codex
+      changes:
+        - createTable:
+            tableName: colectivos
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(500)
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - createTable:
+            tableName: personajes
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: id_colectivo
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: apellidos
+                  type: VARCHAR(150)
+              - column:
+                  name: edad
+                  type: INT
+              - column:
+                  name: genero
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: origen
+                  type: VARCHAR(150)
+              - column:
+                  name: descripcion
+                  type: VARCHAR(500)
+              - column:
+                  name: url_avatar
+                  type: VARCHAR(255)
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - addForeignKeyConstraint:
+            baseTableName: personajes
+            baseColumnNames: id_colectivo
+            constraintName: fk_personajes_colectivo_id
+            referencedTableName: colectivos
+            referencedColumnNames: id
+        - createIndex:
+            tableName: colectivos
+            indexName: idx_colectivos_code
+            columns:
+              - column:
+                  name: codigo
+        - createIndex:
+            tableName: personajes
+            indexName: idx_personajes_code
+            columns:
+              - column:
+                  name: codigo
+        - createIndex:
+            tableName: personajes
+            indexName: idx_personajes_colectivo_id
+            columns:
+              - column:
+                  name: id_colectivo

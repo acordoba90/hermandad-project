@@ -1,0 +1,17 @@
+﻿spring:
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/hermandad-project}
+    nombreUsuario: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:Usuario-1}
+    driver-class-nombre: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+server:
+  port: 8084

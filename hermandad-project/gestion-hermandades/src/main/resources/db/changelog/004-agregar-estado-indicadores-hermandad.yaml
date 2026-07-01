@@ -1,0 +1,85 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-agregar-hermandades-estado-indicadores
+      author: codex
+      changes:
+        - addColumn:
+            tableName: hermandades
+            columns:
+              - column:
+                  name: estado
+                  type: VARCHAR(30)
+                  defaultValue: EN_FORMACION
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prestigio
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: popularidad
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: devocion
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: solemnidad
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 013-inicializar-hermandades-estado-indicadores
+      author: codex
+      changes:
+        - sql:
+            splitStatements: false
+            sql: |
+              UPDATE hermandades
+              SET estado = COALESCE(estado, 'EN_FORMACION'),
+                  prestigio = COALESCE(prestigio, 0),
+                  popularidad = COALESCE(popularidad, 0),
+                  devocion = COALESCE(devocion, 0),
+                  solemnidad = COALESCE(solemnidad, 0);
+
+  - changeSet:
+      id: 014-recalcular-indicadores-hermandades-existentes
+      author: codex
+      changes:
+        - sql:
+            splitStatements: false
+            sql: |
+              UPDATE hermandades h
+              LEFT JOIN tipo_hermandad t ON t.uuid = h.uuid_tipo_hermandad
+              LEFT JOIN carisma_hermandad cp ON cp.uuid = h.uuid_carisma_principal
+              LEFT JOIN (
+                SELECT
+                  hcs.uuid_hermandad,
+                  SUM(ch.prestigio_base) AS sec_prestigio,
+                  SUM(ch.popularidad_base) AS sec_popularidad,
+                  SUM(ch.devocion_base) AS sec_devocion,
+                  SUM(ch.solemnidad_base) AS sec_solemnidad
+                FROM hermandad_carisma_secundario hcs
+                JOIN carisma_hermandad ch ON ch.uuid = hcs.uuid_carisma
+                GROUP BY hcs.uuid_hermandad
+              ) sec ON sec.uuid_hermandad = h.id
+              SET
+                h.prestigio = COALESCE(t.prestigio_base, 0)
+                            + COALESCE(cp.prestigio_base, 0)
+                            + COALESCE(sec.sec_prestigio, 0),
+                h.popularidad = COALESCE(cp.popularidad_base, 0)
+                              + COALESCE(sec.sec_popularidad, 0),
+                h.devocion = COALESCE(cp.devocion_base, 0)
+                           + COALESCE(sec.sec_devocion, 0),
+                h.solemnidad = COALESCE(cp.solemnidad_base, 0)
+                             + COALESCE(sec.sec_solemnidad, 0);
+

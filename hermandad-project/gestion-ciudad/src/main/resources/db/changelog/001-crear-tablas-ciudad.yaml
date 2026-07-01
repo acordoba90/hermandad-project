@@ -1,0 +1,473 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-crear-tablas-ciudad
+      author: codex
+      changes:
+        - createTable:
+            tableName: ciudades
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(500)
+              - column:
+                  name: activa
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+
+        - createTable:
+            tableName: mapas_ciudad
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: ciudad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: url_recurso
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ancho
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alto
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+
+        - createTable:
+            tableName: nodos_ciudad
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: mapa_ciudad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tipo
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: posicion_x
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: posicion_y
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: distrito
+                  type: VARCHAR(150)
+              - column:
+                  name: anchura_via
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nivel_publico
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dificultad
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+
+        - createTable:
+            tableName: conexiones_ciudad
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: mapa_ciudad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nodo_origen_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nodo_destino_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: distancia_metros
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: minutos_estimados
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dificultad
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activa
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+
+        - createTable:
+            tableName: iglesias
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: ciudad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nodo_ciudad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(500)
+              - column:
+                  name: capacidad
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prestigio
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: disponible_como_sede
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: construible
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: coste_construccion
+                  type: DECIMAL(12,2)
+              - column:
+                  name: meses_construccion
+                  type: INT
+              - column:
+                  name: activa
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+
+        - createTable:
+            tableName: carreras_oficiales
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: ciudad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mapa_ciudad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nodo_entrada_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nodo_salida_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(500)
+              - column:
+                  name: minutos_estimados
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activa
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+
+        - addForeignKeyConstraint:
+            constraintName: fk_mapas_ciudad_ciudad
+            baseTableName: mapas_ciudad
+            baseColumnNames: ciudad_id
+            referencedTableName: ciudades
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_nodos_ciudad_mapa
+            baseTableName: nodos_ciudad
+            baseColumnNames: mapa_ciudad_id
+            referencedTableName: mapas_ciudad
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_conexiones_ciudad_mapa
+            baseTableName: conexiones_ciudad
+            baseColumnNames: mapa_ciudad_id
+            referencedTableName: mapas_ciudad
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_conexiones_ciudad_origen
+            baseTableName: conexiones_ciudad
+            baseColumnNames: nodo_origen_id
+            referencedTableName: nodos_ciudad
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_conexiones_ciudad_destino
+            baseTableName: conexiones_ciudad
+            baseColumnNames: nodo_destino_id
+            referencedTableName: nodos_ciudad
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_iglesias_ciudad
+            baseTableName: iglesias
+            baseColumnNames: ciudad_id
+            referencedTableName: ciudades
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_iglesias_nodo
+            baseTableName: iglesias
+            baseColumnNames: nodo_ciudad_id
+            referencedTableName: nodos_ciudad
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_carreras_oficiales_ciudad
+            baseTableName: carreras_oficiales
+            baseColumnNames: ciudad_id
+            referencedTableName: ciudades
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_carreras_oficiales_mapa
+            baseTableName: carreras_oficiales
+            baseColumnNames: mapa_ciudad_id
+            referencedTableName: mapas_ciudad
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_carreras_oficiales_entrada
+            baseTableName: carreras_oficiales
+            baseColumnNames: nodo_entrada_id
+            referencedTableName: nodos_ciudad
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_carreras_oficiales_salida
+            baseTableName: carreras_oficiales
+            baseColumnNames: nodo_salida_id
+            referencedTableName: nodos_ciudad
+            referencedColumnNames: id
+
+        - addUniqueConstraint:
+            constraintName: uk_nodos_ciudad_mapa_codigo
+            tableName: nodos_ciudad
+            columnNames: mapa_ciudad_id, codigo
+        - addUniqueConstraint:
+            constraintName: uk_conexiones_ciudad_mapa_origen_destino
+            tableName: conexiones_ciudad
+            columnNames: mapa_ciudad_id, nodo_origen_id, nodo_destino_id
+
+        - createIndex:
+            tableName: ciudades
+            indexName: idx_ciudades_codigo
+            columns:
+              - column:
+                  name: codigo
+        - createIndex:
+            tableName: mapas_ciudad
+            indexName: idx_mapas_ciudad_ciudad_id
+            columns:
+              - column:
+                  name: ciudad_id
+        - createIndex:
+            tableName: nodos_ciudad
+            indexName: idx_nodos_ciudad_mapa_ciudad_id
+            columns:
+              - column:
+                  name: mapa_ciudad_id
+        - createIndex:
+            tableName: conexiones_ciudad
+            indexName: idx_conexiones_ciudad_mapa_ciudad_id
+            columns:
+              - column:
+                  name: mapa_ciudad_id
+        - createIndex:
+            tableName: iglesias
+            indexName: idx_iglesias_ciudad_id
+            columns:
+              - column:
+                  name: ciudad_id
+        - createIndex:
+            tableName: iglesias
+            indexName: idx_iglesias_nodo_ciudad_id
+            columns:
+              - column:
+                  name: nodo_ciudad_id
+        - createIndex:
+            tableName: carreras_oficiales
+            indexName: idx_carreras_oficiales_ciudad_id
+            columns:
+              - column:
+                  name: ciudad_id
+        - createIndex:
+            tableName: carreras_oficiales
+            indexName: idx_carreras_oficiales_mapa_ciudad_id
+            columns:
+              - column:
+                  name: mapa_ciudad_id

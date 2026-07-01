@@ -1,0 +1,328 @@
+databaseChangeLog:
+  - changeSet:
+      id: 015-actualizar-descripciones-tipo-hermandad
+      author: codex
+      changes:
+        - update:
+            tableName: tipo_hermandad
+            columns:
+              - column:
+                  name: descripcion
+                  value: "Evento o grupo vecinal/devocional muy básico, normalmente centrado en una cruz, una pequeña procesión infantil o una actividad popular de barrio. Representa el inicio más humilde antes de constituirse como asociación formal."
+            where: codigo = 'CRUZ_DE_MAYO'
+        - update:
+            tableName: tipo_hermandad
+            columns:
+              - column:
+                  name: descripcion
+                  value: "Grupo de personas con fines culturales, sociales o devocionales, pero sin reconocimiento eclesiástico oficial como corporación religiosa."
+            where: codigo = 'ASOCIACION_CIVIL'
+        - update:
+            tableName: tipo_hermandad
+            columns:
+              - column:
+                  name: descripcion
+                  value: "Grupo vinculado a una parroquia concreta, con cierta actividad religiosa organizada, pero aún sin reconocimiento pleno como agrupación o hermandad."
+            where: codigo = 'ASOCIACION_PARROQUIAL'
+        - update:
+            tableName: tipo_hermandad
+            columns:
+              - column:
+                  name: descripcion
+                  value: "Entidad religiosa reconocida por la autoridad eclesiástica local, normalmente como paso previo a convertirse en hermandad."
+            where: codigo = 'AGRUPACION_PARROQUIAL'
+        - update:
+            tableName: tipo_hermandad
+            columns:
+              - column:
+                  name: descripcion
+                  value: "Hermandad centrada en advocaciones gloriosas de la Virgen o santos, normalmente con procesiones festivas y no penitenciales."
+            where: codigo = 'HERMANDAD_GLORIA'
+        - update:
+            tableName: tipo_hermandad
+            columns:
+              - column:
+                  name: descripcion
+                  value: "Hermandad dedicada principalmente al culto eucarístico y sacramental, con gran importancia litúrgica y parroquial."
+            where: codigo = 'HERMANDAD_SACRAMENTAL'
+        - update:
+            tableName: tipo_hermandad
+            columns:
+              - column:
+                  name: descripcion
+                  value: "Corporación religiosa organizada que realiza actos públicos de culto y puede participar oficialmente en celebraciones procesionales."
+            where: codigo = 'COFRADIA'
+        - update:
+            tableName: tipo_hermandad
+            columns:
+              - column:
+                  name: descripcion
+                  value: "Hermandad orientada específicamente a la estación de penitencia, con carácter solemne, devocional y fuerte tradición procesional."
+            where: codigo = 'HERMANDAD_PENITENCIA'
+        - update:
+            tableName: tipo_hermandad
+            columns:
+              - column:
+                  name: descripcion
+                  value: "Corporación de especial relevancia histórica o eclesiástica, normalmente con privilegios, distinciones honoríficas y gran peso institucional."
+            where: codigo = 'ARCHICOFRADIA'
+
+  - changeSet:
+      id: 016-crear-tipo-hermandad-caracteristicas
+      author: codex
+      changes:
+        - createTable:
+            tableName: tipo_hermandad_caracteristicas
+            columns:
+              - column:
+                  name: uuid
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: tipo_hermandad_uuid
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resumen_jugable
+                  type: VARCHAR(500)
+              - column:
+                  name: coste_mantenimiento_base
+                  type: DECIMAL(12,2)
+                  defaultValueNumeric: 0.00
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ingresos_base
+                  type: DECIMAL(12,2)
+                  defaultValueNumeric: 0.00
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dificultad_base
+                  type: INT
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+              - column:
+                  name: devocion_base
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: influencia_eclesiastica_base
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: influencia_social_base
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: capacidad_crecimiento
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: permite_carrera_oficial
+                  type: TINYINT(1)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: permite_patrimonio_avanzado
+                  type: TINYINT(1)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: permite_banda_musica
+                  type: TINYINT(1)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: permite_cuerpo_nazarenos
+                  type: TINYINT(1)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: permite_cuadrilla_costaleros
+                  type: TINYINT(1)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tipo_previo_requerido
+                  type: VARCHAR(50)
+              - column:
+                  name: requisitos_evolucion
+                  type: VARCHAR(1000)
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - addUniqueConstraint:
+            tableName: tipo_hermandad_caracteristicas
+            columnNames: tipo_hermandad_uuid
+            constraintName: uk_tipo_hermandad_caracteristicas_tipo
+        - addForeignKeyConstraint:
+            constraintName: fk_tipo_hermandad_caracteristicas_tipo
+            baseTableName: tipo_hermandad_caracteristicas
+            baseColumnNames: tipo_hermandad_uuid
+            referencedTableName: tipo_hermandad
+            referencedColumnNames: uuid
+
+  - changeSet:
+      id: 017-cargar-tipo-hermandad-caracteristicas
+      author: codex
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO tipo_hermandad_caracteristicas (
+                  uuid, tipo_hermandad_uuid, resumen_jugable, coste_mantenimiento_base, ingresos_base,
+                  dificultad_base, devocion_base, influencia_eclesiastica_base, influencia_social_base,
+                  capacidad_crecimiento, permite_carrera_oficial, permite_patrimonio_avanzado,
+                  permite_banda_musica, permite_cuerpo_nazarenos, permite_cuadrilla_costaleros,
+                  tipo_previo_requerido, requisitos_evolucion, fecha_creacion, fecha_actualizacion
+              )
+              SELECT 'd0a80101-0000-0000-0000-000000000001', uuid,
+                     'Inicio desde cero, bajo coste, fuerte cercanía vecinal y sin estructura formal.',
+                     100.00, 250.00, 1, 5, 0, 15, 90, 0, 0, 0, 0, 0,
+                     NULL,
+                     'Alcanzar suficiente apoyo vecinal, organizar varios cultos o actos externos y formalizar una asociación.',
+                     NOW(), NOW()
+              FROM tipo_hermandad
+              WHERE codigo = 'CRUZ_DE_MAYO';
+        - sql:
+            sql: |
+              INSERT INTO tipo_hermandad_caracteristicas (
+                  uuid, tipo_hermandad_uuid, resumen_jugable, coste_mantenimiento_base, ingresos_base,
+                  dificultad_base, devocion_base, influencia_eclesiastica_base, influencia_social_base,
+                  capacidad_crecimiento, permite_carrera_oficial, permite_patrimonio_avanzado,
+                  permite_banda_musica, permite_cuerpo_nazarenos, permite_cuadrilla_costaleros,
+                  tipo_previo_requerido, requisitos_evolucion, fecha_creacion, fecha_actualizacion
+              )
+              SELECT 'd0a80101-0000-0000-0000-000000000002', uuid,
+                     'Entidad básica, barata y flexible, pero con poco prestigio y sin reconocimiento eclesiástico.',
+                     300.00, 500.00, 1, 10, 0, 25, 80, 0, 0, 0, 0, 0,
+                     'CRUZ_DE_MAYO', NULL, NOW(), NOW()
+              FROM tipo_hermandad
+              WHERE codigo = 'ASOCIACION_CIVIL';
+        - sql:
+            sql: |
+              INSERT INTO tipo_hermandad_caracteristicas (
+                  uuid, tipo_hermandad_uuid, resumen_jugable, coste_mantenimiento_base, ingresos_base,
+                  dificultad_base, devocion_base, influencia_eclesiastica_base, influencia_social_base,
+                  capacidad_crecimiento, permite_carrera_oficial, permite_patrimonio_avanzado,
+                  permite_banda_musica, permite_cuerpo_nazarenos, permite_cuadrilla_costaleros,
+                  tipo_previo_requerido, requisitos_evolucion, fecha_creacion, fecha_actualizacion
+              )
+              SELECT 'd0a80101-0000-0000-0000-000000000003', uuid,
+                     'Primer vínculo parroquial, permite crecer en devoción y organizar cultos sencillos.',
+                     700.00, 900.00, 2, 20, 20, 30, 70, 0, 0, 0, 0, 0,
+                     'ASOCIACION_CIVIL', NULL, NOW(), NOW()
+              FROM tipo_hermandad
+              WHERE codigo = 'ASOCIACION_PARROQUIAL';
+        - sql:
+            sql: |
+              INSERT INTO tipo_hermandad_caracteristicas (
+                  uuid, tipo_hermandad_uuid, resumen_jugable, coste_mantenimiento_base, ingresos_base,
+                  dificultad_base, devocion_base, influencia_eclesiastica_base, influencia_social_base,
+                  capacidad_crecimiento, permite_carrera_oficial, permite_patrimonio_avanzado,
+                  permite_banda_musica, permite_cuerpo_nazarenos, permite_cuadrilla_costaleros,
+                  tipo_previo_requerido, requisitos_evolucion, fecha_creacion, fecha_actualizacion
+              )
+              SELECT 'd0a80101-0000-0000-0000-000000000004', uuid,
+                     'Estructura religiosa reconocida, con acceso a salidas menores y primeros pasos procesionales.',
+                     1500.00, 1800.00, 3, 35, 40, 45, 60, 0, 1, 1, 1, 1,
+                     'ASOCIACION_PARROQUIAL', NULL, NOW(), NOW()
+              FROM tipo_hermandad
+              WHERE codigo = 'AGRUPACION_PARROQUIAL';
+        - sql:
+            sql: |
+              INSERT INTO tipo_hermandad_caracteristicas (
+                  uuid, tipo_hermandad_uuid, resumen_jugable, coste_mantenimiento_base, ingresos_base,
+                  dificultad_base, devocion_base, influencia_eclesiastica_base, influencia_social_base,
+                  capacidad_crecimiento, permite_carrera_oficial, permite_patrimonio_avanzado,
+                  permite_banda_musica, permite_cuerpo_nazarenos, permite_cuadrilla_costaleros,
+                  tipo_previo_requerido, requisitos_evolucion, fecha_creacion, fecha_actualizacion
+              )
+              SELECT 'd0a80101-0000-0000-0000-000000000005', uuid,
+                     'Rama festiva y devocional, centrada en procesiones de gloria y vida social.',
+                     2500.00, 3000.00, 3, 45, 45, 60, 55, 0, 1, 1, 0, 1,
+                     'AGRUPACION_PARROQUIAL', NULL, NOW(), NOW()
+              FROM tipo_hermandad
+              WHERE codigo = 'HERMANDAD_GLORIA';
+        - sql:
+            sql: |
+              INSERT INTO tipo_hermandad_caracteristicas (
+                  uuid, tipo_hermandad_uuid, resumen_jugable, coste_mantenimiento_base, ingresos_base,
+                  dificultad_base, devocion_base, influencia_eclesiastica_base, influencia_social_base,
+                  capacidad_crecimiento, permite_carrera_oficial, permite_patrimonio_avanzado,
+                  permite_banda_musica, permite_cuerpo_nazarenos, permite_cuadrilla_costaleros,
+                  tipo_previo_requerido, requisitos_evolucion, fecha_creacion, fecha_actualizacion
+              )
+              SELECT 'd0a80101-0000-0000-0000-000000000006', uuid,
+                     'Rama litúrgica con gran peso religioso, cultos importantes e influencia parroquial.',
+                     3000.00, 3200.00, 4, 50, 75, 45, 45, 0, 1, 0, 0, 0,
+                     'AGRUPACION_PARROQUIAL', NULL, NOW(), NOW()
+              FROM tipo_hermandad
+              WHERE codigo = 'HERMANDAD_SACRAMENTAL';
+        - sql:
+            sql: |
+              INSERT INTO tipo_hermandad_caracteristicas (
+                  uuid, tipo_hermandad_uuid, resumen_jugable, coste_mantenimiento_base, ingresos_base,
+                  dificultad_base, devocion_base, influencia_eclesiastica_base, influencia_social_base,
+                  capacidad_crecimiento, permite_carrera_oficial, permite_patrimonio_avanzado,
+                  permite_banda_musica, permite_cuerpo_nazarenos, permite_cuadrilla_costaleros,
+                  tipo_previo_requerido, requisitos_evolucion, fecha_creacion, fecha_actualizacion
+              )
+              SELECT 'd0a80101-0000-0000-0000-000000000007', uuid,
+                     'Corporación consolidada, con acceso a procesiones complejas y mayor presión pública.',
+                     5000.00, 6000.00, 5, 60, 60, 65, 40, 1, 1, 1, 1, 1,
+                     'AGRUPACION_PARROQUIAL', NULL, NOW(), NOW()
+              FROM tipo_hermandad
+              WHERE codigo = 'COFRADIA';
+        - sql:
+            sql: |
+              INSERT INTO tipo_hermandad_caracteristicas (
+                  uuid, tipo_hermandad_uuid, resumen_jugable, coste_mantenimiento_base, ingresos_base,
+                  dificultad_base, devocion_base, influencia_eclesiastica_base, influencia_social_base,
+                  capacidad_crecimiento, permite_carrera_oficial, permite_patrimonio_avanzado,
+                  permite_banda_musica, permite_cuerpo_nazarenos, permite_cuadrilla_costaleros,
+                  tipo_previo_requerido, requisitos_evolucion, fecha_creacion, fecha_actualizacion
+              )
+              SELECT 'd0a80101-0000-0000-0000-000000000008', uuid,
+                     'Máximo enfoque procesional, gran prestigio, altos costes y fuerte exigencia organizativa.',
+                     8000.00, 9000.00, 7, 75, 70, 80, 30, 1, 1, 1, 1, 1,
+                     'COFRADIA', NULL, NOW(), NOW()
+              FROM tipo_hermandad
+              WHERE codigo = 'HERMANDAD_PENITENCIA';
+        - sql:
+            sql: |
+              INSERT INTO tipo_hermandad_caracteristicas (
+                  uuid, tipo_hermandad_uuid, resumen_jugable, coste_mantenimiento_base, ingresos_base,
+                  dificultad_base, devocion_base, influencia_eclesiastica_base, influencia_social_base,
+                  capacidad_crecimiento, permite_carrera_oficial, permite_patrimonio_avanzado,
+                  permite_banda_musica, permite_cuerpo_nazarenos, permite_cuadrilla_costaleros,
+                  tipo_previo_requerido, requisitos_evolucion, fecha_creacion, fecha_actualizacion
+              )
+              SELECT 'd0a80101-0000-0000-0000-000000000009', uuid,
+                     'Rango superior, máximo prestigio institucional, patrimonio elevado y expectativas altísimas.',
+                     12000.00, 14000.00, 9, 90, 90, 90, 20, 1, 1, 1, 1, 1,
+                     'HERMANDAD_PENITENCIA', NULL, NOW(), NOW()
+              FROM tipo_hermandad
+              WHERE codigo = 'ARCHICOFRADIA';

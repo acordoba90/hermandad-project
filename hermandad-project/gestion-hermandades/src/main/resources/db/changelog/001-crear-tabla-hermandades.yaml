@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-crear-tabla-hermandades
+      author: codex
+      changes:
+        - createTable:
+            tableName: hermandades
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: usuario_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ciudad
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: anio_fundacion
+                  type: INT
+              - column:
+                  name: dinero
+                  type: DECIMAL(12,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prestigio_global
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: devocion_global
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: satisfaccion_interna
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - createIndex:
+            indexName: idx_hermandades_usuario_id
+            tableName: hermandades
+            columns:
+              - column:
+                  name: usuario_id
+        - addUniqueConstraint:
+            tableName: hermandades
+            columnNames: usuario_id, nombre
+            constraintName: uq_hermandades_usuario_id_nombre
+

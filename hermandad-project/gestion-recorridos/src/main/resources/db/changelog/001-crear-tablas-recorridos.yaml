@@ -1,0 +1,197 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-crear-tablas-recorridos
+      author: codex
+      changes:
+        - createTable:
+            tableName: recorridos
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: hermandad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ciudad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mapa_ciudad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: iglesia_sede_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nodo_inicio_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nodo_fin_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(500)
+              - column:
+                  name: estado
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: distancia_total_metros
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: minutos_estimados
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dificultad_total
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pasa_carrera_oficial
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+
+        - createTable:
+            tableName: recorrido_nodos
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recorrido_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nodo_ciudad_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: codigo_nodo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre_nodo
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: orden
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: minutos_desde_anterior
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: distancia_desde_anterior_metros
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dificultad_tramo
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+
+        - addForeignKeyConstraint:
+            constraintName: fk_recorrido_nodos_recorrido
+            baseTableName: recorrido_nodos
+            baseColumnNames: recorrido_id
+            referencedTableName: recorridos
+            referencedColumnNames: id
+
+        - addUniqueConstraint:
+            constraintName: uk_recorrido_nodos_recorrido_orden
+            tableName: recorrido_nodos
+            columnNames: recorrido_id, orden
+
+        - createIndex:
+            tableName: recorridos
+            indexName: idx_recorridos_hermandad_id
+            columns:
+              - column:
+                  name: hermandad_id
+        - createIndex:
+            tableName: recorridos
+            indexName: idx_recorridos_ciudad_id
+            columns:
+              - column:
+                  name: ciudad_id
+        - createIndex:
+            tableName: recorridos
+            indexName: idx_recorridos_mapa_ciudad_id
+            columns:
+              - column:
+                  name: mapa_ciudad_id
+        - createIndex:
+            tableName: recorridos
+            indexName: idx_recorridos_estado
+            columns:
+              - column:
+                  name: estado
+        - createIndex:
+            tableName: recorrido_nodos
+            indexName: idx_recorrido_nodos_recorrido_id
+            columns:
+              - column:
+                  name: recorrido_id
+        - createIndex:
+            tableName: recorrido_nodos
+            indexName: idx_recorrido_nodos_nodo_ciudad_id
+            columns:
+              - column:
+                  name: nodo_ciudad_id

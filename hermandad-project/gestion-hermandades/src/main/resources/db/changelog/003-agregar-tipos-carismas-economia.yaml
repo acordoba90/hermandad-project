@@ -1,0 +1,683 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-crear-tipo-hermandad
+      author: codex
+      changes:
+        - createTable:
+            tableName: tipo_hermandad
+            columns:
+              - column:
+                  name: uuid
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(500)
+              - column:
+                  name: nivel
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: puede_estacion_penitencia
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: puede_cultos_externos
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: puede_tener_sede_canonica
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: puede_tener_paso
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prestigio_base
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: orden
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: tipo_hermandad
+            columnNames: codigo
+            constraintName: uq_tipo_hermandad_codigo
+
+  - changeSet:
+      id: 004-cargar-tipo-hermandad
+      author: codex
+      changes:
+        - insert:
+            tableName: tipo_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80101-0000-0000-0000-000000000001" }
+              - column: { name: codigo, value: "ASOCIACION_CIVIL" }
+              - column: { name: nombre, value: "Asociacion Civil" }
+              - column: { name: descripcion, value: "Asociacion civil." }
+              - column: { name: nivel, valueNumeric: 1 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: puede_estacion_penitencia, valueBoolean: false }
+              - column: { name: puede_cultos_externos, valueBoolean: true }
+              - column: { name: puede_tener_sede_canonica, valueBoolean: false }
+              - column: { name: puede_tener_paso, valueBoolean: false }
+              - column: { name: prestigio_base, valueNumeric: 5 }
+              - column: { name: orden, valueNumeric: 1 }
+        - insert:
+            tableName: tipo_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80101-0000-0000-0000-000000000002" }
+              - column: { name: codigo, value: "ASOCIACION_PARROQUIAL" }
+              - column: { name: nombre, value: "Asociacion Parroquial" }
+              - column: { name: descripcion, value: "Asociacion parroquial." }
+              - column: { name: nivel, valueNumeric: 2 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: puede_estacion_penitencia, valueBoolean: false }
+              - column: { name: puede_cultos_externos, valueBoolean: true }
+              - column: { name: puede_tener_sede_canonica, valueBoolean: true }
+              - column: { name: puede_tener_paso, valueBoolean: false }
+              - column: { name: prestigio_base, valueNumeric: 7 }
+              - column: { name: orden, valueNumeric: 2 }
+        - insert:
+            tableName: tipo_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80101-0000-0000-0000-000000000003" }
+              - column: { name: codigo, value: "AGRUPACION_PARROQUIAL" }
+              - column: { name: nombre, value: "Agrupacion Parroquial" }
+              - column: { name: descripcion, value: "Agrupacion parroquial." }
+              - column: { name: nivel, valueNumeric: 3 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: puede_estacion_penitencia, valueBoolean: false }
+              - column: { name: puede_cultos_externos, valueBoolean: true }
+              - column: { name: puede_tener_sede_canonica, valueBoolean: true }
+              - column: { name: puede_tener_paso, valueBoolean: false }
+              - column: { name: prestigio_base, valueNumeric: 9 }
+              - column: { name: orden, valueNumeric: 3 }
+        - insert:
+            tableName: tipo_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80101-0000-0000-0000-000000000004" }
+              - column: { name: codigo, value: "HERMANDAD_GLORIA" }
+              - column: { name: nombre, value: "Hermandad de Gloria" }
+              - column: { name: descripcion, value: "Hermandad de gloria." }
+              - column: { name: nivel, valueNumeric: 4 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: puede_estacion_penitencia, valueBoolean: false }
+              - column: { name: puede_cultos_externos, valueBoolean: true }
+              - column: { name: puede_tener_sede_canonica, valueBoolean: true }
+              - column: { name: puede_tener_paso, valueBoolean: true }
+              - column: { name: prestigio_base, valueNumeric: 12 }
+              - column: { name: orden, valueNumeric: 4 }
+        - insert:
+            tableName: tipo_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80101-0000-0000-0000-000000000005" }
+              - column: { name: codigo, value: "HERMANDAD_SACRAMENTAL" }
+              - column: { name: nombre, value: "Hermandad Sacramental" }
+              - column: { name: descripcion, value: "Hermandad sacramental." }
+              - column: { name: nivel, valueNumeric: 4 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: puede_estacion_penitencia, valueBoolean: false }
+              - column: { name: puede_cultos_externos, valueBoolean: true }
+              - column: { name: puede_tener_sede_canonica, valueBoolean: true }
+              - column: { name: puede_tener_paso, valueBoolean: true }
+              - column: { name: prestigio_base, valueNumeric: 12 }
+              - column: { name: orden, valueNumeric: 5 }
+        - insert:
+            tableName: tipo_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80101-0000-0000-0000-000000000006" }
+              - column: { name: codigo, value: "COFRADIA" }
+              - column: { name: nombre, value: "Cofradia" }
+              - column: { name: descripcion, value: "Cofradia." }
+              - column: { name: nivel, valueNumeric: 5 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: puede_estacion_penitencia, valueBoolean: true }
+              - column: { name: puede_cultos_externos, valueBoolean: true }
+              - column: { name: puede_tener_sede_canonica, valueBoolean: true }
+              - column: { name: puede_tener_paso, valueBoolean: true }
+              - column: { name: prestigio_base, valueNumeric: 15 }
+              - column: { name: orden, valueNumeric: 6 }
+        - insert:
+            tableName: tipo_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80101-0000-0000-0000-000000000007" }
+              - column: { name: codigo, value: "HERMANDAD_PENITENCIA" }
+              - column: { name: nombre, value: "Hermandad de Penitencia" }
+              - column: { name: descripcion, value: "Hermandad de penitencia." }
+              - column: { name: nivel, valueNumeric: 6 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: puede_estacion_penitencia, valueBoolean: true }
+              - column: { name: puede_cultos_externos, valueBoolean: true }
+              - column: { name: puede_tener_sede_canonica, valueBoolean: true }
+              - column: { name: puede_tener_paso, valueBoolean: true }
+              - column: { name: prestigio_base, valueNumeric: 18 }
+              - column: { name: orden, valueNumeric: 7 }
+        - insert:
+            tableName: tipo_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80101-0000-0000-0000-000000000008" }
+              - column: { name: codigo, value: "ARCHICOFRADIA" }
+              - column: { name: nombre, value: "Archicofradia" }
+              - column: { name: descripcion, value: "Archicofradia." }
+              - column: { name: nivel, valueNumeric: 7 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: puede_estacion_penitencia, valueBoolean: true }
+              - column: { name: puede_cultos_externos, valueBoolean: true }
+              - column: { name: puede_tener_sede_canonica, valueBoolean: true }
+              - column: { name: puede_tener_paso, valueBoolean: true }
+              - column: { name: prestigio_base, valueNumeric: 22 }
+              - column: { name: orden, valueNumeric: 8 }
+
+  - changeSet:
+      id: 005-crear-carisma-hermandad
+      author: codex
+      changes:
+        - createTable:
+            tableName: carisma_hermandad
+            columns:
+              - column:
+                  name: uuid
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(800)
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: orden
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prestigio_base
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: popularidad_base
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: solemnidad_base
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: devocion_base
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: impacto_economico_base
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: carisma_hermandad
+            columnNames: codigo
+            constraintName: uq_carisma_hermandad_codigo
+
+  - changeSet:
+      id: 006-cargar-carisma-hermandad
+      author: codex
+      changes:
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-000000000001" }
+              - column: { name: codigo, value: "SILENCIO" }
+              - column: { name: nombre, value: "Silencio" }
+              - column: { name: descripcion, value: "Hermandad de caracter sobrio, recogido y penitencial, centrada en la solemnidad, la oracion y el respeto del cortejo." }
+              - column: { name: prestigio_base, valueNumeric: 15 }
+              - column: { name: popularidad_base, valueNumeric: 5 }
+              - column: { name: solemnidad_base, valueNumeric: 25 }
+              - column: { name: devocion_base, valueNumeric: 20 }
+              - column: { name: impacto_economico_base, valueNumeric: 5 }
+              - column: { name: orden, valueNumeric: 1 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-000000000002" }
+              - column: { name: codigo, value: "BARRIO_POPULAR" }
+              - column: { name: nombre, value: "Barrio Popular" }
+              - column: { name: descripcion, value: "Hermandad muy vinculada a su barrio, con gran arraigo social, participacion vecinal y fuerte respuesta popular." }
+              - column: { name: prestigio_base, valueNumeric: 10 }
+              - column: { name: popularidad_base, valueNumeric: 25 }
+              - column: { name: solemnidad_base, valueNumeric: 10 }
+              - column: { name: devocion_base, valueNumeric: 18 }
+              - column: { name: impacto_economico_base, valueNumeric: 15 }
+              - column: { name: orden, valueNumeric: 2 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-000000000003" }
+              - column: { name: codigo, value: "CLASICA" }
+              - column: { name: nombre, value: "Clasica" }
+              - column: { name: descripcion, value: "Hermandad de estilo tradicional, equilibrada entre solemnidad, patrimonio, devocion y reconocimiento publico." }
+              - column: { name: prestigio_base, valueNumeric: 18 }
+              - column: { name: popularidad_base, valueNumeric: 15 }
+              - column: { name: solemnidad_base, valueNumeric: 18 }
+              - column: { name: devocion_base, valueNumeric: 15 }
+              - column: { name: impacto_economico_base, valueNumeric: 12 }
+              - column: { name: orden, valueNumeric: 3 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-000000000004" }
+              - column: { name: codigo, value: "AFLAMENCADA" }
+              - column: { name: nombre, value: "Aflamencada" }
+              - column: { name: descripcion, value: "Hermandad con estetica alegre, expresiva y popular, influenciada por el caracter musical y devocional mas cercano al pueblo." }
+              - column: { name: prestigio_base, valueNumeric: 8 }
+              - column: { name: popularidad_base, valueNumeric: 24 }
+              - column: { name: solemnidad_base, valueNumeric: 6 }
+              - column: { name: devocion_base, valueNumeric: 16 }
+              - column: { name: impacto_economico_base, valueNumeric: 18 }
+              - column: { name: orden, valueNumeric: 4 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-000000000005" }
+              - column: { name: codigo, value: "SACRAMENTAL" }
+              - column: { name: nombre, value: "Sacramental" }
+              - column: { name: descripcion, value: "Hermandad centrada en el culto al Santisimo Sacramento, con fuerte peso liturgico, parroquial y devocional." }
+              - column: { name: prestigio_base, valueNumeric: 22 }
+              - column: { name: popularidad_base, valueNumeric: 10 }
+              - column: { name: solemnidad_base, valueNumeric: 22 }
+              - column: { name: devocion_base, valueNumeric: 24 }
+              - column: { name: impacto_economico_base, valueNumeric: 10 }
+              - column: { name: orden, valueNumeric: 5 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-000000000006" }
+              - column: { name: codigo, value: "MARIANA" }
+              - column: { name: nombre, value: "Mariana" }
+              - column: { name: descripcion, value: "Hermandad con especial devocion a la Virgen Maria, fuerte componente emocional, devocional y de acompanamiento popular." }
+              - column: { name: prestigio_base, valueNumeric: 15 }
+              - column: { name: popularidad_base, valueNumeric: 20 }
+              - column: { name: solemnidad_base, valueNumeric: 14 }
+              - column: { name: devocion_base, valueNumeric: 25 }
+              - column: { name: impacto_economico_base, valueNumeric: 15 }
+              - column: { name: orden, valueNumeric: 6 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-000000000007" }
+              - column: { name: codigo, value: "CRISTIFERA" }
+              - column: { name: nombre, value: "Cristifera" }
+              - column: { name: descripcion, value: "Hermandad centrada principalmente en una advocacion de Cristo, con especial peso penitencial, catequetico y devocional." }
+              - column: { name: prestigio_base, valueNumeric: 16 }
+              - column: { name: popularidad_base, valueNumeric: 15 }
+              - column: { name: solemnidad_base, valueNumeric: 18 }
+              - column: { name: devocion_base, valueNumeric: 23 }
+              - column: { name: impacto_economico_base, valueNumeric: 12 }
+              - column: { name: orden, valueNumeric: 7 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-000000000008" }
+              - column: { name: codigo, value: "ROCIERO" }
+              - column: { name: nombre, value: "Rociero" }
+              - column: { name: descripcion, value: "Hermandad de caracter romero y festivo, vinculada a la devocion rociera, la convivencia, el camino y las peregrinaciones." }
+              - column: { name: prestigio_base, valueNumeric: 10 }
+              - column: { name: popularidad_base, valueNumeric: 22 }
+              - column: { name: solemnidad_base, valueNumeric: 8 }
+              - column: { name: devocion_base, valueNumeric: 20 }
+              - column: { name: impacto_economico_base, valueNumeric: 18 }
+              - column: { name: orden, valueNumeric: 8 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-000000000009" }
+              - column: { name: codigo, value: "ASISTENCIAL" }
+              - column: { name: nombre, value: "Asistencial" }
+              - column: { name: descripcion, value: "Hermandad centrada en la accion social, la caridad, la ayuda a los necesitados y el compromiso comunitario." }
+              - column: { name: prestigio_base, valueNumeric: 20 }
+              - column: { name: popularidad_base, valueNumeric: 14 }
+              - column: { name: solemnidad_base, valueNumeric: 12 }
+              - column: { name: devocion_base, valueNumeric: 18 }
+              - column: { name: impacto_economico_base, valueNumeric: 8 }
+              - column: { name: orden, valueNumeric: 9 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-00000000000a" }
+              - column: { name: codigo, value: "JUVENIL" }
+              - column: { name: nombre, value: "Juvenil" }
+              - column: { name: descripcion, value: "Hermandad con fuerte presencia joven, dinamismo, actividades formativas y gran capacidad de crecimiento futuro." }
+              - column: { name: prestigio_base, valueNumeric: 8 }
+              - column: { name: popularidad_base, valueNumeric: 18 }
+              - column: { name: solemnidad_base, valueNumeric: 8 }
+              - column: { name: devocion_base, valueNumeric: 14 }
+              - column: { name: impacto_economico_base, valueNumeric: 10 }
+              - column: { name: orden, valueNumeric: 10 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-00000000000b" }
+              - column: { name: codigo, value: "UNIVERSITARIA" }
+              - column: { name: nombre, value: "Universitaria" }
+              - column: { name: descripcion, value: "Hermandad vinculada al ambito academico o universitario, con identidad formativa, cultural y espiritual." }
+              - column: { name: prestigio_base, valueNumeric: 18 }
+              - column: { name: popularidad_base, valueNumeric: 10 }
+              - column: { name: solemnidad_base, valueNumeric: 16 }
+              - column: { name: devocion_base, valueNumeric: 14 }
+              - column: { name: impacto_economico_base, valueNumeric: 8 }
+              - column: { name: orden, valueNumeric: 11 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-00000000000c" }
+              - column: { name: codigo, value: "HUMILDE" }
+              - column: { name: nombre, value: "Humilde" }
+              - column: { name: descripcion, value: "Hermandad sencilla, cercana y austera, con pocos recursos iniciales pero fuerte capacidad de crecimiento devocional." }
+              - column: { name: prestigio_base, valueNumeric: 6 }
+              - column: { name: popularidad_base, valueNumeric: 12 }
+              - column: { name: solemnidad_base, valueNumeric: 10 }
+              - column: { name: devocion_base, valueNumeric: 18 }
+              - column: { name: impacto_economico_base, valueNumeric: 4 }
+              - column: { name: orden, valueNumeric: 12 }
+              - column: { name: activo, valueBoolean: true }
+        - insert:
+            tableName: carisma_hermandad
+            columns:
+              - column: { name: uuid, value: "c0a80102-0000-0000-0000-00000000000d" }
+              - column: { name: codigo, value: "PATRIMONIAL" }
+              - column: { name: nombre, value: "Patrimonial" }
+              - column: { name: descripcion, value: "Hermandad con fuerte orientacion hacia el patrimonio artistico, la conservacion, el valor historico y la calidad estetica." }
+              - column: { name: prestigio_base, valueNumeric: 25 }
+              - column: { name: popularidad_base, valueNumeric: 12 }
+              - column: { name: solemnidad_base, valueNumeric: 20 }
+              - column: { name: devocion_base, valueNumeric: 14 }
+              - column: { name: impacto_economico_base, valueNumeric: 20 }
+              - column: { name: orden, valueNumeric: 13 }
+              - column: { name: activo, valueBoolean: true }
+
+  - changeSet:
+      id: 007-actualizar-hermandades-agregar-fks
+      author: codex
+      changes:
+        - addColumn:
+            tableName: hermandades
+            columns:
+              - column:
+                  name: uuid_tipo_hermandad
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: uuid_carisma_principal
+                  type: CHAR(36)
+        - createIndex:
+            indexName: idx_hermandades_uuid_tipo_hermandad
+            tableName: hermandades
+            columns:
+              - column:
+                  name: uuid_tipo_hermandad
+        - createIndex:
+            indexName: idx_hermandades_uuid_carisma_principal
+            tableName: hermandades
+            columns:
+              - column:
+                  name: uuid_carisma_principal
+        - addForeignKeyConstraint:
+            constraintName: fk_hermandades_tipo_hermandad
+            baseTableName: hermandades
+            baseColumnNames: uuid_tipo_hermandad
+            referencedTableName: tipo_hermandad
+            referencedColumnNames: uuid
+        - addForeignKeyConstraint:
+            constraintName: fk_hermandades_carisma_principal
+            baseTableName: hermandades
+            baseColumnNames: uuid_carisma_principal
+            referencedTableName: carisma_hermandad
+            referencedColumnNames: uuid
+
+  - changeSet:
+      id: 008-crear-hermandad-carisma-secundario
+      author: codex
+      changes:
+        - createTable:
+            tableName: hermandad_carisma_secundario
+            columns:
+              - column:
+                  name: uuid_hermandad
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: uuid_carisma
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: hermandad_carisma_secundario
+            columnNames: uuid_hermandad, uuid_carisma
+            constraintName: pk_hermandad_carisma_secundario
+        - addForeignKeyConstraint:
+            constraintName: fk_hcs_hermandad
+            baseTableName: hermandad_carisma_secundario
+            baseColumnNames: uuid_hermandad
+            referencedTableName: hermandades
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_hcs_carisma
+            baseTableName: hermandad_carisma_secundario
+            baseColumnNames: uuid_carisma
+            referencedTableName: carisma_hermandad
+            referencedColumnNames: uuid
+
+  - changeSet:
+      id: 009-crear-economia-hermandad
+      author: codex
+      changes:
+        - createTable:
+            tableName: economia_hermandad
+            columns:
+              - column:
+                  name: uuid
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: uuid_hermandad
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: saldo_actual
+                  type: DECIMAL(12,2)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ingresos_mensuales
+                  type: DECIMAL(12,2)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: gastos_mensuales
+                  type: DECIMAL(12,2)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: deuda_actual
+                  type: DECIMAL(12,2)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: patrimonio_estimado
+                  type: DECIMAL(12,2)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nivel_estabilidad_economica
+                  type: INT
+                  defaultValueNumeric: 5
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_ultima_actualizacion
+                  type: DATE
+        - addUniqueConstraint:
+            tableName: economia_hermandad
+            columnNames: uuid_hermandad
+            constraintName: uq_economia_hermandad_uuid_hermandad
+        - addForeignKeyConstraint:
+            constraintName: fk_economia_hermandad_hermandad
+            baseTableName: economia_hermandad
+            baseColumnNames: uuid_hermandad
+            referencedTableName: hermandades
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 010-inicializar-economia-hermandades-existentes
+      author: codex
+      changes:
+        - sql:
+            splitStatements: false
+            sql: |
+              INSERT INTO economia_hermandad
+                (uuid, uuid_hermandad, saldo_actual, ingresos_mensuales, gastos_mensuales, deuda_actual, patrimonio_estimado, nivel_estabilidad_economica, fecha_ultima_actualizacion)
+              SELECT
+                UUID(), h.id, 0, 0, 0, 0, 0, 5, CURDATE()
+              FROM hermandades h
+              LEFT JOIN economia_hermandad e ON e.uuid_hermandad = h.id
+              WHERE e.uuid_hermandad IS NULL;
+
+  - changeSet:
+      id: 011-crear-movimiento-economico-hermandad
+      author: codex
+      changes:
+        - createTable:
+            tableName: movimiento_economico_hermandad
+            columns:
+              - column:
+                  name: uuid
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: uuid_hermandad
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tipo_movimiento
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: categoria
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: concepto
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(800)
+              - column:
+                  name: importe
+                  type: DECIMAL(12,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_movimiento
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_registro
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: idx_mov_eco_uuid_hermandad
+            tableName: movimiento_economico_hermandad
+            columns:
+              - column:
+                  name: uuid_hermandad
+        - createIndex:
+            indexName: idx_mov_eco_fecha
+            tableName: movimiento_economico_hermandad
+            columns:
+              - column:
+                  name: fecha_movimiento
+        - createIndex:
+            indexName: idx_mov_eco_tipo
+            tableName: movimiento_economico_hermandad
+            columns:
+              - column:
+                  name: tipo_movimiento
+        - addForeignKeyConstraint:
+            constraintName: fk_mov_eco_hermandad
+            baseTableName: movimiento_economico_hermandad
+            baseColumnNames: uuid_hermandad
+            referencedTableName: hermandades
+            referencedColumnNames: id
+

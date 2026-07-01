@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-agregar-rol-a-usuarios
+      author: codex
+      changes:
+        - addColumn:
+            tableName: usuarios
+            columns:
+              - column:
+                  name: rol
+                  type: VARCHAR(30)
+        - update:
+            tableName: usuarios
+            columns:
+              - column:
+                  name: rol
+                  value: PLAYER
+            where: rol IS NULL
+        - addNotNullConstraint:
+            tableName: usuarios
+            columnName: rol
+            columnDataType: VARCHAR(30)

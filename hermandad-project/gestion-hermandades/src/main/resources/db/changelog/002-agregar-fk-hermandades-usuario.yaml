@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-agregar-fk-hermandades-usuario
+      author: codex
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_hermandades_usuarios
+            baseTableName: hermandades
+            baseColumnNames: usuario_id
+            referencedTableName: usuarios
+            referencedColumnNames: id
+

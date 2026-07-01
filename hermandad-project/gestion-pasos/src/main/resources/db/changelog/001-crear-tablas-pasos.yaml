@@ -1,0 +1,303 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-crear-tablas-pasos
+      author: codex
+      changes:
+        - createTable:
+            tableName: plantillas_paso
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(500)
+              - column:
+                  name: tipo
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: url_recurso
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: precio
+                  type: DECIMAL(12,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prestigio_requerido
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - createTable:
+            tableName: huecos_paso
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: plantilla_paso_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: clave_hueco
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tipo
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: posicion_x
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: posicion_y
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: indice_z
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: escala_por_defecto
+                  type: DECIMAL(6,3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rotacion_por_defecto
+                  type: DECIMAL(6,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - createTable:
+            tableName: figuras_paso
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(500)
+              - column:
+                  name: tipo
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: url_recurso
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: precio
+                  type: DECIMAL(12,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prestigio_requerido
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - createTable:
+            tableName: figuras_colocadas
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: id_hermandad
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: plantilla_paso_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hueco_paso_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: figura_paso_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: desplazamiento_x
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: desplazamiento_y
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: escala
+                  type: DECIMAL(6,3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rotacion
+                  type: DECIMAL(6,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - addForeignKeyConstraint:
+            baseTableName: huecos_paso
+            baseColumnNames: plantilla_paso_id
+            constraintName: fk_huecos_paso_plantilla_paso_id
+            referencedTableName: plantillas_paso
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: figuras_colocadas
+            baseColumnNames: plantilla_paso_id
+            constraintName: fk_figuras_colocadas_plantilla_paso_id
+            referencedTableName: plantillas_paso
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: figuras_colocadas
+            baseColumnNames: hueco_paso_id
+            constraintName: fk_figuras_colocadas_hueco_paso_id
+            referencedTableName: huecos_paso
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: figuras_colocadas
+            baseColumnNames: figura_paso_id
+            constraintName: fk_figuras_colocadas_figura_paso_id
+            referencedTableName: figuras_paso
+            referencedColumnNames: id
+        - addUniqueConstraint:
+            tableName: huecos_paso
+            columnNames: plantilla_paso_id, clave_hueco
+            constraintName: uk_huecos_paso_template_slot_key
+        - addUniqueConstraint:
+            tableName: figuras_colocadas
+            columnNames: id_hermandad, plantilla_paso_id, hueco_paso_id
+            constraintName: uk_figuras_colocadas_hermandad_template_slot
+        - createIndex:
+            tableName: plantillas_paso
+            indexName: idx_plantillas_paso_code
+            columns:
+              - column:
+                  name: codigo
+        - createIndex:
+            tableName: figuras_paso
+            indexName: idx_figuras_paso_code
+            columns:
+              - column:
+                  name: codigo
+        - createIndex:
+            tableName: huecos_paso
+            indexName: idx_huecos_paso_plantilla_paso_id
+            columns:
+              - column:
+                  name: plantilla_paso_id
+        - createIndex:
+            tableName: figuras_colocadas
+            indexName: idx_figuras_colocadas_hermandad_id
+            columns:
+              - column:
+                  name: id_hermandad
+        - createIndex:
+            tableName: figuras_colocadas
+            indexName: idx_figuras_colocadas_plantilla_paso_id
+            columns:
+              - column:
+                  name: plantilla_paso_id

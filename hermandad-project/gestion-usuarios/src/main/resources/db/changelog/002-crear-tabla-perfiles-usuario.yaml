@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-crear-tabla-perfiles-usuario
+      author: codex
+      changes:
+        - createTable:
+            tableName: perfiles_usuario
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: usuario_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: alias
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: url_avatar
+                  type: VARCHAR(255)
+              - column:
+                  name: nivel
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: experiencia
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - addForeignKeyConstraint:
+            baseTableName: perfiles_usuario
+            baseColumnNames: usuario_id
+            constraintName: fk_perfiles_usuario_usuario_id
+            referencedTableName: usuarios
+            referencedColumnNames: id
+        - createIndex:
+            tableName: perfiles_usuario
+            indexName: idx_perfiles_usuario_usuario_id
+            columns:
+              - column:
+                  name: usuario_id
+        - createIndex:
+            tableName: perfiles_usuario
+            indexName: idx_perfiles_usuario_alias
+            columns:
+              - column:
+                  name: alias

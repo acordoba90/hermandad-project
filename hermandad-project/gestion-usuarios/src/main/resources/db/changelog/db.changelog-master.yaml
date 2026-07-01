@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/001-crear-tabla-usuarios.yaml
+  - include:
+      file: db/changelog/002-crear-tabla-perfiles-usuario.yaml
+  - include:
+      file: db/changelog/003-agregar-rol-a-usuarios.yaml

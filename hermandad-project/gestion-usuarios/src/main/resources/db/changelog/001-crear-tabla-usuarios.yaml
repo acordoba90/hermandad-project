@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-crear-tabla-usuarios
+      author: codex
+      changes:
+        - createTable:
+            tableName: usuarios
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: nombre_usuario
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: correo_electronico
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: hash_contrasena
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+              - column:
+                  name: fecha_inicio_vigencia
+                  type: DATETIME
+              - column:
+                  name: fecha_fin_vigencia
+                  type: DATETIME

@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/001-crear-tablas-ciudad.yaml
+  - include:
+      file: db/changelog/002-cargar-ciudad-del-sur.yaml

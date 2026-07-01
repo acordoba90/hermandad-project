@@ -1,0 +1,77 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-crear-tabla-elementos-inventario
+      author: codex
+      changes:
+        - createTable:
+            tableName: elementos_inventario
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: id_hermandad
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tipo_elemento
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: id_elemento
+                  type: CHAR(36)
+              - column:
+                  name: codigo_elemento
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cantidad
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_adquisicion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - addUniqueConstraint:
+            tableName: elementos_inventario
+            columnNames: id_hermandad, tipo_elemento, codigo_elemento
+            constraintName: uk_elementos_inventario_hermandad_type_code
+        - createIndex:
+            tableName: elementos_inventario
+            indexName: idx_elementos_inventario_hermandad_id
+            columns:
+              - column:
+                  name: id_hermandad
+        - createIndex:
+            tableName: elementos_inventario
+            indexName: idx_elementos_inventario_tipo_elemento
+            columns:
+              - column:
+                  name: tipo_elemento
+        - createIndex:
+            tableName: elementos_inventario
+            indexName: idx_elementos_inventario_codigo_elemento
+            columns:
+              - column:
+                  name: codigo_elemento

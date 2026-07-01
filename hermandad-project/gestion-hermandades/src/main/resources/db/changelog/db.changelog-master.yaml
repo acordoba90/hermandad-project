@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/001-crear-tabla-hermandades.yaml
+  - include:
+      file: db/changelog/002-agregar-fk-hermandades-usuario.yaml
+  - include:
+      file: db/changelog/003-agregar-tipos-carismas-economia.yaml
+  - include:
+      file: db/changelog/004-agregar-estado-indicadores-hermandad.yaml
+  - include:
+      file: db/changelog/005-agregar-caracteristicas-tipo-hermandad.yaml

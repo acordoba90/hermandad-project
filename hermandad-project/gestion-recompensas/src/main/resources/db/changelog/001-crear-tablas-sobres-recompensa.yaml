@@ -1,0 +1,246 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-crear-tablas-sobres-recompensa
+      author: codex
+      changes:
+        - createTable:
+            tableName: sobres_recompensa
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(500)
+              - column:
+                  name: precio
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cantidad_recompensas
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rareza_minima
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - createTable:
+            tableName: elementos_pool_sobre_recompensa
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: sobre_recompensa_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tipo_elemento
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: id_elemento
+                  type: CHAR(36)
+              - column:
+                  name: codigo_elemento
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre_elemento
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rareza
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: peso
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cantidad
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - createTable:
+            tableName: aperturas_sobre_recompensa
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: id_hermandad
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sobre_recompensa_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_apertura
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - createTable:
+            tableName: recompensas_sobre
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: apertura_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tipo_elemento
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: id_elemento
+                  type: CHAR(36)
+              - column:
+                  name: codigo_elemento
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre_elemento
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rareza
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cantidad
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - addForeignKeyConstraint:
+            baseTableName: elementos_pool_sobre_recompensa
+            baseColumnNames: sobre_recompensa_id
+            constraintName: fk_elementos_pool_sobre_recompensa_sobre_recompensa_id
+            referencedTableName: sobres_recompensa
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: aperturas_sobre_recompensa
+            baseColumnNames: sobre_recompensa_id
+            constraintName: fk_aperturas_sobre_recompensa_sobre_recompensa_id
+            referencedTableName: sobres_recompensa
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: recompensas_sobre
+            baseColumnNames: apertura_id
+            constraintName: fk_recompensas_sobre_apertura_id
+            referencedTableName: aperturas_sobre_recompensa
+            referencedColumnNames: id
+        - createIndex:
+            tableName: sobres_recompensa
+            indexName: idx_sobres_recompensa_code
+            columns:
+              - column:
+                  name: codigo
+        - createIndex:
+            tableName: elementos_pool_sobre_recompensa
+            indexName: idx_elementos_pool_sobre_recompensa_sobre_recompensa_id
+            columns:
+              - column:
+                  name: sobre_recompensa_id
+        - createIndex:
+            tableName: elementos_pool_sobre_recompensa
+            indexName: idx_elementos_pool_sobre_recompensa_codigo_elemento
+            columns:
+              - column:
+                  name: codigo_elemento
+        - createIndex:
+            tableName: aperturas_sobre_recompensa
+            indexName: idx_aperturas_sobre_recompensa_hermandad_id
+            columns:
+              - column:
+                  name: id_hermandad
+        - createIndex:
+            tableName: recompensas_sobre
+            indexName: idx_recompensas_sobre_apertura_id
+            columns:
+              - column:
+                  name: apertura_id
