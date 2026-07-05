@@ -29,5 +29,4 @@ export const validarCredenciales = async (credentials) => {
       severity: 'error',
     };
   }
-  // Prueba
 };
