@@ -54,6 +54,9 @@ public class UsuarioEntity {
     @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY)
     private PerfilUsuarioEntity perfil;
 
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private UsuarioEstadoEntity estado;
+
     public UUID getId() {
         return id;
     }
@@ -125,6 +128,10 @@ public class UsuarioEntity {
     public void setPerfil(PerfilUsuarioEntity perfil) {
         this.perfil = perfil;
     }
+
+    public UsuarioEstadoEntity getEstado() {return estado;}
+
+    public void setEstado(UsuarioEstadoEntity estado) {this.estado = estado;}
 
     @PrePersist
     void prePersist() {

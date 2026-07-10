@@ -1,0 +1,98 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-crear-tabla-usuarios-estado
+      author: acordoba
+
+      changes:
+        - createTable:
+            tableName: usuarios_estado
+            columns:
+              - column:
+                  name: id
+                  type: char(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: pk_usuarios_estado
+
+              - column:
+                  name: usuario_id
+                  type: char(36)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uk_usuarios_estado_usuario
+
+              - column:
+                  name: account_status
+                  type: varchar(20)
+                  defaultValue: PENDING
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: email_verified
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: activation_token
+                  type: varchar(100)
+
+              - column:
+                  name: activation_token_expiration
+                  type: timestamp
+
+              - column:
+                  name: last_login
+                  type: timestamp
+
+              - column:
+                  name: last_activity
+                  type: timestamp
+
+              - column:
+                  name: failed_login_attempts
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: locked_until
+                  type: timestamp
+
+              - column:
+                  name: password_changed_at
+                  type: timestamp
+
+              - column:
+                  name: fecha_creacion
+                  type: timestamp
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: fecha_actualizacion
+                  type: timestamp
+
+        - addForeignKeyConstraint:
+            baseTableName: usuarios_estado
+            baseColumnNames: usuario_id
+            referencedTableName: usuarios
+            referencedColumnNames: id
+            constraintName: fk_usuarios_estado_usuario
+
+        - addCheckConstraint:
+            tableName: usuarios_estado
+            constraintName: chk_usuarios_estado_account_status
+            checkConstraint: "account_status IN ('PENDING', 'ACTIVE', 'INACTIVE', 'LOCKED', 'DELETED')"
+
+        - createIndex:
+            tableName: usuarios_estado
+            indexName: idx_usuarios_estado_activation_token
+            columns:
+              - column:
+                  name: activation_token

@@ -13,6 +13,7 @@ import com.hermandadproject.gestionusuarios.repository.UserRepository;
 import com.hermandadproject.gestionusuarios.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserResponse create(UserCreateRequest request) {
         if (userRepository.existsByNombreUsuario(request.nombreUsuario())) {
             throw new UserAlreadyExistsException("El nombre de usuario ya existe");
