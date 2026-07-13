@@ -1,0 +1,33 @@
+name: hermandad-project
+
+services:
+  config-server:
+    build:
+      context: ./hermandad-project-config-server
+      dockerfile: Dockerfile
+
+    image: hermandad/config-server:dev
+    container_name: hermandad-project-config-server
+
+    restart: unless-stopped
+
+    environment:
+      SPRING_PROFILES_ACTIVE: native
+      CONFIG_REPOSITORY_LOCATION: file:/config-repository
+
+    ports:
+      - "8888:8888"
+
+    volumes:
+      - ./hermandad-project-config:/config-repository:ro
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl --fail --silent http://localhost:8888/actuator/health || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
