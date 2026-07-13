@@ -125,7 +125,7 @@ public class EmailServiceImpl implements EmailService {
                 usuario.getCorreoElectronico(),
                 WELCOME_EMAIL_SUBJECT,
                 WELCOME_EMAIL_TEMPLATE,
-                Map.of("nombreUsuario", usuario.getNombreUsuario(), "enlaceActivacion",enlaceActivacionCuenta)
+                Map.of("nombreUsuario", usuario.getNombreUsuario(), "enlaceActivacion", enlaceActivacionCuenta.concat(usuario.getEstado().getActivationToken()))
         );
 
         LOGGER.info(
