@@ -85,10 +85,11 @@ databaseChangeLog:
             referencedColumnNames: id
             constraintName: fk_usuarios_estado_usuario
 
-        - addCheckConstraint:
-            tableName: usuarios_estado
-            constraintName: chk_usuarios_estado_account_status
-            checkConstraint: "account_status IN ('PENDING', 'ACTIVE', 'INACTIVE', 'LOCKED', 'DELETED')"
+        - sql:
+            sql: >
+              ALTER TABLE usuarios_estado
+              ADD CONSTRAINT chk_usuarios_estado_account_status
+              CHECK (account_status IN ('PENDING', 'ACTIVE', 'INACTIVE', 'LOCKED', 'DELETED'))
 
         - createIndex:
             tableName: usuarios_estado
