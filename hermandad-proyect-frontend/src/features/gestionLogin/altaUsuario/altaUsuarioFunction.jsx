@@ -1,8 +1,9 @@
 import { apiClient } from '../../../api/apiClient';
+import { mappedService } from '../../../api/mappedService';
 
 export const crearUsuario = async (usuario) => {
   try {
-    await apiClient.post('/api/users', usuario);
+    await apiClient.post(mappedService.usuarios.user.crear, usuario);
 
     return {
       open: true,

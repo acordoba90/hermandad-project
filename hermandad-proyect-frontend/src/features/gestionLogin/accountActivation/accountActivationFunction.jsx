@@ -1,7 +1,6 @@
 import { apiClient } from '../../../api/apiClient';
+import { mappedService } from '../../../api/mappedService';
 import { accountActivationData } from './accountActivationData';
-
-const ACCOUNT_ACTIVATION_ENDPOINT = '/api/users/activate';
 
 /**
  * Comprueba que el token recibido sea una cadena no vacía.
@@ -61,9 +60,10 @@ export const activateAccount = async (token) => {
   }
 
   try {
-    await apiClient.patch(ACCOUNT_ACTIVATION_ENDPOINT, null, {
-      params: { token: token.trim() },
-    });
+    const request = {
+      token: token
+    }
+    await apiClient.post(mappedService.usuarios.userEstado.activarCuenta, request);
 
     return {
       success: true,

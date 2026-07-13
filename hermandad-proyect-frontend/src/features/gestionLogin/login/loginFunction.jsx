@@ -1,6 +1,5 @@
 import { apiClient } from '../../../api/apiClient';
-
-const LOGIN_ENDPOINT = '/api/users/validate';
+import { mappedService } from '../../../api/mappedService';
 
 export const validarCredenciales = async (credentials) => {
   try {
@@ -9,7 +8,10 @@ export const validarCredenciales = async (credentials) => {
       password: credentials.password,
     };
 
-    const { data } = await apiClient.post(LOGIN_ENDPOINT, request);
+    const { data } = await apiClient.post(
+      mappedService.usuarios.user.validarCredenciales,
+      request,
+    );
 
     return {
       open: true,
