@@ -28,9 +28,11 @@ export const loginPageStyles = {
   },
 
   logoIcon: {
-    fontSize: 56,
-    color: 'secondary.main',
-    mb: 1,
+    display: 'block',
+    width: 300,
+    objectFit: 'contain',
+    mx: 'auto',
+    mb: 1.5,
   },
 
   subtitle: {

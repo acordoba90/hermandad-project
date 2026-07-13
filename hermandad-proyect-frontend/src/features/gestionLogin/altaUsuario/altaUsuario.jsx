@@ -41,6 +41,13 @@ const AltaUsuario = () => {
       <Card sx={altaUsuarioStyles.card}>
         <CardContent sx={altaUsuarioStyles.cardContent}>
           <Box sx={altaUsuarioStyles.header}>
+            <Box
+              component="img"
+              src="/escudo_hermandad_project.svg"
+              alt="Escudo de Hermandad Project"
+              sx={altaUsuarioStyles.logoIcon}
+            />
+
             <Typography variant="h4" fontWeight="bold">
               {altaUsuarioData.title}
             </Typography>

@@ -9,7 +9,6 @@ import {
   Link,
 } from '@mui/material';
 
-import ShieldIcon from '@mui/icons-material/Shield';
 import LoginIcon from '@mui/icons-material/Login';
 
 import { loginPageStyles } from './loginStyle';
@@ -34,7 +33,12 @@ const LoginForm = ({ onSubmit }) => {
     <Card sx={loginPageStyles.card}>
       <CardContent sx={loginPageStyles.cardContent}>
         <Box sx={loginPageStyles.header}>
-          <ShieldIcon sx={loginPageStyles.logoIcon} />
+          <Box
+            component="img"
+            src="/escudo_hermandad_project.svg"
+            alt="Escudo de Hermandad Project"
+            sx={loginPageStyles.logoIcon}
+          />
 
           <Typography variant="h4" fontWeight="bold">
             {loginData.title}

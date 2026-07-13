@@ -27,6 +27,14 @@ export const altaUsuarioStyles = {
     mb: 3,
   },
 
+  logoIcon: {
+    display: 'block',
+    width: 300,
+    objectFit: 'contain',
+    mx: 'auto',
+    mb: 1.5,
+  },
+
   subtitle: {
     mt: 1,
   },
