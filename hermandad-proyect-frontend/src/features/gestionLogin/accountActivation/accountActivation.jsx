@@ -5,6 +5,10 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   Link,
   Typography,
@@ -16,6 +20,7 @@ import { accountActivationData } from './accountActivationData';
 import {
   activateAccount,
   isValidActivationToken,
+  resendActivationLink,
 } from './accountActivationFunction';
 import { accountActivationStyles } from './accountActivationStyle';
 
@@ -32,9 +37,14 @@ const AccountActivation = () => {
   const hasValidToken = isValidActivationToken(token);
   const requestInProgress = useRef(false);
   const redirectTimer = useRef(null);
+  const closeCheckTimer = useRef(null);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isResendLoading, setIsResendLoading] = useState(false);
   const [isActivated, setIsActivated] = useState(false);
+  const [isTokenExpired, setIsTokenExpired] = useState(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [isResendSent, setIsResendSent] = useState(false);
   const [statusMessage, setStatusMessage] = useState(
     hasValidToken ? '' : accountActivationData.messages.invalidLink,
   );
@@ -48,6 +58,9 @@ const AccountActivation = () => {
     () => () => {
       if (redirectTimer.current) {
         clearTimeout(redirectTimer.current);
+      }
+      if (closeCheckTimer.current) {
+        clearTimeout(closeCheckTimer.current);
       }
     },
     [],
@@ -81,12 +94,66 @@ const AccountActivation = () => {
       severity: result.severity,
     });
 
+    if (result.expired) {
+      setIsTokenExpired(true);
+    }
+
     if (result.success) {
       setIsActivated(true);
       redirectTimer.current = setTimeout(() => {
         navigate(accountActivationData.routes.success);
       }, accountActivationData.redirectDelay);
     }
+  };
+
+  /**
+   * Solicita un nuevo enlace para el token expirado y bloquea solicitudes
+   * simultáneas. El modal solo se abre cuando el backend confirma el envío.
+   */
+  const handleResendActivationLink = async () => {
+    if (
+      !isTokenExpired ||
+      requestInProgress.current ||
+      isConfirmationOpen ||
+      isResendSent
+    ) {
+      return;
+    }
+
+    requestInProgress.current = true;
+    setIsResendLoading(true);
+
+    const result = await resendActivationLink(token);
+
+    requestInProgress.current = false;
+    setIsResendLoading(false);
+
+    if (result.success) {
+      setIsResendSent(true);
+      setIsConfirmationOpen(true);
+      return;
+    }
+
+    setSnackbar({
+      open: true,
+      message: result.message,
+      severity: result.severity,
+    });
+  };
+
+  /**
+   * Confirma el modal e intenta cerrar la pestaña. Si el navegador impide el
+   * cierre, deja un mensaje permanente y mantiene bloqueado el reenvío.
+   */
+  const handleConfirmResend = () => {
+    setIsConfirmationOpen(false);
+    window.close();
+
+    closeCheckTimer.current = setTimeout(() => {
+      if (!window.closed) {
+        setStatusMessage(accountActivationData.messages.manualClose);
+      }
+    }, 100);
   };
 
   return (
@@ -131,7 +198,7 @@ const AccountActivation = () => {
                   <Typography
                     variant="body2"
                     sx={
-                      isActivated
+                      isActivated || isResendSent
                         ? accountActivationStyles.successMessage
                         : accountActivationStyles.errorMessage
                     }
@@ -142,7 +209,7 @@ const AccountActivation = () => {
               </Box>
             )}
 
-            {!isActivated && (
+            {!isActivated && !isTokenExpired && (
               <Button
                 type="button"
                 variant="contained"
@@ -164,6 +231,31 @@ const AccountActivation = () => {
                 {isLoading
                   ? accountActivationData.buttons.activating
                   : accountActivationData.buttons.activate}
+              </Button>
+            )}
+
+            {isTokenExpired && !isResendSent && (
+              <Button
+                type="button"
+                variant="contained"
+                fullWidth
+                size="large"
+                disabled={isResendLoading}
+                onClick={handleResendActivationLink}
+                startIcon={
+                  isResendLoading ? (
+                    <CircularProgress
+                      size={20}
+                      aria-label={accountActivationData.accessibility.resendLoading}
+                      sx={accountActivationStyles.buttonProgress}
+                    />
+                  ) : undefined
+                }
+                sx={accountActivationStyles.submitButton}
+              >
+                {isResendLoading
+                  ? accountActivationData.buttons.resending
+                  : accountActivationData.buttons.resend}
               </Button>
             )}
 
@@ -191,6 +283,39 @@ const AccountActivation = () => {
         severity={snackbar.severity}
         onClose={handleCloseSnackbar}
       />
+
+      <Dialog
+        open={isConfirmationOpen}
+        disableEscapeKeyDown
+        slotProps={{ paper: { sx: accountActivationStyles.dialogPaper } }}
+        aria-labelledby="activation-resend-dialog-title"
+        aria-describedby="activation-resend-dialog-description"
+      >
+        <DialogTitle
+          id="activation-resend-dialog-title"
+          sx={accountActivationStyles.dialogTitle}
+        >
+          {accountActivationData.modal.title}
+        </DialogTitle>
+        <DialogContent>
+          <Typography
+            id="activation-resend-dialog-description"
+            sx={accountActivationStyles.dialogContent}
+          >
+            {accountActivationData.messages.resendSuccess}
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={accountActivationStyles.dialogActions}>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={handleConfirmResend}
+            sx={accountActivationStyles.dialogButton}
+          >
+            {accountActivationData.buttons.accept}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

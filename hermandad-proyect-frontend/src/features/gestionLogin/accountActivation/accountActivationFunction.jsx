@@ -11,6 +11,19 @@ import { accountActivationData } from './accountActivationData';
 export const isValidActivationToken = (token) =>
   typeof token === 'string' && token.trim().length > 0;
 
+const EXPIRED_TOKEN_BACKEND_MESSAGE = 'El token de activacion ha expirado';
+
+/**
+ * Identifica la respuesta de token expirado mediante el estado y el campo
+ * estructurado `message` que devuelve actualmente el backend.
+ *
+ * @param {unknown} error Error producido por el endpoint de activación.
+ * @returns {boolean} `true` exclusivamente para un token expirado.
+ */
+export const isExpiredActivationTokenError = (error) =>
+  error?.response?.status === 400 &&
+  error?.response?.data?.message === EXPIRED_TOKEN_BACKEND_MESSAGE;
+
 /**
  * Traduce un error HTTP a uno de los mensajes seguros de la interfaz.
  * No devuelve detalles técnicos procedentes del backend.
@@ -28,7 +41,7 @@ export const getActivationErrorMessage = (error) => {
     .join(' ')
     .toLocaleLowerCase('es');
 
-  if (status === 410 || backendMessage.includes('expir')) {
+  if (isExpiredActivationTokenError(error) || status === 410) {
     return accountActivationData.messages.expiredToken;
   }
 
@@ -73,7 +86,45 @@ export const activateAccount = async (token) => {
   } catch (error) {
     return {
       success: false,
+      expired: isExpiredActivationTokenError(error),
       message: getActivationErrorMessage(error),
+      severity: 'error',
+    };
+  }
+};
+
+/**
+ * Solicita al servicio de correo un nuevo enlace usando el token expirado para
+ * identificar la cuenta, sin pedir datos adicionales al usuario.
+ *
+ * @param {string} token Token de activación expirado.
+ * @returns {Promise<{success: boolean, message: string, severity: string}>}
+ * Resultado normalizado para la pantalla de activación.
+ */
+export const resendActivationLink = async (token) => {
+  if (!isValidActivationToken(token)) {
+    return {
+      success: false,
+      message: accountActivationData.messages.invalidLink,
+      severity: 'error',
+    };
+  }
+
+  try {
+    await apiClient.post(
+      mappedService.usuarios.email.reenviarEnlaceActivacion,
+      { token },
+    );
+
+    return {
+      success: true,
+      message: accountActivationData.messages.resendSuccess,
+      severity: 'success',
+    };
+  } catch {
+    return {
+      success: false,
+      message: accountActivationData.messages.resendError,
       severity: 'error',
     };
   }

@@ -84,4 +84,25 @@ export const accountActivationStyles = {
     mt: 1,
     textAlign: 'center',
   },
+  dialogPaper: {
+    width: '100%',
+    maxWidth: 440,
+    borderRadius: 4,
+  },
+  dialogTitle: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  dialogContent: {
+    textAlign: 'center',
+    color: 'text.secondary',
+  },
+  dialogActions: {
+    px: 3,
+    pb: 3,
+  },
+  dialogButton: {
+    py: 1.2,
+    fontWeight: 'bold',
+  },
 };

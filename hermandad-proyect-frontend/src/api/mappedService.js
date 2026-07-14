@@ -1,5 +1,6 @@
 const UserController = '/api/users';
 const UsertEstadoController = '/api/usuarios-estado';
+const EmailController = '/api/emails';
 
 /**
  * Mapa centralizado de las rutas REST consumidas por el frontend.
@@ -16,6 +17,10 @@ export const mappedService = {
     userEstado: {
       basePath: UsertEstadoController,
       activarCuenta: `${UsertEstadoController}/activar-cuenta`,
+    },
+    email: {
+      basePath: EmailController,
+      reenviarEnlaceActivacion: `${EmailController}/activacion-token-expirado`,
     }
   },
 };

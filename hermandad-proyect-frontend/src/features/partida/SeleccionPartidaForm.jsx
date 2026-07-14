@@ -51,7 +51,13 @@ const SeleccionPartidaForm = ({
     <Box sx={seleccionPartidaStyles.content}>
       <Box sx={seleccionPartidaStyles.topBar}>
         <Box sx={seleccionPartidaStyles.brand}>
-          <ShieldIcon sx={seleccionPartidaStyles.brandIcon} />
+          <Box
+            component="img"
+            src="/escudo_hermandad_project.svg"
+            alt="Escudo de Hermandad Project"
+            sx={seleccionPartidaStyles.logoIcon}
+          />
+
           <Box>
             <Typography variant="h3" sx={seleccionPartidaStyles.brandTitle}>
               Hermandad

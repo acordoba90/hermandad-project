@@ -29,10 +29,12 @@ export const seleccionPartidaStyles = {
     gap: 2,
   },
 
-  brandIcon: {
-    fontSize: 52,
-    color: 'secondary.main',
-    filter: 'drop-shadow(0 0 10px rgba(212,175,55,0.35))',
+  logoIcon: {
+    display: 'block',
+    width: 300,
+    objectFit: 'contain',
+    mx: 'auto',
+    mb: 1.5,
   },
 
   brandTitle: {

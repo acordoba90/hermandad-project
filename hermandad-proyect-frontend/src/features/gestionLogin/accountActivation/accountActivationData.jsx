@@ -9,6 +9,9 @@ export const accountActivationData = {
   buttons: {
     activate: 'Activar cuenta',
     activating: 'Activando cuenta...',
+    resend: 'Enviar un nuevo enlace de activación',
+    resending: 'Enviando nuevo enlace...',
+    accept: 'Aceptar',
     backToLogin: 'Volver al inicio de sesión',
   },
   messages: {
@@ -17,10 +20,20 @@ export const accountActivationData = {
     expiredToken: 'El enlace de activación ha caducado.',
     alreadyActive: 'La cuenta ya se encuentra activada.',
     genericError: 'No se ha podido activar la cuenta. Inténtalo de nuevo.',
+    resendError:
+      'No se ha podido enviar un nuevo enlace. Inténtalo de nuevo.',
+    resendSuccess:
+      'Se ha enviado un nuevo enlace de activación. Revise su bandeja de correo electrónico.',
+    manualClose:
+      'El nuevo enlace ha sido enviado. Ya puede cerrar esta pestaña.',
+  },
+  modal: {
+    title: 'Nuevo enlace enviado',
   },
   accessibility: {
     activationIcon: 'Activación segura de la cuenta',
     loading: 'Activación de la cuenta en curso',
+    resendLoading: 'Envío del nuevo enlace de activación en curso',
   },
   routes: {
     login: '/',
