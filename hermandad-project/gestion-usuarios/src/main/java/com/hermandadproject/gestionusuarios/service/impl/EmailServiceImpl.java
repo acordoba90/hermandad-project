@@ -1,8 +1,13 @@
 package com.hermandadproject.gestionusuarios.service.impl;
 
+import com.hermandadproject.gestionusuarios.config.properties.HermandadUserProperties;
 import com.hermandadproject.gestionusuarios.exception.EmailSendingException;
 import com.hermandadproject.gestionusuarios.logging.SensitiveDataMasker;
 import com.hermandadproject.gestionusuarios.model.entity.UsuarioEntity;
+import com.hermandadproject.gestionusuarios.model.entity.UsuarioEstadoEntity;
+import com.hermandadproject.gestionusuarios.model.enums.AccountStatusEnum;
+import com.hermandadproject.gestionusuarios.repository.UserRepository;
+import com.hermandadproject.gestionusuarios.repository.UsuarioEstadoRepository;
 import com.hermandadproject.gestionusuarios.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -15,13 +20,18 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -33,19 +43,31 @@ public class EmailServiceImpl implements EmailService {
     private static final String WELCOME_EMAIL_SUBJECT = "Bienvenido a Hermandad Project";
     private static final String TOKEN_EXPIRED_TEMPLATE = "tokenActivacionExpirado.md";
     private static final String TOKEN_EXPIRED_SUBJECT = "Nuevo enlace para activar tu cuenta de Hermandad Project";
+    private static final String EMAIL_RESTORE_PASS = "Restablece tu contraseña de Hermandad Project.";
 
     private final JavaMailSender javaMailSender;
+    private final UsuarioEstadoRepository usuarioEstadoRepository;
+    private final String enlaceActivacionCuenta;
     private final Parser markdownParser = Parser.builder().build();
     private final HtmlRenderer htmlRenderer = HtmlRenderer.builder().build();
+    private final HermandadUserProperties hermandadUserProperties;
+    private final UserRepository UserRepository;
 
-    public EmailServiceImpl(JavaMailSender javaMailSender) {
+    public EmailServiceImpl(
+            JavaMailSender javaMailSender,
+            UsuarioEstadoRepository usuarioEstadoRepository,
+            @Value("${hermandad.mail.activation-url}") String enlaceActivacionCuenta,
+            HermandadUserProperties hermandadUserProperties,
+            UserRepository userRepository
+    ) {
         this.javaMailSender = javaMailSender;
+        this.usuarioEstadoRepository = usuarioEstadoRepository;
+        this.enlaceActivacionCuenta = enlaceActivacionCuenta;
+        this.hermandadUserProperties = hermandadUserProperties;
+        this.UserRepository = userRepository;
     }
 
-    @Value("${hermandad.mail.activation-url}")
-    private String enlaceActivacionCuenta;
-
-
+    @Override
     public void enviarCorreoDesdeMarkdown(
             String destinatario,
             String asunto,
@@ -114,7 +136,9 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Override
     public void enviarCorreoBienvenida(UsuarioEntity usuario) {
+        UsuarioEstadoEntity estado = obtenerEstadoActivacion(usuario);
         String maskedEmail = SensitiveDataMasker.maskEmail(usuario.getCorreoElectronico());
         LOGGER.info(
                 "Iniciando envio del correo de activacion. usuarioId={}, correo={}",
@@ -125,7 +149,10 @@ public class EmailServiceImpl implements EmailService {
                 usuario.getCorreoElectronico(),
                 WELCOME_EMAIL_SUBJECT,
                 WELCOME_EMAIL_TEMPLATE,
-                Map.of("nombreUsuario", usuario.getNombreUsuario(), "enlaceActivacion", enlaceActivacionCuenta.concat(usuario.getEstado().getActivationToken()))
+                Map.of(
+                        "nombreUsuario", usuario.getNombreUsuario(),
+                        "enlaceActivacion", construirEnlaceActivacion(estado.getActivationToken())
+                )
         );
 
         LOGGER.info(
@@ -135,26 +162,98 @@ public class EmailServiceImpl implements EmailService {
         );
     }
 
-    public void enviarCorreoExpiracionTokenActivacion(UsuarioEntity usuario) {
+    @Override
+    @Transactional
+    public void enviarCorreoExpiracionTokenActivacion(String token) {
+        long startTime = System.currentTimeMillis();
+        LOGGER.info("Iniciando envio de correo por expiracion de token de activacion. actor=ANONYMOUS");
+
+        if (token == null || token.isBlank()) {
+            LOGGER.warn("Envio de correo por expiracion rechazado: token de activacion vacio");
+            throw new IllegalArgumentException("El token de activacion no puede estar vacio");
+        }
+
+        UsuarioEstadoEntity estado = usuarioEstadoRepository.findByActivationToken(token)
+                .orElseThrow(() -> {
+                    LOGGER.warn("Envio de correo por expiracion rechazado: token de activacion no encontrado");
+                    return new IllegalArgumentException("No existe un estado de usuario para el token indicado");
+                });
+
+        UsuarioEntity usuario = estado.getUsuario();
+        if (usuario == null) {
+            LOGGER.warn("Envio de correo por expiracion rechazado: estado sin usuario asociado. estadoId={}", estado.getId());
+            throw new IllegalStateException("El estado de usuario no tiene un usuario asociado");
+        }
+
+        Instant fechaExpiracion = estado.getActivationTokenExpiration();
+        if (fechaExpiracion == null) {
+            LOGGER.warn(
+                    "Envio de correo por expiracion rechazado: token sin fecha de expiracion. usuarioId={}",
+                    usuario.getId()
+            );
+            throw new IllegalStateException("El token de activacion no tiene fecha de expiracion");
+        }
+
         String maskedEmail = SensitiveDataMasker.maskEmail(usuario.getCorreoElectronico());
         LOGGER.info(
-                "Iniciando envio del correo de expiración de token. usuarioId={}, correo={}",
+                "Usuario localizado para correo por expiracion de token. usuarioId={}, correo={}, expiracion={}",
                 usuario.getId(),
-                maskedEmail
+                maskedEmail,
+                fechaExpiracion
         );
 
-        enviarCorreoDesdeMarkdown(
-                usuario.getCorreoElectronico(),
-                TOKEN_EXPIRED_SUBJECT,
-                TOKEN_EXPIRED_TEMPLATE,
-                Map.of("nombreUsuario", usuario.getNombreUsuario(), "botonActivarCuenta", enlaceActivacionCuenta, "fechaExpiracion", usuario.getEstado().getActivationTokenExpiration().toString())
+        // Generación y actualización del nuevo token de activación
+        Instant now = Instant.now();
+        Instant nuevaFechaExpiracionToken = now.plus(
+                hermandadUserProperties.getActivation().getExpirationHours(),
+                ChronoUnit.HOURS
         );
-        LOGGER.info(
-                "Correo de expiración de token enviado correctamente. usuarioId={}, correo={}",
+        String nuevoTokenGenerado = UUID.randomUUID().toString();
+        estado.setActivationToken(nuevoTokenGenerado);
+        estado.setActivationTokenExpiration(nuevaFechaExpiracionToken);
+        LOGGER.debug(
+                "Token de activacion generado. usuarioObjetivoId={}, expiracion={}",
                 usuario.getId(),
-                maskedEmail
+                estado.getActivationTokenExpiration()
+        );
+
+        try {
+            LOGGER.debug("Construyendo enlace de activacion para correo de expiracion. usuarioId={}", usuario.getId());
+            enviarCorreoDesdeMarkdown(
+                    usuario.getCorreoElectronico(),
+                    TOKEN_EXPIRED_SUBJECT,
+                    TOKEN_EXPIRED_TEMPLATE,
+                    Map.of(
+                            "nombreUsuario", usuario.getNombreUsuario(),
+                            "botonActivarCuenta", construirEnlaceActivacion(nuevoTokenGenerado),
+                            "fechaExpiracion", nuevaFechaExpiracionToken.toString()
+                    )
+            );
+        } catch (RuntimeException exception) {
+            LOGGER.error(
+                    "Error al enviar correo por expiracion de token. usuarioId={}, correo={}",
+                    usuario.getId(),
+                    maskedEmail,
+                    exception
+            );
+            throw exception;
+        }
+
+        usuarioEstadoRepository.save(estado);
+        LOGGER.info(
+                "Correo por expiracion de token enviado correctamente. usuarioId={}, correo={}, duracionMs={}",
+                usuario.getId(),
+                maskedEmail,
+                System.currentTimeMillis() - startTime
         );
     }
+
+    @Override
+    public void enviarCorreoRestauracionContrasena(String correo) {
+
+
+    }
+
 
     private String cargarPlantilla(String plantilla) throws IOException {
         ClassPathResource resource = new ClassPathResource(EMAIL_TEMPLATES_PATH + plantilla);
@@ -169,5 +268,32 @@ public class EmailServiceImpl implements EmailService {
             resultado = resultado.replace("{{" + variable.getKey() + "}}", Objects.toString(variable.getValue(), ""));
         }
         return resultado;
+    }
+
+    private String construirEnlaceActivacion(String token) {
+        return UriComponentsBuilder.fromUriString(enlaceActivacionCuenta)
+                .queryParam("token", token)
+                .build()
+                .toUriString();
+    }
+
+    private UsuarioEstadoEntity obtenerEstadoActivacion(UsuarioEntity usuario) {
+        if (usuario == null) {
+            LOGGER.warn("Envio de correo de activacion rechazado: usuario null");
+            throw new IllegalArgumentException("El usuario no puede ser null");
+        }
+
+        if (usuario.getId() == null) {
+            LOGGER.warn("Envio de correo de activacion rechazado: usuario sin identificador");
+            throw new IllegalArgumentException("El usuario debe tener un identificador");
+        }
+
+        LOGGER.debug("Buscando estado de activacion para envio de correo. usuarioId={}", usuario.getId());
+        return usuarioEstadoRepository.findByUsuarioId(usuario.getId())
+                .filter(estado -> estado.getActivationToken() != null)
+                .orElseThrow(() -> {
+                    LOGGER.warn("Envio de correo de activacion rechazado: token no encontrado. usuarioId={}", usuario.getId());
+                    return new IllegalStateException("No existe un token de activacion para el usuario indicado");
+                });
     }
 }

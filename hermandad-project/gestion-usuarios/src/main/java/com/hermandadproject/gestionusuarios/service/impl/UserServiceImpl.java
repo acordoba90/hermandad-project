@@ -9,6 +9,8 @@ import com.hermandadproject.gestionusuarios.model.dto.UserCreateRequest;
 import com.hermandadproject.gestionusuarios.model.dto.UserResponse;
 import com.hermandadproject.gestionusuarios.model.dto.UserValidationRequest;
 import com.hermandadproject.gestionusuarios.model.entity.UsuarioEntity;
+import com.hermandadproject.gestionusuarios.model.entity.UsuarioEstadoEntity;
+import com.hermandadproject.gestionusuarios.model.enums.AccountStatusEnum;
 import com.hermandadproject.gestionusuarios.model.enums.UserRoleEnum;
 import com.hermandadproject.gestionusuarios.repository.UserRepository;
 import com.hermandadproject.gestionusuarios.service.EmailService;
@@ -20,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private static final String INVALID_CREDENTIALS_MESSAGE = "El correo o la contraseña introducida no son correctos";
     private static final String USUARIO_NO_ACTIVADO = "El usuario no se encuentra activado, por favor, revise su correo electrónico";
     private static final String USUARIO_INACTIVO = "El usuario ha sido dado de baja por inactividad";
+    private static final String USUARIO_BLOQUEADO = "La cuenta esta bloqueada temporalmente";
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -143,6 +145,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserResponse validateCredentials(UserValidationRequest request) {
         String maskedEmail = SensitiveDataMasker.maskEmail(request.correoElectronico());
         LOGGER.info("Iniciando validacion de credenciales. actor=ANONYMOUS, correo={}", maskedEmail);
@@ -158,33 +161,69 @@ public class UserServiceImpl implements UserService {
                     entity.getId(),
                     maskedEmail
             );
+            usuarioEstadoService.incrementarIntentoFallido(entity.getId());
             throw new InvalidUserCredentialsException(INVALID_CREDENTIALS_MESSAGE);
         }
         LOGGER.debug("Credenciales basicas validadas. usuarioObjetivoId={}", entity.getId());
 
-        if (entity.getVigenteDesde() == null || entity.getVigenteDesde().isAfter(Instant.now())) {
-            LOGGER.warn(
-                    "Validacion rechazada: usuario no activado. usuarioObjetivoId={}, vigenteDesde={}",
-                    entity.getId(),
-                    entity.getVigenteDesde()
-            );
-            throw new InvalidUserCredentialsException(USUARIO_NO_ACTIVADO);
-        }
-
-        if (entity.getVigenteHasta() != null && entity.getVigenteHasta().isBefore(Instant.now())) {
-            LOGGER.warn(
-                    "Validacion rechazada: usuario inactivo. usuarioObjetivoId={}, vigenteHasta={}",
-                    entity.getId(),
-                    entity.getVigenteHasta()
-            );
-            throw new InvalidUserCredentialsException(USUARIO_INACTIVO);
-        }
+        UsuarioEstadoEntity estado = obtenerEstadoParaValidacion(entity);
+        validarEstadoCuenta(entity, estado);
 
         LOGGER.info(
                 "Validacion de credenciales completada. usuarioObjetivoId={}, nombreUsuario={}",
                 entity.getId(),
                 entity.getNombreUsuario()
         );
+
+        // Si el login es correcto, se registra el login del usuario reseteando los intentos fallidos y además, se registra la actividad del usuario
+        usuarioEstadoService.registrarLogin(entity.getId());
+        usuarioEstadoService.registrarActividad(entity.getId());
+
         return userMapper.toResponse(entity);
+    }
+
+    private UsuarioEstadoEntity obtenerEstadoParaValidacion(UsuarioEntity usuario) {
+        try {
+            return usuarioEstadoService.buscarPorUsuarioId(usuario.getId());
+        } catch (IllegalArgumentException exception) {
+            LOGGER.warn(
+                    "Validacion rechazada: estado de usuario no encontrado. usuarioObjetivoId={}",
+                    usuario.getId()
+            );
+            throw new InvalidUserCredentialsException(USUARIO_NO_ACTIVADO);
+        }
+    }
+
+    private void validarEstadoCuenta(UsuarioEntity usuario, UsuarioEstadoEntity estado) {
+        AccountStatusEnum accountStatus = estado.getAccountStatus();
+        if (accountStatus == AccountStatusEnum.ACTIVE) {
+            return;
+        }
+
+        if (accountStatus == AccountStatusEnum.PENDING) {
+            LOGGER.warn(
+                    "Validacion rechazada: usuario no activado. usuarioObjetivoId={}, estadoCuenta={}",
+                    usuario.getId(),
+                    accountStatus
+            );
+            throw new InvalidUserCredentialsException(USUARIO_NO_ACTIVADO);
+        }
+
+        if (accountStatus == AccountStatusEnum.LOCKED) {
+            LOGGER.warn(
+                    "Validacion rechazada: usuario bloqueado. usuarioObjetivoId={}, estadoCuenta={}, lockedUntil={}",
+                    usuario.getId(),
+                    accountStatus,
+                    estado.getLockedUntil()
+            );
+            throw new InvalidUserCredentialsException(USUARIO_BLOQUEADO);
+        }
+
+        LOGGER.warn(
+                "Validacion rechazada: usuario inactivo. usuarioObjetivoId={}, estadoCuenta={}",
+                usuario.getId(),
+                accountStatus
+        );
+        throw new InvalidUserCredentialsException(USUARIO_INACTIVO);
     }
 }

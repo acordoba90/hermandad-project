@@ -12,4 +12,8 @@ public interface EmailService {
     void enviarCorreoDesdeMarkdown(String destinatario, String asunto, String plantilla, Map<String, String> variables);
 
     void enviarCorreoBienvenida(UsuarioEntity usuario);
+
+    void enviarCorreoExpiracionTokenActivacion(String token);
+
+    void enviarCorreoRestauracionContrasena(String correo);
 }
