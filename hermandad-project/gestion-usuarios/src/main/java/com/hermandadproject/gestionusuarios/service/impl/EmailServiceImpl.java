@@ -5,8 +5,6 @@ import com.hermandadproject.gestionusuarios.exception.EmailSendingException;
 import com.hermandadproject.gestionusuarios.logging.SensitiveDataMasker;
 import com.hermandadproject.gestionusuarios.model.entity.UsuarioEntity;
 import com.hermandadproject.gestionusuarios.model.entity.UsuarioEstadoEntity;
-import com.hermandadproject.gestionusuarios.model.enums.AccountStatusEnum;
-import com.hermandadproject.gestionusuarios.repository.UserRepository;
 import com.hermandadproject.gestionusuarios.repository.UsuarioEstadoRepository;
 import com.hermandadproject.gestionusuarios.service.EmailService;
 import jakarta.mail.MessagingException;
@@ -30,7 +28,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -44,6 +41,8 @@ public class EmailServiceImpl implements EmailService {
     private static final String TOKEN_EXPIRED_TEMPLATE = "tokenActivacionExpirado.md";
     private static final String TOKEN_EXPIRED_SUBJECT = "Nuevo enlace para activar tu cuenta de Hermandad Project";
     private static final String EMAIL_RESTORE_PASS = "Restablece tu contraseña de Hermandad Project.";
+    private static final String PASSWORD_RESET_TEMPLATE = "restauracionPass.md";
+    private static final String PASSWORD_RESET_SUBJECT = "Restablece tu contrasena de Hermandad Project";
 
     private final JavaMailSender javaMailSender;
     private final UsuarioEstadoRepository usuarioEstadoRepository;
@@ -51,20 +50,17 @@ public class EmailServiceImpl implements EmailService {
     private final Parser markdownParser = Parser.builder().build();
     private final HtmlRenderer htmlRenderer = HtmlRenderer.builder().build();
     private final HermandadUserProperties hermandadUserProperties;
-    private final UserRepository UserRepository;
 
     public EmailServiceImpl(
             JavaMailSender javaMailSender,
             UsuarioEstadoRepository usuarioEstadoRepository,
             @Value("${hermandad.mail.activation-url}") String enlaceActivacionCuenta,
-            HermandadUserProperties hermandadUserProperties,
-            UserRepository userRepository
+            HermandadUserProperties hermandadUserProperties
     ) {
         this.javaMailSender = javaMailSender;
         this.usuarioEstadoRepository = usuarioEstadoRepository;
         this.enlaceActivacionCuenta = enlaceActivacionCuenta;
         this.hermandadUserProperties = hermandadUserProperties;
-        this.UserRepository = userRepository;
     }
 
     @Override
@@ -249,9 +245,37 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void enviarCorreoRestauracionContrasena(String correo) {
+    public void enviarCorreoRestauracionContrasena(
+            UsuarioEntity usuario,
+            String enlaceRestauracion,
+            String tiempoExpiracion
+    ) {
+        if (usuario == null) {
+            LOGGER.warn("Envio de correo de restauracion rechazado: usuario null");
+            throw new IllegalArgumentException("El usuario no puede ser null");
+        }
 
-
+        String maskedEmail = SensitiveDataMasker.maskEmail(usuario.getCorreoElectronico());
+        LOGGER.info(
+                "Iniciando envio del correo de restauracion de contrasena. usuarioId={}, correo={}",
+                usuario.getId(),
+                maskedEmail
+        );
+        enviarCorreoDesdeMarkdown(
+                usuario.getCorreoElectronico(),
+                PASSWORD_RESET_SUBJECT,
+                PASSWORD_RESET_TEMPLATE,
+                Map.of(
+                        "nombreUsuario", usuario.getNombreUsuario(),
+                        "enlaceRestauracion", enlaceRestauracion,
+                        "tiempoExpiracion", tiempoExpiracion
+                )
+        );
+        LOGGER.info(
+                "Correo de restauracion de contrasena enviado correctamente. usuarioId={}, correo={}",
+                usuario.getId(),
+                maskedEmail
+        );
     }
 
 

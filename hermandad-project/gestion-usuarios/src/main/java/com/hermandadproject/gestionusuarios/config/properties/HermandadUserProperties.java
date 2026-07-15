@@ -14,6 +14,7 @@ public class HermandadUserProperties {
     private final Login login = new Login();
     private final Inactivity inactivity = new Inactivity();
     private final Password password = new Password();
+    private final PasswordReset passwordReset = new PasswordReset();
     private final Registration registration = new Registration();
 
     /**
@@ -50,6 +51,15 @@ public class HermandadUserProperties {
      */
     public Password getPassword() {
         return password;
+    }
+
+    /**
+     * Devuelve la configuracion de restauracion de contrasena.
+     *
+     * @return propiedades de restauracion de contrasena.
+     */
+    public PasswordReset getPasswordReset() {
+        return passwordReset;
     }
 
     /**
@@ -238,6 +248,32 @@ public class HermandadUserProperties {
          */
         public void setRequireSpecialCharacter(boolean requireSpecialCharacter) {
             this.requireSpecialCharacter = requireSpecialCharacter;
+        }
+    }
+
+    /**
+     * Propiedades que controlan la caducidad de los tokens de restauracion de contrasena.
+     */
+    public static class PasswordReset {
+
+        private long tokenExpirationMinutes;
+
+        /**
+         * Devuelve los minutos de validez de un token de restauracion de contrasena.
+         *
+         * @return minutos de expiracion configurados.
+         */
+        public long getTokenExpirationMinutes() {
+            return tokenExpirationMinutes;
+        }
+
+        /**
+         * Actualiza los minutos de validez de un token de restauracion de contrasena.
+         *
+         * @param tokenExpirationMinutes minutos de expiracion configurados.
+         */
+        public void setTokenExpirationMinutes(long tokenExpirationMinutes) {
+            this.tokenExpirationMinutes = tokenExpirationMinutes;
         }
     }
 

@@ -15,5 +15,16 @@ public interface EmailService {
 
     void enviarCorreoExpiracionTokenActivacion(String token);
 
-    void enviarCorreoRestauracionContrasena(String correo);
+    /**
+     * Envia un correo con el enlace de restauracion de contrasena.
+     *
+     * @param usuario usuario destinatario.
+     * @param enlaceRestauracion enlace completo hacia el frontend.
+     * @param tiempoExpiracion descripcion publica de la vigencia del enlace.
+     */
+    void enviarCorreoRestauracionContrasena(
+            UsuarioEntity usuario,
+            String enlaceRestauracion,
+            String tiempoExpiracion
+    );
 }

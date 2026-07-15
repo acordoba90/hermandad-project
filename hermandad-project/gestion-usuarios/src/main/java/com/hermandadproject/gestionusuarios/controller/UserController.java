@@ -3,6 +3,9 @@ package com.hermandadproject.gestionusuarios.controller;
 import com.hermandadproject.gestionusuarios.logging.ActorContext;
 import com.hermandadproject.gestionusuarios.logging.CurrentUserContext;
 import com.hermandadproject.gestionusuarios.logging.SensitiveDataMasker;
+import com.hermandadproject.gestionusuarios.model.dto.ConfirmacionRestauracionContrasenaRequest;
+import com.hermandadproject.gestionusuarios.model.dto.MensajeResponse;
+import com.hermandadproject.gestionusuarios.model.dto.SolicitudRestauracionContrasenaRequest;
 import com.hermandadproject.gestionusuarios.model.dto.UserCreateRequest;
 import com.hermandadproject.gestionusuarios.model.dto.UserResponse;
 import com.hermandadproject.gestionusuarios.model.dto.UserValidationRequest;
@@ -28,6 +31,9 @@ import java.util.UUID;
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    private static final String PASSWORD_RESET_REQUEST_MESSAGE =
+            "Si el correo pertenece a una cuenta valida, se ha enviado un enlace para restaurar la contrasena.";
+    private static final String PASSWORD_RESET_CONFIRM_MESSAGE = "La contrasena se ha actualizado correctamente.";
 
     private final UserService userService;
     private final CurrentUserContext currentUserContext;
@@ -98,6 +104,29 @@ public class UserController {
                 response.nombreUsuario()
         );
         return response;
+    }
+
+    @PostMapping("/password-reset/request")
+    public ResponseEntity<MensajeResponse> requestPasswordReset(
+            @Valid @RequestBody SolicitudRestauracionContrasenaRequest request
+    ) {
+        LOGGER.info(
+                "Peticion REST publica para solicitar restauracion de contrasena. actor=ANONYMOUS, correo={}",
+                SensitiveDataMasker.maskEmail(request.correoElectronico())
+        );
+        userService.solicitarRestauracionContrasena(request);
+        LOGGER.info("Solicitud de restauracion de contrasena completada. status={}", HttpStatus.ACCEPTED.value());
+        return ResponseEntity.accepted().body(new MensajeResponse(PASSWORD_RESET_REQUEST_MESSAGE));
+    }
+
+    @PostMapping("/password-reset/confirm")
+    public ResponseEntity<MensajeResponse> confirmPasswordReset(
+            @Valid @RequestBody ConfirmacionRestauracionContrasenaRequest request
+    ) {
+        LOGGER.info("Peticion REST publica para confirmar restauracion de contrasena. actor=ANONYMOUS");
+        userService.confirmarRestauracionContrasena(request);
+        LOGGER.info("Confirmacion de restauracion de contrasena completada. status={}", HttpStatus.OK.value());
+        return ResponseEntity.ok(new MensajeResponse(PASSWORD_RESET_CONFIRM_MESSAGE));
     }
 
 }

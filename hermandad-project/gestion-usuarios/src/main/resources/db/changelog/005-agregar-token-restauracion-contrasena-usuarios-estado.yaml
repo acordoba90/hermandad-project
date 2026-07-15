@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-agregar-token-restauracion-contrasena-usuarios-estado
+      author: acordoba
+
+      changes:
+        - addColumn:
+            tableName: usuarios_estado
+            columns:
+              - column:
+                  name: token_restauracion_contrasena
+                  type: varchar(100)
+
+              - column:
+                  name: expiracion_token_restauracion_contrasena
+                  type: timestamp
+
+        - addUniqueConstraint:
+            tableName: usuarios_estado
+            columnNames: token_restauracion_contrasena
+            constraintName: uk_usuarios_estado_token_restauracion_contrasena
+
+        - createIndex:
+            tableName: usuarios_estado
+            indexName: idx_usuarios_estado_token_restauracion_contrasena
+            columns:
+              - column:
+                  name: token_restauracion_contrasena
+
+      rollback:
+        - dropIndex:
+            tableName: usuarios_estado
+            indexName: idx_usuarios_estado_token_restauracion_contrasena
+
+        - dropUniqueConstraint:
+            tableName: usuarios_estado
+            constraintName: uk_usuarios_estado_token_restauracion_contrasena
+
+        - dropColumn:
+            tableName: usuarios_estado
+            columnName: expiracion_token_restauracion_contrasena
+
+        - dropColumn:
+            tableName: usuarios_estado
+            columnName: token_restauracion_contrasena

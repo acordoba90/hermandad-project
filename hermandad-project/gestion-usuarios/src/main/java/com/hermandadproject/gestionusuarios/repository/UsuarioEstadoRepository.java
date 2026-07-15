@@ -2,7 +2,9 @@ package com.hermandadproject.gestionusuarios.repository;
 
 import com.hermandadproject.gestionusuarios.model.entity.UsuarioEstadoEntity;
 import com.hermandadproject.gestionusuarios.model.enums.AccountStatusEnum;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,6 +26,18 @@ public interface UsuarioEstadoRepository extends JpaRepository<UsuarioEstadoEnti
      * @return estado asociado al token, o vacio si no existe.
      */
     Optional<UsuarioEstadoEntity> findByActivationToken(String activationToken);
+
+    /**
+     * Busca el estado asociado a un token de restauracion de contrasena.
+     *
+     * La consulta bloquea el registro para impedir que dos confirmaciones
+     * concurrentes consuman el mismo token.
+     *
+     * @param tokenRestauracionContrasena token de restauracion recibido.
+     * @return estado asociado al token, o vacio si no existe.
+     */
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<UsuarioEstadoEntity> findByTokenRestauracionContrasena(String tokenRestauracionContrasena);
 
     /**
      * Busca el estado asociado al identificador de un usuario.

@@ -34,6 +34,12 @@ public class UsuarioEstadoEntity {
     @Column(name = "activation_token_expiration")
     private Instant activationTokenExpiration;
 
+    @Column(name = "token_restauracion_contrasena", length = 100)
+    private String tokenRestauracionContrasena;
+
+    @Column(name = "expiracion_token_restauracion_contrasena")
+    private Instant expiracionTokenRestauracionContrasena;
+
     @Column(name = "last_login")
     private Instant lastLogin;
 
@@ -131,6 +137,22 @@ public class UsuarioEstadoEntity {
 
     public void setActivationTokenExpiration(Instant activationTokenExpiration) {
         this.activationTokenExpiration = activationTokenExpiration;
+    }
+
+    public String getTokenRestauracionContrasena() {
+        return tokenRestauracionContrasena;
+    }
+
+    public void setTokenRestauracionContrasena(String tokenRestauracionContrasena) {
+        this.tokenRestauracionContrasena = tokenRestauracionContrasena;
+    }
+
+    public Instant getExpiracionTokenRestauracionContrasena() {
+        return expiracionTokenRestauracionContrasena;
+    }
+
+    public void setExpiracionTokenRestauracionContrasena(Instant expiracionTokenRestauracionContrasena) {
+        this.expiracionTokenRestauracionContrasena = expiracionTokenRestauracionContrasena;
     }
 
     public Instant getLastLogin() {

@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/003-agregar-rol-a-usuarios.yaml
   - include:
       file: db/changelog/004-crear-tabla-usuarios-estado.yaml
+  - include:
+      file: db/changelog/005-agregar-token-restauracion-contrasena-usuarios-estado.yaml
