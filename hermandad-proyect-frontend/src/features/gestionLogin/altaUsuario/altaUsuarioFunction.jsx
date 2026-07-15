@@ -1,5 +1,6 @@
 import { apiClient } from '../../../api/apiClient';
 import { mappedService } from '../../../api/mappedService';
+import { validatePassword } from '../passwordValidation';
 
 export const crearUsuario = async (usuario) => {
   try {
@@ -46,6 +47,17 @@ export const handleAltaUsuarioSubmit = async (event) => {
   };
 
   const confirmPassword = formData.get('confirmPassword');
+
+  const passwordError = validatePassword(usuario.password);
+
+  if (passwordError) {
+    return {
+      open: true,
+      success: false,
+      message: passwordError,
+      severity: 'error',
+    };
+  }
 
   if (confirmPassword !== usuario.password) {
     return {

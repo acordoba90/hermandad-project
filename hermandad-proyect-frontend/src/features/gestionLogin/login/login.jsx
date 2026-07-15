@@ -5,6 +5,7 @@ import CustomSnackbar from '../../../components/snackbar/snackbar';
 import LoginForm from './loginForm';
 import { validarCredenciales } from './loginFunction';
 import { loginPageStyles } from './loginStyle';
+import SolicitudRestauracionDialog from '../solicitudRestauracion/solicitudRestauracionDialog';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const LoginPage = () => {
     message: '',
     severity: 'info',
   });
+  const [isPasswordResetOpen, setIsPasswordResetOpen] = useState(false);
 
   const handleCloseSnackbar = () => {
     setSnackbar((prev) => ({
@@ -40,7 +42,14 @@ const LoginPage = () => {
 
   return (
     <Box sx={loginPageStyles.page}>
-      <LoginForm onSubmit={handleSubmit} />
+      <LoginForm
+        onSubmit={handleSubmit}
+        onOpenPasswordReset={() => setIsPasswordResetOpen(true)}
+      />
+      <SolicitudRestauracionDialog
+        open={isPasswordResetOpen}
+        onClose={() => setIsPasswordResetOpen(false)}
+      />
       <CustomSnackbar
         open={snackbar.open}
         message={snackbar.message}

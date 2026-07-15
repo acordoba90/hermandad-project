@@ -12,7 +12,9 @@ export const mappedService = {
     user: {
       basePath: UserController,
       crear: UserController,
-      validarCredenciales: `${UserController}/validate`
+      validarCredenciales: `${UserController}/validate`,
+      solicitarRestauracionContrasena: `${UserController}/password-reset/request`,
+      confirmarRestauracionContrasena: `${UserController}/password-reset/confirm`,
     },
     userEstado: {
       basePath: UsertEstadoController,

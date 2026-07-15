@@ -59,6 +59,11 @@ export const loginPageStyles = {
     mt: 3,
   },
 
+  forgotPasswordLink: {
+    font: 'inherit',
+    cursor: 'pointer',
+  },
+
   registerText: {
     mt: 3,
   },

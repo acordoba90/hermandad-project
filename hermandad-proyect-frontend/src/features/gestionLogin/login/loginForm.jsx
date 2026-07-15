@@ -15,7 +15,7 @@ import { loginPageStyles } from './loginStyle';
 import { loginData } from './loginData';
 import { Link as RouterLink } from 'react-router-dom';
 
-const LoginForm = ({ onSubmit }) => {
+const LoginForm = ({ onSubmit, onOpenPasswordReset }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -89,7 +89,14 @@ const LoginForm = ({ onSubmit }) => {
         </Box>
 
         <Box sx={loginPageStyles.forgotPassword}>
-          <Link href="#" underline="hover" color="secondary">
+          <Link
+            component="button"
+            type="button"
+            underline="hover"
+            color="secondary"
+            onClick={onOpenPasswordReset}
+            sx={loginPageStyles.forgotPasswordLink}
+          >
             {loginData.forgotPassword}
           </Link>
         </Box>
