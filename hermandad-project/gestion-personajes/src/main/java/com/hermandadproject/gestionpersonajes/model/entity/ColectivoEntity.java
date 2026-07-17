@@ -12,6 +12,9 @@ import org.hibernate.type.SqlTypes;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Entidad JPA que representa un colectivo funcional de personajes dentro del juego.
+ */
 @Entity
 @Table(name = "colectivos")
 public class ColectivoEntity {

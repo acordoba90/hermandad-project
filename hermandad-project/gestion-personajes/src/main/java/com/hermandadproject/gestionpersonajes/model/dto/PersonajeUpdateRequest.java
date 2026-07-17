@@ -9,13 +9,21 @@ import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 public record PersonajeUpdateRequest(
+        UUID usuarioId,
+        UUID avatarId,
         @NotNull UUID colectivoId,
+        @NotNull UUID rolPersonajeId,
         @NotBlank @Size(max = 100) String nombre,
         @Size(max = 150) String apellidos,
         @Positive Integer edad,
         @NotNull GenderEnum genero,
         @Size(max = 150) String origen,
+        @Size(max = 150) String profesion,
         @Size(max = 500) String descripcion,
+        String biografia,
+        String motivacion,
+        @Size(max = 100) String tipoPersonaje,
+        Boolean personalizado,
         @Size(max = 255) String urlAvatar,
         @NotNull Boolean activo
 ) {

@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Implementacion transaccional de los casos de uso de colectivos.
+ */
 @Service
 @Transactional
 public class ColectivoServiceImpl implements ColectivoService {
@@ -56,7 +59,7 @@ public class ColectivoServiceImpl implements ColectivoService {
     @Override
     @Transactional(readOnly = true)
     public List<ColectivoResponse> findAllActive() {
-        return colectivoRepository.findByActivoTrue()
+        return colectivoRepository.findByActivoTrueOrderByNombreAsc()
                 .stream()
                 .map(colectivoMapper::toResponse)
                 .toList();

@@ -1,5 +1,6 @@
 package com.hermandadproject.gestionpersonajes.service.impl;
 
+import com.hermandadproject.gestionpersonajes.exception.ColectivoInactiveException;
 import com.hermandadproject.gestionpersonajes.exception.ColectivoNotFoundException;
 import com.hermandadproject.gestionpersonajes.exception.PersonajeAlreadyExistsException;
 import com.hermandadproject.gestionpersonajes.exception.PersonajeNotFoundException;
@@ -9,9 +10,12 @@ import com.hermandadproject.gestionpersonajes.model.dto.PersonajeResponse;
 import com.hermandadproject.gestionpersonajes.model.dto.PersonajeUpdateRequest;
 import com.hermandadproject.gestionpersonajes.model.entity.ColectivoEntity;
 import com.hermandadproject.gestionpersonajes.model.entity.PersonajeEntity;
+import com.hermandadproject.gestionpersonajes.model.entity.RolPersonajeEntity;
 import com.hermandadproject.gestionpersonajes.repository.ColectivoRepository;
 import com.hermandadproject.gestionpersonajes.repository.PersonajeRepository;
+import com.hermandadproject.gestionpersonajes.service.PerfilPersonajeService;
 import com.hermandadproject.gestionpersonajes.service.PersonajeService;
+import com.hermandadproject.gestionpersonajes.service.RolPersonajeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,15 +29,21 @@ public class PersonajeServiceImpl implements PersonajeService {
     private final PersonajeRepository personajeRepository;
     private final ColectivoRepository colectivoRepository;
     private final PersonajeMapper personajeMapper;
+    private final PerfilPersonajeService perfilPersonajeService;
+    private final RolPersonajeService rolPersonajeService;
 
     public PersonajeServiceImpl(
             PersonajeRepository personajeRepository,
             ColectivoRepository colectivoRepository,
-            PersonajeMapper personajeMapper
+            PersonajeMapper personajeMapper,
+            PerfilPersonajeService perfilPersonajeService,
+            RolPersonajeService rolPersonajeService
     ) {
         this.personajeRepository = personajeRepository;
         this.colectivoRepository = colectivoRepository;
         this.personajeMapper = personajeMapper;
+        this.perfilPersonajeService = perfilPersonajeService;
+        this.rolPersonajeService = rolPersonajeService;
     }
 
     @Override
@@ -42,10 +52,15 @@ public class PersonajeServiceImpl implements PersonajeService {
             throw new PersonajeAlreadyExistsException("Ya existe un personaje con ese codigo");
         }
 
-        ColectivoEntity colectivo = findColectivoById(request.colectivoId());
-        PersonajeEntity entity = personajeMapper.toEntity(request, colectivo);
+        ColectivoEntity colectivo = findActiveColectivoById(request.colectivoId());
+        RolPersonajeEntity rolPersonaje = rolPersonajeService.findActiveEntityById(request.rolPersonajeId());
+        rolPersonajeService.validarPertenencia(rolPersonaje, colectivo);
+        PersonajeEntity entity = personajeMapper.toEntity(request, colectivo, rolPersonaje);
         entity.setActivo(true);
         PersonajeEntity saved = personajeRepository.save(entity);
+        if (request.arquetipoPerfilId() != null) {
+            perfilPersonajeService.crearDesdeArquetipo(saved, request.arquetipoPerfilId());
+        }
         return personajeMapper.toResponse(saved);
     }
 
@@ -101,8 +116,10 @@ public class PersonajeServiceImpl implements PersonajeService {
     @Override
     public PersonajeResponse update(UUID id, PersonajeUpdateRequest request) {
         PersonajeEntity entity = findEntityById(id);
-        ColectivoEntity colectivo = findColectivoById(request.colectivoId());
-        personajeMapper.updateEntity(entity, request, colectivo);
+        ColectivoEntity colectivo = findActiveColectivoById(request.colectivoId());
+        RolPersonajeEntity rolPersonaje = rolPersonajeService.findActiveEntityById(request.rolPersonajeId());
+        rolPersonajeService.validarPertenencia(rolPersonaje, colectivo);
+        personajeMapper.updateEntity(entity, request, colectivo, rolPersonaje);
         PersonajeEntity saved = personajeRepository.save(entity);
         return personajeMapper.toResponse(saved);
     }
@@ -122,5 +139,13 @@ public class PersonajeServiceImpl implements PersonajeService {
     private ColectivoEntity findColectivoById(UUID id) {
         return colectivoRepository.findById(id)
                 .orElseThrow(() -> new ColectivoNotFoundException("Colectivo no encontrado"));
+    }
+
+    private ColectivoEntity findActiveColectivoById(UUID id) {
+        ColectivoEntity colectivo = findColectivoById(id);
+        if (!Boolean.TRUE.equals(colectivo.getActivo())) {
+            throw new ColectivoInactiveException("El colectivo no esta activo");
+        }
+        return colectivo;
     }
 }
