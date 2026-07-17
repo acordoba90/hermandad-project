@@ -1,6 +1,8 @@
 const UserController = '/api/users';
 const UsertEstadoController = '/api/usuarios-estado';
 const EmailController = '/api/emails';
+const PersonajeController = '/api/personajes';
+const ArquetipoPerfilController = '/api/arquetipos-perfil';
 
 /**
  * Mapa centralizado de las rutas REST consumidas por el frontend.
@@ -24,5 +26,15 @@ export const mappedService = {
       basePath: EmailController,
       reenviarEnlaceActivacion: `${EmailController}/activacion-token-expirado`,
     }
+  },
+  gestionPersonajes: {
+    personajes: {
+      basePath: PersonajeController,
+      crearHermanoMayor: PersonajeController,
+      preestablecidosJuntaGobierno: `${PersonajeController}/colectivo/codigo/JUNTA_GOBIERNO`,
+    },
+    arquetipos: {
+      activos: ArquetipoPerfilController,
+    },
   },
 };

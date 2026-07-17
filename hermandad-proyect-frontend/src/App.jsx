@@ -5,6 +5,7 @@ import AltaUsuario from './features/gestionLogin/altaUsuario/altaUsuario';
 import SeleccionPartidaPage from './features/partida/SeleccionPartidaPage';
 import AccountActivation from './features/gestionLogin/accountActivation/accountActivation';
 import RestauracionContrasena from './features/gestionLogin/restauracionContrasena/restauracionContrasena';
+import CharacterOnboardingPage from './features/gestionPersonajes/CharacterOnboardingPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path="/partida" element={<SeleccionPartidaPage />} />
       <Route path="/activar-cuenta" element={<AccountActivation />} />
       <Route path="/restaurar-contrasena" element={<RestauracionContrasena />} />
+      <Route path="/crear-personaje" element={<CharacterOnboardingPage />} />
     </Routes>
   );
 }
