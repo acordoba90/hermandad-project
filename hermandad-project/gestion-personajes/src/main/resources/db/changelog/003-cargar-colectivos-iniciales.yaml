@@ -1,0 +1,451 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-cargar-colectivo-junta-gobierno
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'JUNTA_GOBIERNO'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000001 }
+              - column: { name: codigo, value: JUNTA_GOBIERNO }
+              - column: { name: nombre, value: Junta de Gobierno }
+              - column: { name: descripcion, value: "Miembros responsables de la direccion, administracion y toma de decisiones de la hermandad, incluyendo cargos como Hermano Mayor, Teniente de Hermano Mayor, Mayordomo, Secretario, Fiscal, Prioste y diputados de area." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-hermanos
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'HERMANOS'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000002 }
+              - column: { name: codigo, value: HERMANOS }
+              - column: { name: nombre, value: Hermanos }
+              - column: { name: descripcion, value: "Miembros pertenecientes a la corporacion, con distintos niveles de antiguedad, participacion, influencia y vinculacion con la vida diaria de la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-cortejo-procesional
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'CORTEJO_PROCESIONAL'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000003 }
+              - column: { name: codigo, value: CORTEJO_PROCESIONAL }
+              - column: { name: nombre, value: Cortejo Procesional }
+              - column: { name: descripcion, value: "Personas que participan en las procesiones y estaciones de penitencia como nazarenos, penitentes, diputados de tramo, portadores de insignias, manigueteros y servidores de paso." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-cuerpo-liturgico
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'CUERPO_LITURGICO'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000004 }
+              - column: { name: codigo, value: CUERPO_LITURGICO }
+              - column: { name: nombre, value: Cuerpo Litúrgico }
+              - column: { name: descripcion, value: "Personas encargadas de colaborar en los cultos y ceremonias religiosas, como acolitos, pertigueros, monaguillos, lectores, sacristanes, cantores y maestros de ceremonias." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-cuadrilla-costaleros
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'CUADRILLA_COSTALEROS'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000005 }
+              - column: { name: codigo, value: CUADRILLA_COSTALEROS }
+              - column: { name: nombre, value: Cuadrilla de Costaleros }
+              - column: { name: descripcion, value: "Colectivo encargado de portar los pasos procesionales, formado por capataces, auxiliares, contraguias, listeros, costaleros, aspirantes y personal de apoyo." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-banda-musica
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'BANDA_MUSICA'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000006 }
+              - column: { name: codigo, value: BANDA_MUSICA }
+              - column: { name: nombre, value: Banda de Música }
+              - column: { name: descripcion, value: "Musicos, directores, compositores, representantes y responsables de las formaciones musicales que acompanan los actos y procesiones de la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-priostia
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'PRIOSTIA'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000007 }
+              - column: { name: codigo, value: PRIOSTIA }
+              - column: { name: nombre, value: Priostía }
+              - column: { name: descripcion, value: "Personas responsables de la conservacion, preparacion y montaje de altares, insignias, pasos, enseres, flores, cera y demas elementos patrimoniales de la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-administracion
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'ADMINISTRACION'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000008 }
+              - column: { name: codigo, value: ADMINISTRACION }
+              - column: { name: nombre, value: Administración }
+              - column: { name: descripcion, value: "Personal encargado de la gestion administrativa, economica y documental de la hermandad, incluyendo tesoreria, secretaria, contabilidad, archivo y atencion a los hermanos." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-grupo-joven
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'GRUPO_JOVEN'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000009 }
+              - column: { name: codigo, value: GRUPO_JOVEN }
+              - column: { name: nombre, value: Grupo Joven }
+              - column: { name: descripcion, value: "Jovenes y menores vinculados a las actividades formativas, culturales, religiosas, sociales y organizativas de la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-accion-social
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'ACCION_SOCIAL'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000010 }
+              - column: { name: codigo, value: ACCION_SOCIAL }
+              - column: { name: nombre, value: Acción Social }
+              - column: { name: descripcion, value: "Voluntarios, profesionales y responsables de las obras de caridad, asistencia social, campanas solidarias, economatos, roperos y bancos de alimentos." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-clero-parroquia
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'CLERO_PARROQUIA'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000011 }
+              - column: { name: codigo, value: CLERO_PARROQUIA }
+              - column: { name: nombre, value: Clero y Parroquia }
+              - column: { name: descripcion, value: "Sacerdotes, diaconos, religiosos, sacristanes, catequistas y miembros de la comunidad parroquial vinculados a la sede canonica de la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-consejo-hermandades
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'CONSEJO_HERMANDADES'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000012 }
+              - column: { name: codigo, value: CONSEJO_HERMANDADES }
+              - column: { name: nombre, value: Consejo de Hermandades }
+              - column: { name: descripcion, value: "Representantes y responsables del organismo encargado de coordinar a las hermandades, gestionar horarios, recorridos, carrera oficial y relaciones institucionales." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-otras-hermandades
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'OTRAS_HERMANDADES'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000013 }
+              - column: { name: codigo, value: OTRAS_HERMANDADES }
+              - column: { name: nombre, value: Otras Hermandades }
+              - column: { name: descripcion, value: "Miembros y representantes de otras corporaciones que pueden mantener relaciones de colaboracion, rivalidad, conflicto, hermanamiento o representacion institucional." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-autoridades
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'AUTORIDADES'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000014 }
+              - column: { name: codigo, value: AUTORIDADES }
+              - column: { name: nombre, value: Autoridades }
+              - column: { name: descripcion, value: "Representantes de administraciones publicas, fuerzas de seguridad, servicios de emergencia y organismos civiles o religiosos con influencia sobre las actividades de la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-medios-comunicacion
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'MEDIOS_COMUNICACION'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000015 }
+              - column: { name: codigo, value: MEDIOS_COMUNICACION }
+              - column: { name: nombre, value: Medios de Comunicación }
+              - column: { name: descripcion, value: "Periodistas, presentadores, locutores, fotografos, camaras, tertulianos, criticos y responsables de medios que informan sobre la actualidad de la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-redes-sociales
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'REDES_SOCIALES'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000016 }
+              - column: { name: codigo, value: REDES_SOCIALES }
+              - column: { name: nombre, value: Redes Sociales }
+              - column: { name: descripcion, value: "Influencers, creadores de contenido, administradores de redes, fotografos digitales, usuarios criticos y cuentas anonimas capaces de influir en la reputacion publica de la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-publico-devotos
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'PUBLICO_DEVOTOS'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000017 }
+              - column: { name: codigo, value: PUBLICO_DEVOTOS }
+              - column: { name: nombre, value: Público y Devotos }
+              - column: { name: descripcion, value: "Devotos, vecinos, turistas, familiares, aficionados y publico general que asisten a cultos, procesiones y actividades organizadas por la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-proveedores
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'PROVEEDORES'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000018 }
+              - column: { name: codigo, value: PROVEEDORES }
+              - column: { name: nombre, value: Proveedores }
+              - column: { name: descripcion, value: "Empresas, profesionales y comerciantes que suministran bienes o servicios a la hermandad, como floristas, cereros, imprentas, aseguradoras, transportistas y empresas de seguridad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-arte-patrimonio
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'ARTE_PATRIMONIO'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000019 }
+              - column: { name: codigo, value: ARTE_PATRIMONIO }
+              - column: { name: nombre, value: Arte y Patrimonio }
+              - column: { name: descripcion, value: "Artistas, artesanos y especialistas vinculados a la creacion, restauracion y conservacion del patrimonio, como imagineros, escultores, bordadores, orfebres, tallistas, doradores y restauradores." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-seguridad-emergencias
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'SEGURIDAD_EMERGENCIAS'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000020 }
+              - column: { name: codigo, value: SEGURIDAD_EMERGENCIAS }
+              - column: { name: nombre, value: Seguridad y Emergencias }
+              - column: { name: descripcion, value: "Profesionales y voluntarios responsables de la seguridad, prevencion, asistencia sanitaria, evacuacion y coordinacion de emergencias durante actos y procesiones." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-profesionales-asesores
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'PROFESIONALES_ASESORES'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000021 }
+              - column: { name: codigo, value: PROFESIONALES_ASESORES }
+              - column: { name: nombre, value: Profesionales y Asesores }
+              - column: { name: descripcion, value: "Abogados, economistas, gestores, arquitectos, informaticos, disenadores, consultores y otros especialistas que prestan asesoramiento tecnico a la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-benefactores
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'BENEFACTORES'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000022 }
+              - column: { name: codigo, value: BENEFACTORES }
+              - column: { name: nombre, value: Benefactores }
+              - column: { name: descripcion, value: "Donantes, empresarios, patrocinadores, mecenas y familias vinculadas a la hermandad que aportan recursos economicos, materiales o influencia institucional." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-candidaturas
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'CANDIDATURAS'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000023 }
+              - column: { name: codigo, value: CANDIDATURAS }
+              - column: { name: nombre, value: Candidaturas }
+              - column: { name: descripcion, value: "Candidatos, equipos electorales, partidarios, opositores, interventores y hermanos con derecho a voto que participan en los procesos electorales internos." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-personajes-historicos
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'PERSONAJES_HISTORICOS'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000024 }
+              - column: { name: codigo, value: PERSONAJES_HISTORICOS }
+              - column: { name: nombre, value: Personajes Históricos }
+              - column: { name: descripcion, value: "Fundadores, antiguos cargos, artistas, benefactores, capataces, musicos, sacerdotes y otras figuras relevantes en la historia y memoria de la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }
+  - changeSet:
+      id: 003-cargar-colectivo-personajes-conflicto
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM colectivos WHERE codigo = 'PERSONAJES_CONFLICTO'
+      changes:
+        - insert:
+            tableName: colectivos
+            columns:
+              - column: { name: id, value: 30000000-0000-0000-0000-000000000025 }
+              - column: { name: codigo, value: PERSONAJES_CONFLICTO }
+              - column: { name: nombre, value: Personajes de Conflicto }
+              - column: { name: descripcion, value: "Personajes que pueden generar problemas, rumores, rivalidades, incumplimientos, polemicas o situaciones negativas dentro o alrededor de la hermandad." }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueDate: 2026-07-16T00:00:00 }

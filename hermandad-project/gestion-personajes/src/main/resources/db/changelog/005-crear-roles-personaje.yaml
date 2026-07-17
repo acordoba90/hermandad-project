@@ -1,0 +1,241 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-crear-tabla-roles-personaje
+      author: codex
+      changes:
+        - createTable:
+            tableName: roles_personaje
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_roles_personaje
+                    nullable: false
+              - column:
+                  name: colectivo_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: VARCHAR(1000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - addForeignKeyConstraint:
+            baseTableName: roles_personaje
+            baseColumnNames: colectivo_id
+            constraintName: fk_roles_personaje_colectivo
+            referencedTableName: colectivos
+            referencedColumnNames: id
+        - addUniqueConstraint:
+            tableName: roles_personaje
+            columnNames: colectivo_id, codigo
+            constraintName: uk_roles_personaje_colectivo_codigo
+        - createIndex:
+            tableName: roles_personaje
+            indexName: idx_roles_personaje_activo
+            columns:
+              - column:
+                  name: activo
+  - changeSet:
+      id: 005-anadir-rol-personaje-a-personajes
+      author: codex
+      changes:
+        - addColumn:
+            tableName: personajes
+            columns:
+              - column:
+                  name: rol_personaje_id
+                  type: CHAR(36)
+        - addForeignKeyConstraint:
+            baseTableName: personajes
+            baseColumnNames: rol_personaje_id
+            constraintName: fk_personajes_rol_personaje
+            referencedTableName: roles_personaje
+            referencedColumnNames: id
+        - createIndex:
+            tableName: personajes
+            indexName: idx_personajes_rol_personaje
+            columns:
+              - column:
+                  name: rol_personaje_id
+  - changeSet:
+      id: 005-cargar-catalogo-roles-personaje
+      author: codex
+      changes:
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: |
+              INSERT INTO roles_personaje (id, colectivo_id, codigo, nombre, descripcion, activo, fecha_creacion)
+              SELECT r_new.id, colectivos.id, r_new.codigo, r_new.nombre, r_new.descripcion, TRUE, CURRENT_TIMESTAMP
+              FROM colectivos
+              JOIN (
+                SELECT '50000000-0000-0000-0000-000000000001' AS id, 'JUNTA_GOBIERNO' AS colectivo_codigo, 'HERMANO_MAYOR' AS codigo, 'Hermano Mayor' AS nombre, 'Maxima autoridad de la hermandad y principal responsable de su direccion, representacion y toma de decisiones.' AS descripcion
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000002', 'JUNTA_GOBIERNO', 'TENIENTE_HERMANO_MAYOR', 'Teniente de Hermano Mayor', 'Sustituye y asiste al Hermano Mayor, colaborando en la coordinacion general de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000003', 'JUNTA_GOBIERNO', 'MAYORDOMO', 'Mayordomo', 'Responsable de la gestion economica, patrimonial y material de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000004', 'JUNTA_GOBIERNO', 'SECRETARIO', 'Secretario', 'Responsable de actas, comunicaciones oficiales, documentacion y gestion administrativa.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000005', 'JUNTA_GOBIERNO', 'FISCAL', 'Fiscal', 'Responsable de velar por el cumplimiento de las reglas, acuerdos y normas de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000006', 'JUNTA_GOBIERNO', 'DIPUTADO_MAYOR_GOBIERNO', 'Diputado Mayor de Gobierno', 'Responsable de la organizacion del cortejo, la estacion de penitencia y el orden procesional.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000007', 'JUNTA_GOBIERNO', 'PRIOSTE', 'Prioste', 'Responsable de cultos, altares, pasos, insignias y enseres de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000008', 'JUNTA_GOBIERNO', 'CONSILIARIO', 'Consiliario', 'Miembro de la Junta encargado de asesorar y colaborar en las decisiones de gobierno.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000009', 'JUNTA_GOBIERNO', 'DIPUTADO_CULTOS', 'Diputado de Cultos', 'Responsable de organizar y coordinar los cultos internos y externos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000010', 'JUNTA_GOBIERNO', 'DIPUTADO_CARIDAD', 'Diputado de Caridad', 'Responsable de coordinar la accion social y asistencial de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000011', 'JUNTA_GOBIERNO', 'DIPUTADO_FORMACION', 'Diputado de Formacion', 'Responsable de organizar actividades formativas y religiosas para los hermanos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000012', 'JUNTA_GOBIERNO', 'DIPUTADO_JUVENTUD', 'Diputado de Juventud', 'Responsable de coordinar las actividades y participacion de los jovenes.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000013', 'JUNTA_GOBIERNO', 'VOCAL_JUNTA', 'Vocal de Junta', 'Miembro de la Junta que colabora en las distintas areas de gestion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000014', 'HERMANOS', 'HERMANO', 'Hermano', 'Miembro ordinario perteneciente a la corporacion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000015', 'HERMANOS', 'HERMANO_VETERANO', 'Hermano veterano', 'Miembro con amplia antiguedad, experiencia y conocimiento de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000016', 'HERMANOS', 'HERMANO_NUEVO', 'Hermano nuevo', 'Miembro recientemente incorporado a la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000017', 'HERMANOS', 'HERMANO_BENEFACTOR', 'Hermano benefactor', 'Hermano que realiza aportaciones economicas o materiales relevantes.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000018', 'HERMANOS', 'HERMANO_HONORARIO', 'Hermano honorario', 'Persona distinguida por su especial vinculacion o contribucion a la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000019', 'CORTEJO_PROCESIONAL', 'NAZARENO_CIRIO', 'Nazareno de cirio', 'Nazareno que participa en el cortejo portando un cirio.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000020', 'CORTEJO_PROCESIONAL', 'NAZARENO_CRUZ', 'Nazareno de cruz', 'Penitente que participa en el cortejo portando una cruz.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000021', 'CORTEJO_PROCESIONAL', 'PORTADOR_INSIGNIA', 'Portador de insignia', 'Persona encargada de portar una insignia representativa de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000022', 'CORTEJO_PROCESIONAL', 'DIPUTADO_TRAMO', 'Diputado de tramo', 'Responsable de organizar y mantener el orden dentro de un tramo de nazarenos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000023', 'CORTEJO_PROCESIONAL', 'CELADOR', 'Celador', 'Auxilia a los diputados en el control y organizacion del cortejo.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000024', 'CORTEJO_PROCESIONAL', 'MANIGUETERO', 'Maniguetero', 'Persona que acompana al paso sujetando una de sus maniguetas.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000025', 'CORTEJO_PROCESIONAL', 'SERVIDOR_PASO', 'Servidor de paso', 'Persona encargada de asistir y atender las necesidades inmediatas del paso.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000026', 'CORTEJO_PROCESIONAL', 'FISCAL_PASO', 'Fiscal de paso', 'Responsable del control del paso y del cumplimiento de las normas durante la procesion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000027', 'CUERPO_LITURGICO', 'ACOLITO_CEROFERARIO', 'Acolito ceroferario', 'Acolito que participa en los cultos portando un cirial.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000028', 'CUERPO_LITURGICO', 'ACOLITO_TURIFERARIO', 'Acolito turiferario', 'Acolito encargado de portar y utilizar el incensario.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000029', 'CUERPO_LITURGICO', 'PERTIGUERO', 'Pertiguero', 'Responsable de dirigir y coordinar el cuerpo de acolitos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000030', 'CUERPO_LITURGICO', 'MONAGUILLO', 'Monaguillo', 'Auxiliar liturgico que colabora durante los cultos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000031', 'CUERPO_LITURGICO', 'LECTOR', 'Lector', 'Persona encargada de proclamar las lecturas durante las celebraciones.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000032', 'CUERPO_LITURGICO', 'SACRISTAN', 'Sacristan', 'Responsable de preparar y atender los elementos necesarios para los cultos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000033', 'CUERPO_LITURGICO', 'MAESTRO_CEREMONIAS', 'Maestro de ceremonias', 'Responsable de coordinar el desarrollo ceremonial y protocolario de los cultos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000034', 'CUADRILLA_COSTALEROS', 'CAPATAZ', 'Capataz', 'Maximo responsable de dirigir la cuadrilla y conducir el paso.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000035', 'CUADRILLA_COSTALEROS', 'SEGUNDO_CAPATAZ', 'Segundo capataz', 'Auxilia y sustituye al capataz en la direccion de la cuadrilla.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000036', 'CUADRILLA_COSTALEROS', 'CONTRAGUIA', 'Contraguia', 'Ayuda a dirigir el paso desde posiciones laterales o traseras.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000037', 'CUADRILLA_COSTALEROS', 'LISTERO', 'Listero', 'Responsable de controlar la composicion, asistencia y organizacion de la cuadrilla.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000038', 'CUADRILLA_COSTALEROS', 'COSTALERO', 'Costalero', 'Persona encargada de portar el paso procesional.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000039', 'CUADRILLA_COSTALEROS', 'COSTALERO_SUPLENTE', 'Costalero suplente', 'Costalero disponible para sustituir a un miembro de la cuadrilla.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000040', 'CUADRILLA_COSTALEROS', 'AGUADOR', 'Aguador', 'Persona encargada de atender la hidratacion y necesidades basicas de la cuadrilla.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000041', 'BANDA_MUSICA', 'DIRECTOR_MUSICAL', 'Director musical', 'Responsable de la direccion artistica y musical de la formacion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000042', 'BANDA_MUSICA', 'SUBDIRECTOR_MUSICAL', 'Subdirector musical', 'Auxilia y sustituye al director musical.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000043', 'BANDA_MUSICA', 'MUSICO', 'Musico', 'Miembro instrumental de una formacion musical.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000044', 'BANDA_MUSICA', 'CORNETA', 'Corneta', 'Musico especializado en la interpretacion de corneta.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000045', 'BANDA_MUSICA', 'TAMBOR', 'Tambor', 'Musico encargado de la percusion mediante tambor.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000046', 'BANDA_MUSICA', 'BOMBO', 'Bombo', 'Musico encargado de interpretar el bombo.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000047', 'BANDA_MUSICA', 'PLATILLERO', 'Platillero', 'Musico encargado de la interpretacion de los platillos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000048', 'BANDA_MUSICA', 'REPRESENTANTE_BANDA', 'Representante de banda', 'Responsable de las relaciones contractuales y organizativas de la formacion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000049', 'PRIOSTIA', 'AUXILIAR_PRIOSTIA', 'Auxiliar de priostia', 'Persona que colabora en el montaje, desmontaje y conservacion de enseres.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000050', 'PRIOSTIA', 'CAMARERO_IMAGEN', 'Camarero de la imagen', 'Persona encargada del cuidado y atencion directa de una imagen titular.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000051', 'PRIOSTIA', 'VESTIDOR', 'Vestidor', 'Especialista encargado de vestir y presentar adecuadamente las imagenes.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000052', 'PRIOSTIA', 'FLORISTA', 'Florista', 'Profesional encargado del diseno y montaje floral.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000053', 'PRIOSTIA', 'ENCARGADO_CERA', 'Encargado de cera', 'Responsable de preparar y conservar cirios, velas y demas elementos de cera.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000054', 'PRIOSTIA', 'MONTADOR_CULTOS', 'Montador de cultos', 'Persona encargada de preparar altares y espacios para los cultos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000055', 'PRIOSTIA', 'CONSERVADOR_PATRIMONIO', 'Conservador de patrimonio', 'Responsable del seguimiento y conservacion preventiva de los bienes patrimoniales.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000056', 'ADMINISTRACION', 'ADMINISTRADOR', 'Administrador', 'Responsable de coordinar la gestion administrativa de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000057', 'ADMINISTRACION', 'TESORERO', 'Tesorero', 'Responsable del control de ingresos, gastos y cuentas.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000058', 'ADMINISTRACION', 'CONTABLE', 'Contable', 'Profesional encargado del registro y seguimiento contable.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000059', 'ADMINISTRACION', 'ARCHIVERO', 'Archivero', 'Responsable de conservar y organizar el archivo documental.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000060', 'ADMINISTRACION', 'AUXILIAR_ADMINISTRATIVO', 'Auxiliar administrativo', 'Persona que presta apoyo en tareas administrativas y de atencion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000061', 'ADMINISTRACION', 'RESPONSABLE_ATENCION_HERMANOS', 'Responsable de atencion a hermanos', 'Persona encargada de gestionar consultas, altas, bajas y comunicaciones con los hermanos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000062', 'ADMINISTRACION', 'ASESOR_JURIDICO', 'Asesor juridico', 'Profesional encargado de asesorar juridicamente a la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000063', 'GRUPO_JOVEN', 'PRESIDENTE_GRUPO_JOVEN', 'Presidente del Grupo Joven', 'Responsable de dirigir y representar al Grupo Joven.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000064', 'GRUPO_JOVEN', 'COORDINADOR_JUVENIL', 'Coordinador juvenil', 'Persona encargada de planificar y coordinar las actividades juveniles.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000065', 'GRUPO_JOVEN', 'MIEMBRO_GRUPO_JOVEN', 'Miembro del Grupo Joven', 'Joven que participa activamente en las actividades de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000066', 'GRUPO_JOVEN', 'MONITOR_JUVENIL', 'Monitor juvenil', 'Persona encargada de acompanar y organizar actividades destinadas a menores y jovenes.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000067', 'ACCION_SOCIAL', 'COORDINADOR_ACCION_SOCIAL', 'Coordinador de Accion Social', 'Responsable de planificar y coordinar las actividades sociales y asistenciales.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000068', 'ACCION_SOCIAL', 'VOLUNTARIO', 'Voluntario', 'Persona que colabora de forma desinteresada en las acciones sociales.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000069', 'ACCION_SOCIAL', 'TRABAJADOR_SOCIAL', 'Trabajador social', 'Profesional encargado de valorar y atender necesidades sociales.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000070', 'ACCION_SOCIAL', 'RESPONSABLE_ECONOMATO', 'Responsable del economato', 'Persona encargada de organizar y gestionar el economato social.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000071', 'ACCION_SOCIAL', 'RESPONSABLE_ROPERO', 'Responsable del ropero', 'Persona encargada de gestionar la recogida y entrega de ropa.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000072', 'CLERO_PARROQUIA', 'PARROCO', 'Parroco', 'Sacerdote responsable de la parroquia y su comunidad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000073', 'CLERO_PARROQUIA', 'VICARIO_PARROQUIAL', 'Vicario parroquial', 'Sacerdote que auxilia al parroco en sus funciones.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000074', 'CLERO_PARROQUIA', 'DIRECTOR_ESPIRITUAL', 'Director espiritual', 'Sacerdote encargado del acompanamiento espiritual de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000075', 'CLERO_PARROQUIA', 'DIACONO', 'Diacono', 'Ministro ordenado que colabora en celebraciones y actividades pastorales.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000076', 'CLERO_PARROQUIA', 'CATEQUISTA', 'Catequista', 'Persona encargada de la formacion religiosa y catequetica.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000077', 'CONSEJO_HERMANDADES', 'PRESIDENTE_CONSEJO', 'Presidente del Consejo', 'Maximo representante del Consejo de Hermandades.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000078', 'CONSEJO_HERMANDADES', 'CONSEJERO', 'Consejero', 'Miembro encargado de colaborar en la coordinacion de las hermandades.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000079', 'CONSEJO_HERMANDADES', 'DELEGADO_DIA', 'Delegado de dia', 'Responsable de supervisar las hermandades asignadas durante una jornada procesional.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000080', 'CONSEJO_HERMANDADES', 'RESPONSABLE_HORARIOS_ITINERARIOS', 'Responsable de horarios e itinerarios', 'Persona encargada de coordinar horarios, recorridos y posibles conflictos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000081', 'MEDIOS_COMUNICACION', 'PERIODISTA', 'Periodista', 'Profesional encargado de informar sobre la actualidad cofrade.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000082', 'MEDIOS_COMUNICACION', 'PRESENTADOR', 'Presentador', 'Profesional encargado de conducir programas y espacios informativos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000083', 'MEDIOS_COMUNICACION', 'LOCUTOR_RADIO', 'Locutor de radio', 'Profesional encargado de comunicar y narrar contenidos radiofonicos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000084', 'MEDIOS_COMUNICACION', 'FOTOGRAFO', 'Fotografo', 'Profesional encargado de documentar graficamente cultos y procesiones.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000085', 'MEDIOS_COMUNICACION', 'REPORTERO', 'Reportero', 'Profesional encargado de cubrir actos y acontecimientos sobre el terreno.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000086', 'MEDIOS_COMUNICACION', 'TERTULIANO', 'Tertuliano', 'Colaborador que participa en debates y espacios de opinion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000087', 'REDES_SOCIALES', 'INFLUENCER_COFRADE', 'Influencer cofrade', 'Creador con capacidad para influir en la opinion publica cofrade.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000088', 'REDES_SOCIALES', 'CREADOR_CONTENIDO', 'Creador de contenido', 'Persona dedicada a crear videos, fotografias, publicaciones y otros contenidos digitales.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000089', 'REDES_SOCIALES', 'COMMUNITY_MANAGER', 'Community manager', 'Responsable de gestionar la comunicacion y las redes sociales de una organizacion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000090', 'REDES_SOCIALES', 'USUARIO_CRITICO', 'Usuario critico', 'Usuario que publica valoraciones y criticas sobre la gestion de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000091', 'REDES_SOCIALES', 'CUENTA_ANONIMA', 'Cuenta anonima', 'Perfil sin identidad publica capaz de generar opiniones, rumores o polemicas.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000092', 'PUBLICO_DEVOTOS', 'DEVOTO', 'Devoto', 'Persona con una vinculacion religiosa y afectiva con los titulares.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000093', 'PUBLICO_DEVOTOS', 'VECINO', 'Vecino', 'Persona residente en el entorno de la hermandad o de su recorrido.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000094', 'PUBLICO_DEVOTOS', 'TURISTA', 'Turista', 'Visitante que asiste a actos o procesiones por interes cultural.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000095', 'PUBLICO_DEVOTOS', 'PUBLICO_GENERAL', 'Publico general', 'Persona que asiste a cultos, procesiones o actividades abiertas.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000096', 'PUBLICO_DEVOTOS', 'FOTOGRAFO_AFICIONADO', 'Fotografo aficionado', 'Persona que documenta actos y procesiones por aficion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000097', 'PROVEEDORES', 'PROVEEDOR', 'Proveedor', 'Profesional o empresa que suministra productos o servicios.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000098', 'PROVEEDORES', 'CERERO', 'Cerero', 'Profesional especializado en la elaboracion y suministro de cera.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000099', 'PROVEEDORES', 'ORFEBRE', 'Orfebre', 'Artesano especializado en trabajos de metales preciosos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000100', 'PROVEEDORES', 'BORDADOR', 'Bordador', 'Artesano especializado en bordados y textiles ornamentales.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000101', 'PROVEEDORES', 'IMPRENTA', 'Responsable de imprenta', 'Profesional encargado de trabajos de impresion y material grafico.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000102', 'PROVEEDORES', 'ASEGURADOR', 'Asegurador', 'Profesional encargado de la contratacion y gestion de seguros.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000103', 'ARTE_PATRIMONIO', 'IMAGINERO', 'Imaginero', 'Artista especializado en la creacion de imagenes religiosas.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000104', 'ARTE_PATRIMONIO', 'ESCULTOR', 'Escultor', 'Artista especializado en la creacion de obras escultoricas.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000105', 'ARTE_PATRIMONIO', 'TALLISTA', 'Tallista', 'Artesano especializado en la talla ornamental en madera.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000106', 'ARTE_PATRIMONIO', 'DORADOR', 'Dorador', 'Artesano especializado en dorado y policromia.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000107', 'ARTE_PATRIMONIO', 'RESTAURADOR', 'Restaurador', 'Profesional especializado en la conservacion y restauracion de bienes culturales.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000108', 'ARTE_PATRIMONIO', 'HISTORIADOR_ARTE', 'Historiador del arte', 'Profesional especializado en el estudio y valoracion del patrimonio artistico.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000109', 'SEGURIDAD_EMERGENCIAS', 'RESPONSABLE_SEGURIDAD', 'Responsable de seguridad', 'Persona encargada de planificar y coordinar las medidas de seguridad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000110', 'SEGURIDAD_EMERGENCIAS', 'POLICIA', 'Policia', 'Agente encargado de colaborar en el orden y la seguridad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000111', 'SEGURIDAD_EMERGENCIAS', 'PROTECCION_CIVIL', 'Miembro de Proteccion Civil', 'Voluntario o profesional encargado de prevencion y apoyo en emergencias.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000112', 'SEGURIDAD_EMERGENCIAS', 'SANITARIO', 'Sanitario', 'Profesional encargado de prestar asistencia sanitaria.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000113', 'SEGURIDAD_EMERGENCIAS', 'COORDINADOR_EMERGENCIAS', 'Coordinador de emergencias', 'Responsable de coordinar recursos y protocolos ante incidencias.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000114', 'PROFESIONALES_ASESORES', 'ABOGADO', 'Abogado', 'Profesional encargado del asesoramiento juridico.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000115', 'PROFESIONALES_ASESORES', 'ECONOMISTA', 'Economista', 'Profesional encargado de asesorar en planificacion economica y financiera.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000116', 'PROFESIONALES_ASESORES', 'INFORMATICO', 'Informatico', 'Profesional encargado de sistemas, aplicaciones y soporte tecnologico.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000117', 'PROFESIONALES_ASESORES', 'ARQUITECTO', 'Arquitecto', 'Profesional encargado de asesorar en edificios, reformas y espacios.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000118', 'PROFESIONALES_ASESORES', 'DISENADOR_GRAFICO', 'Disenador grafico', 'Profesional encargado de crear elementos visuales y de comunicacion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000119', 'PROFESIONALES_ASESORES', 'CONSULTOR', 'Consultor', 'Profesional que presta asesoramiento especializado en gestion y estrategia.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000120', 'BENEFACTORES', 'DONANTE', 'Donante', 'Persona que realiza aportaciones economicas o materiales.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000121', 'BENEFACTORES', 'MECENAS', 'Mecenas', 'Persona que financia proyectos patrimoniales, artisticos o sociales.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000122', 'BENEFACTORES', 'PATROCINADOR', 'Patrocinador', 'Persona o entidad que aporta recursos a cambio de una colaboracion acordada.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000123', 'BENEFACTORES', 'EMPRESARIO_BENEFACTOR', 'Empresario benefactor', 'Empresario con capacidad para aportar financiacion, contactos o recursos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000124', 'CANDIDATURAS', 'CANDIDATO_HERMANO_MAYOR', 'Candidato a Hermano Mayor', 'Hermano que encabeza una candidatura electoral.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000125', 'CANDIDATURAS', 'MIEMBRO_CANDIDATURA', 'Miembro de candidatura', 'Persona integrada en el equipo de una candidatura.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000126', 'CANDIDATURAS', 'JEFE_CAMPANA', 'Jefe de campana', 'Responsable de coordinar la estrategia y organizacion de una candidatura.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000127', 'CANDIDATURAS', 'INTERVENTOR_ELECTORAL', 'Interventor electoral', 'Persona encargada de supervisar el proceso electoral en representacion de una candidatura.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000128', 'PERSONAJES_HISTORICOS', 'FUNDADOR', 'Fundador', 'Persona vinculada a la fundacion de la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000129', 'PERSONAJES_HISTORICOS', 'ANTIGUO_HERMANO_MAYOR', 'Antiguo Hermano Mayor', 'Persona que ejercio en el pasado como Hermano Mayor.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000130', 'PERSONAJES_HISTORICOS', 'BENEFACTOR_HISTORICO', 'Benefactor historico', 'Persona recordada por sus aportaciones relevantes a la hermandad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000131', 'PERSONAJES_HISTORICOS', 'CAPATAZ_HISTORICO', 'Capataz historico', 'Capataz especialmente relevante en la historia de la corporacion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000132', 'PERSONAJES_CONFLICTO', 'DIFUSOR_RUMORES', 'Difusor de rumores', 'Persona que propaga informacion no confirmada y genera inestabilidad.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000133', 'PERSONAJES_CONFLICTO', 'PROVEEDOR_INCUMPLIDOR', 'Proveedor incumplidor', 'Proveedor que no cumple los plazos, calidad o acuerdos establecidos.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000134', 'PERSONAJES_CONFLICTO', 'PERIODISTA_SENSACIONALISTA', 'Periodista sensacionalista', 'Profesional que exagera conflictos o noticias para obtener repercusion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000135', 'PERSONAJES_CONFLICTO', 'OPOSITOR_INTERNO', 'Opositor interno', 'Persona que se enfrenta activamente a las decisiones de la direccion.'
+                UNION ALL SELECT '50000000-0000-0000-0000-000000000136', 'PERSONAJES_CONFLICTO', 'VANDALO', 'Vandalo', 'Persona capaz de causar danos materiales o alteraciones del orden.'
+              ) r_new ON r_new.colectivo_codigo = colectivos.codigo
+              WHERE NOT EXISTS (
+                SELECT 1
+                FROM roles_personaje rp
+                WHERE rp.colectivo_id = colectivos.id
+                  AND rp.codigo = r_new.codigo
+              );

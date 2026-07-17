@@ -1,0 +1,537 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-crear-tabla-arquetipos-perfil
+      author: codex
+      changes:
+        - createTable:
+            tableName: arquetipos_perfil
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_arquetipos_perfil
+                    nullable: false
+              - column:
+                  name: codigo
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uk_arquetipos_perfil_codigo
+              - column:
+                  name: nombre
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: TEXT
+              - column: { name: liderazgo_base, type: INT, constraints: { nullable: false } }
+              - column: { name: carisma_base, type: INT, constraints: { nullable: false } }
+              - column: { name: diplomacia_base, type: INT, constraints: { nullable: false } }
+              - column: { name: organizacion_base, type: INT, constraints: { nullable: false } }
+              - column: { name: comunicacion_base, type: INT, constraints: { nullable: false } }
+              - column: { name: influencia_base, type: INT, constraints: { nullable: false } }
+              - column: { name: conocimiento_cofrade_base, type: INT, constraints: { nullable: false } }
+              - column: { name: protocolo_base, type: INT, constraints: { nullable: false } }
+              - column: { name: devocion_base, type: INT, constraints: { nullable: false } }
+              - column: { name: disciplina_base, type: INT, constraints: { nullable: false } }
+              - column: { name: empatia_base, type: INT, constraints: { nullable: false } }
+              - column: { name: lealtad_base, type: INT, constraints: { nullable: false } }
+              - column: { name: integridad_base, type: INT, constraints: { nullable: false } }
+              - column: { name: ambicion_base, type: INT, constraints: { nullable: false } }
+              - column: { name: conflictividad_base, type: INT, constraints: { nullable: false } }
+              - column: { name: popularidad_base, type: INT, constraints: { nullable: false } }
+              - column: { name: reputacion_base, type: INT, constraints: { nullable: false } }
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - createIndex:
+            tableName: arquetipos_perfil
+            indexName: idx_arquetipos_perfil_activo
+            columns:
+              - column:
+                  name: activo
+  - changeSet:
+      id: 004-crear-tabla-perfiles-personaje
+      author: codex
+      changes:
+        - createTable:
+            tableName: perfiles_personaje
+            columns:
+              - column:
+                  name: id
+                  type: CHAR(36)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_perfiles_personaje
+                    nullable: false
+              - column:
+                  name: personaje_id
+                  type: CHAR(36)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uk_perfiles_personaje_personaje
+              - column:
+                  name: arquetipo_origen_id
+                  type: CHAR(36)
+              - column: { name: nivel, type: INT, constraints: { nullable: false } }
+              - column: { name: experiencia, type: BIGINT, constraints: { nullable: false } }
+              - column: { name: puntos_desarrollo, type: INT, constraints: { nullable: false } }
+              - column: { name: liderazgo, type: INT, constraints: { nullable: false } }
+              - column: { name: carisma, type: INT, constraints: { nullable: false } }
+              - column: { name: diplomacia, type: INT, constraints: { nullable: false } }
+              - column: { name: organizacion, type: INT, constraints: { nullable: false } }
+              - column: { name: comunicacion, type: INT, constraints: { nullable: false } }
+              - column: { name: influencia, type: INT, constraints: { nullable: false } }
+              - column: { name: conocimiento_cofrade, type: INT, constraints: { nullable: false } }
+              - column: { name: protocolo, type: INT, constraints: { nullable: false } }
+              - column: { name: devocion, type: INT, constraints: { nullable: false } }
+              - column: { name: disciplina, type: INT, constraints: { nullable: false } }
+              - column: { name: empatia, type: INT, constraints: { nullable: false } }
+              - column: { name: lealtad, type: INT, constraints: { nullable: false } }
+              - column: { name: integridad, type: INT, constraints: { nullable: false } }
+              - column: { name: ambicion, type: INT, constraints: { nullable: false } }
+              - column: { name: conflictividad, type: INT, constraints: { nullable: false } }
+              - column: { name: popularidad, type: INT, constraints: { nullable: false } }
+              - column: { name: reputacion, type: INT, constraints: { nullable: false } }
+              - column:
+                  name: activo
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_creacion
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fecha_actualizacion
+                  type: DATETIME
+        - addForeignKeyConstraint:
+            baseTableName: perfiles_personaje
+            baseColumnNames: personaje_id
+            constraintName: fk_perfiles_personaje_personaje
+            referencedTableName: personajes
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: perfiles_personaje
+            baseColumnNames: arquetipo_origen_id
+            constraintName: fk_perfiles_personaje_arquetipo
+            referencedTableName: arquetipos_perfil
+            referencedColumnNames: id
+        - createIndex:
+            tableName: perfiles_personaje
+            indexName: idx_perfiles_personaje_arquetipo
+            columns:
+              - column:
+                  name: arquetipo_origen_id
+  - changeSet:
+      id: 004-cargar-arquetipo-conciliador
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'CONCILIADOR'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000001 }
+              - column: { name: codigo, value: CONCILIADOR }
+              - column: { name: nombre, value: Conciliador }
+              - column: { name: descripcion, value: "Persona prudente, empática y dialogante, especializada en mediar entre distintas sensibilidades y resolver conflictos internos." }
+              - column: { name: liderazgo_base, valueNumeric: 70 }
+              - column: { name: carisma_base, valueNumeric: 75 }
+              - column: { name: diplomacia_base, valueNumeric: 90 }
+              - column: { name: organizacion_base, valueNumeric: 65 }
+              - column: { name: comunicacion_base, valueNumeric: 82 }
+              - column: { name: influencia_base, valueNumeric: 68 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 72 }
+              - column: { name: protocolo_base, valueNumeric: 78 }
+              - column: { name: devocion_base, valueNumeric: 72 }
+              - column: { name: disciplina_base, valueNumeric: 68 }
+              - column: { name: empatia_base, valueNumeric: 92 }
+              - column: { name: lealtad_base, valueNumeric: 82 }
+              - column: { name: integridad_base, valueNumeric: 86 }
+              - column: { name: ambicion_base, valueNumeric: 30 }
+              - column: { name: conflictividad_base, valueNumeric: 10 }
+              - column: { name: popularidad_base, valueNumeric: 78 }
+              - column: { name: reputacion_base, valueNumeric: 76 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-tradicionalista
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'TRADICIONALISTA'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000002 }
+              - column: { name: codigo, value: TRADICIONALISTA }
+              - column: { name: nombre, value: Tradicionalista }
+              - column: { name: descripcion, value: "Persona profundamente vinculada a la historia, las normas y las costumbres de la hermandad, reacia a los cambios que puedan alterar su identidad." }
+              - column: { name: liderazgo_base, valueNumeric: 68 }
+              - column: { name: carisma_base, valueNumeric: 62 }
+              - column: { name: diplomacia_base, valueNumeric: 55 }
+              - column: { name: organizacion_base, valueNumeric: 72 }
+              - column: { name: comunicacion_base, valueNumeric: 58 }
+              - column: { name: influencia_base, valueNumeric: 72 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 94 }
+              - column: { name: protocolo_base, valueNumeric: 92 }
+              - column: { name: devocion_base, valueNumeric: 90 }
+              - column: { name: disciplina_base, valueNumeric: 88 }
+              - column: { name: empatia_base, valueNumeric: 55 }
+              - column: { name: lealtad_base, valueNumeric: 94 }
+              - column: { name: integridad_base, valueNumeric: 84 }
+              - column: { name: ambicion_base, valueNumeric: 42 }
+              - column: { name: conflictividad_base, valueNumeric: 45 }
+              - column: { name: popularidad_base, valueNumeric: 65 }
+              - column: { name: reputacion_base, valueNumeric: 82 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-renovador
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'RENOVADOR'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000003 }
+              - column: { name: codigo, value: RENOVADOR }
+              - column: { name: nombre, value: Renovador }
+              - column: { name: descripcion, value: "Persona innovadora que propone nuevas formas de organización, comunicación y participación, manteniendo el respeto por la identidad de la hermandad." }
+              - column: { name: liderazgo_base, valueNumeric: 76 }
+              - column: { name: carisma_base, valueNumeric: 80 }
+              - column: { name: diplomacia_base, valueNumeric: 68 }
+              - column: { name: organizacion_base, valueNumeric: 72 }
+              - column: { name: comunicacion_base, valueNumeric: 88 }
+              - column: { name: influencia_base, valueNumeric: 70 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 68 }
+              - column: { name: protocolo_base, valueNumeric: 58 }
+              - column: { name: devocion_base, valueNumeric: 65 }
+              - column: { name: disciplina_base, valueNumeric: 66 }
+              - column: { name: empatia_base, valueNumeric: 72 }
+              - column: { name: lealtad_base, valueNumeric: 74 }
+              - column: { name: integridad_base, valueNumeric: 78 }
+              - column: { name: ambicion_base, valueNumeric: 68 }
+              - column: { name: conflictividad_base, valueNumeric: 38 }
+              - column: { name: popularidad_base, valueNumeric: 82 }
+              - column: { name: reputacion_base, valueNumeric: 70 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-influyente
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'INFLUYENTE'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000004 }
+              - column: { name: codigo, value: INFLUYENTE }
+              - column: { name: nombre, value: Influyente }
+              - column: { name: descripcion, value: "Persona con amplias relaciones sociales, empresariales o institucionales, capaz de obtener apoyos y recursos para la hermandad." }
+              - column: { name: liderazgo_base, valueNumeric: 78 }
+              - column: { name: carisma_base, valueNumeric: 86 }
+              - column: { name: diplomacia_base, valueNumeric: 78 }
+              - column: { name: organizacion_base, valueNumeric: 68 }
+              - column: { name: comunicacion_base, valueNumeric: 84 }
+              - column: { name: influencia_base, valueNumeric: 95 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 65 }
+              - column: { name: protocolo_base, valueNumeric: 82 }
+              - column: { name: devocion_base, valueNumeric: 58 }
+              - column: { name: disciplina_base, valueNumeric: 65 }
+              - column: { name: empatia_base, valueNumeric: 62 }
+              - column: { name: lealtad_base, valueNumeric: 68 }
+              - column: { name: integridad_base, valueNumeric: 64 }
+              - column: { name: ambicion_base, valueNumeric: 82 }
+              - column: { name: conflictividad_base, valueNumeric: 35 }
+              - column: { name: popularidad_base, valueNumeric: 80 }
+              - column: { name: reputacion_base, valueNumeric: 78 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-devoto
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'DEVOTO'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000005 }
+              - column: { name: codigo, value: DEVOTO }
+              - column: { name: nombre, value: Devoto }
+              - column: { name: descripcion, value: "Persona caracterizada por una profunda espiritualidad, fuerte compromiso religioso y especial vinculación con los titulares de la hermandad." }
+              - column: { name: liderazgo_base, valueNumeric: 58 }
+              - column: { name: carisma_base, valueNumeric: 68 }
+              - column: { name: diplomacia_base, valueNumeric: 72 }
+              - column: { name: organizacion_base, valueNumeric: 60 }
+              - column: { name: comunicacion_base, valueNumeric: 65 }
+              - column: { name: influencia_base, valueNumeric: 55 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 82 }
+              - column: { name: protocolo_base, valueNumeric: 80 }
+              - column: { name: devocion_base, valueNumeric: 98 }
+              - column: { name: disciplina_base, valueNumeric: 86 }
+              - column: { name: empatia_base, valueNumeric: 85 }
+              - column: { name: lealtad_base, valueNumeric: 96 }
+              - column: { name: integridad_base, valueNumeric: 94 }
+              - column: { name: ambicion_base, valueNumeric: 18 }
+              - column: { name: conflictividad_base, valueNumeric: 12 }
+              - column: { name: popularidad_base, valueNumeric: 75 }
+              - column: { name: reputacion_base, valueNumeric: 88 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-gestor
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'GESTOR'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000006 }
+              - column: { name: codigo, value: GESTOR }
+              - column: { name: nombre, value: Gestor }
+              - column: { name: descripcion, value: "Persona organizada, metódica y eficaz, especializada en administración, planificación, control económico y coordinación de recursos." }
+              - column: { name: liderazgo_base, valueNumeric: 72 }
+              - column: { name: carisma_base, valueNumeric: 58 }
+              - column: { name: diplomacia_base, valueNumeric: 65 }
+              - column: { name: organizacion_base, valueNumeric: 96 }
+              - column: { name: comunicacion_base, valueNumeric: 68 }
+              - column: { name: influencia_base, valueNumeric: 66 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 72 }
+              - column: { name: protocolo_base, valueNumeric: 72 }
+              - column: { name: devocion_base, valueNumeric: 60 }
+              - column: { name: disciplina_base, valueNumeric: 94 }
+              - column: { name: empatia_base, valueNumeric: 58 }
+              - column: { name: lealtad_base, valueNumeric: 82 }
+              - column: { name: integridad_base, valueNumeric: 88 }
+              - column: { name: ambicion_base, valueNumeric: 55 }
+              - column: { name: conflictividad_base, valueNumeric: 22 }
+              - column: { name: popularidad_base, valueNumeric: 58 }
+              - column: { name: reputacion_base, valueNumeric: 80 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-popular
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'POPULAR'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000007 }
+              - column: { name: codigo, value: POPULAR }
+              - column: { name: nombre, value: Popular }
+              - column: { name: descripcion, value: "Persona cercana, conocida y apreciada por hermanos, vecinos y devotos, con facilidad para movilizar apoyos y generar entusiasmo." }
+              - column: { name: liderazgo_base, valueNumeric: 70 }
+              - column: { name: carisma_base, valueNumeric: 95 }
+              - column: { name: diplomacia_base, valueNumeric: 75 }
+              - column: { name: organizacion_base, valueNumeric: 55 }
+              - column: { name: comunicacion_base, valueNumeric: 92 }
+              - column: { name: influencia_base, valueNumeric: 78 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 62 }
+              - column: { name: protocolo_base, valueNumeric: 58 }
+              - column: { name: devocion_base, valueNumeric: 68 }
+              - column: { name: disciplina_base, valueNumeric: 55 }
+              - column: { name: empatia_base, valueNumeric: 88 }
+              - column: { name: lealtad_base, valueNumeric: 76 }
+              - column: { name: integridad_base, valueNumeric: 72 }
+              - column: { name: ambicion_base, valueNumeric: 58 }
+              - column: { name: conflictividad_base, valueNumeric: 25 }
+              - column: { name: popularidad_base, valueNumeric: 98 }
+              - column: { name: reputacion_base, valueNumeric: 78 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-ambicioso
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'AMBICIOSO'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000008 }
+              - column: { name: codigo, value: AMBICIOSO }
+              - column: { name: nombre, value: Ambicioso }
+              - column: { name: descripcion, value: "Persona con gran deseo de ascender, asumir responsabilidades y aumentar su poder e influencia dentro de la hermandad." }
+              - column: { name: liderazgo_base, valueNumeric: 82 }
+              - column: { name: carisma_base, valueNumeric: 78 }
+              - column: { name: diplomacia_base, valueNumeric: 65 }
+              - column: { name: organizacion_base, valueNumeric: 74 }
+              - column: { name: comunicacion_base, valueNumeric: 75 }
+              - column: { name: influencia_base, valueNumeric: 82 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 68 }
+              - column: { name: protocolo_base, valueNumeric: 72 }
+              - column: { name: devocion_base, valueNumeric: 48 }
+              - column: { name: disciplina_base, valueNumeric: 72 }
+              - column: { name: empatia_base, valueNumeric: 48 }
+              - column: { name: lealtad_base, valueNumeric: 52 }
+              - column: { name: integridad_base, valueNumeric: 55 }
+              - column: { name: ambicion_base, valueNumeric: 98 }
+              - column: { name: conflictividad_base, valueNumeric: 58 }
+              - column: { name: popularidad_base, valueNumeric: 68 }
+              - column: { name: reputacion_base, valueNumeric: 62 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-conflictivo
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'CONFLICTIVO'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000009 }
+              - column: { name: codigo, value: CONFLICTIVO }
+              - column: { name: nombre, value: Conflictivo }
+              - column: { name: descripcion, value: "Persona impulsiva y crítica, propensa a provocar enfrentamientos, alimentar polémicas y cuestionar las decisiones de los demás." }
+              - column: { name: liderazgo_base, valueNumeric: 62 }
+              - column: { name: carisma_base, valueNumeric: 68 }
+              - column: { name: diplomacia_base, valueNumeric: 22 }
+              - column: { name: organizacion_base, valueNumeric: 48 }
+              - column: { name: comunicacion_base, valueNumeric: 72 }
+              - column: { name: influencia_base, valueNumeric: 66 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 62 }
+              - column: { name: protocolo_base, valueNumeric: 35 }
+              - column: { name: devocion_base, valueNumeric: 55 }
+              - column: { name: disciplina_base, valueNumeric: 38 }
+              - column: { name: empatia_base, valueNumeric: 25 }
+              - column: { name: lealtad_base, valueNumeric: 42 }
+              - column: { name: integridad_base, valueNumeric: 45 }
+              - column: { name: ambicion_base, valueNumeric: 75 }
+              - column: { name: conflictividad_base, valueNumeric: 98 }
+              - column: { name: popularidad_base, valueNumeric: 48 }
+              - column: { name: reputacion_base, valueNumeric: 35 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-discreto
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'DISCRETO'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000010 }
+              - column: { name: codigo, value: DISCRETO }
+              - column: { name: nombre, value: Discreto }
+              - column: { name: descripcion, value: "Persona prudente, reservada y fiable, que trabaja sin buscar protagonismo y mantiene la confidencialidad en asuntos delicados." }
+              - column: { name: liderazgo_base, valueNumeric: 55 }
+              - column: { name: carisma_base, valueNumeric: 48 }
+              - column: { name: diplomacia_base, valueNumeric: 78 }
+              - column: { name: organizacion_base, valueNumeric: 76 }
+              - column: { name: comunicacion_base, valueNumeric: 55 }
+              - column: { name: influencia_base, valueNumeric: 52 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 78 }
+              - column: { name: protocolo_base, valueNumeric: 82 }
+              - column: { name: devocion_base, valueNumeric: 75 }
+              - column: { name: disciplina_base, valueNumeric: 88 }
+              - column: { name: empatia_base, valueNumeric: 76 }
+              - column: { name: lealtad_base, valueNumeric: 94 }
+              - column: { name: integridad_base, valueNumeric: 96 }
+              - column: { name: ambicion_base, valueNumeric: 18 }
+              - column: { name: conflictividad_base, valueNumeric: 8 }
+              - column: { name: popularidad_base, valueNumeric: 58 }
+              - column: { name: reputacion_base, valueNumeric: 84 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-carismatico
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'CARISMATICO'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000011 }
+              - column: { name: codigo, value: CARISMATICO }
+              - column: { name: nombre, value: Carismático }
+              - column: { name: descripcion, value: "Persona con gran capacidad de comunicación, liderazgo y persuasión, capaz de inspirar entusiasmo y atraer seguidores." }
+              - column: { name: liderazgo_base, valueNumeric: 92 }
+              - column: { name: carisma_base, valueNumeric: 98 }
+              - column: { name: diplomacia_base, valueNumeric: 76 }
+              - column: { name: organizacion_base, valueNumeric: 62 }
+              - column: { name: comunicacion_base, valueNumeric: 96 }
+              - column: { name: influencia_base, valueNumeric: 88 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 65 }
+              - column: { name: protocolo_base, valueNumeric: 68 }
+              - column: { name: devocion_base, valueNumeric: 62 }
+              - column: { name: disciplina_base, valueNumeric: 58 }
+              - column: { name: empatia_base, valueNumeric: 78 }
+              - column: { name: lealtad_base, valueNumeric: 68 }
+              - column: { name: integridad_base, valueNumeric: 70 }
+              - column: { name: ambicion_base, valueNumeric: 72 }
+              - column: { name: conflictividad_base, valueNumeric: 32 }
+              - column: { name: popularidad_base, valueNumeric: 94 }
+              - column: { name: reputacion_base, valueNumeric: 82 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+  - changeSet:
+      id: 004-cargar-arquetipo-estratega
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck: { expectedResult: 0, sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'ESTRATEGA'" }
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, value: 40000000-0000-0000-0000-000000000012 }
+              - column: { name: codigo, value: ESTRATEGA }
+              - column: { name: nombre, value: Estratega }
+              - column: { name: descripcion, value: "Persona analítica y previsora, especializada en planificar a largo plazo, anticipar problemas y tomar decisiones complejas." }
+              - column: { name: liderazgo_base, valueNumeric: 84 }
+              - column: { name: carisma_base, valueNumeric: 65 }
+              - column: { name: diplomacia_base, valueNumeric: 80 }
+              - column: { name: organizacion_base, valueNumeric: 90 }
+              - column: { name: comunicacion_base, valueNumeric: 72 }
+              - column: { name: influencia_base, valueNumeric: 78 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 82 }
+              - column: { name: protocolo_base, valueNumeric: 80 }
+              - column: { name: devocion_base, valueNumeric: 58 }
+              - column: { name: disciplina_base, valueNumeric: 88 }
+              - column: { name: empatia_base, valueNumeric: 62 }
+              - column: { name: lealtad_base, valueNumeric: 76 }
+              - column: { name: integridad_base, valueNumeric: 78 }
+              - column: { name: ambicion_base, valueNumeric: 70 }
+              - column: { name: conflictividad_base, valueNumeric: 28 }
+              - column: { name: popularidad_base, valueNumeric: 62 }
+              - column: { name: reputacion_base, valueNumeric: 86 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
