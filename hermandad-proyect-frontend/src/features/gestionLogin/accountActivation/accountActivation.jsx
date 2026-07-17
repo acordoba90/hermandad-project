@@ -22,7 +22,7 @@ import {
   isValidActivationToken,
   resendActivationLink,
 } from './accountActivationFunction';
-import { accountActivationStyles } from './accountActivationStyle';
+import { appStyles } from '../../../styles/appStyles';
 
 /**
  * Pantalla pública que obtiene el token de `?token=` y permite activar la cuenta
@@ -31,6 +31,7 @@ import { accountActivationStyles } from './accountActivationStyle';
  * @returns {JSX.Element} Tarjeta de activación centrada y responsive.
  */
 const AccountActivation = () => {
+  const accountActivationStyles = appStyles.gestionLogin.accountActivation;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');

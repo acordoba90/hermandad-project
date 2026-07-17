@@ -14,12 +14,13 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 import { altaUsuarioData } from './altaUsuarioData';
-import { altaUsuarioStyles } from './altaUsuarioStyle';
+import { appStyles } from '../../../styles/appStyles';
 import { useState } from 'react';
 import CustomSnackbar from '../../../components/snackbar/snackbar';
 import { handleAltaUsuarioSubmit } from './altaUsuarioFunction';
 
 const AltaUsuario = () => {
+  const altaUsuarioStyles = appStyles.gestionLogin.registration;
 
   const navigate = useNavigate();
 

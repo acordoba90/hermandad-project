@@ -1,5 +1,6 @@
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { appStyles } from '../../styles/appStyles';
 
 const CustomSnackbar = ({
   open,
@@ -22,10 +23,7 @@ const CustomSnackbar = ({
         onClose={onClose}
         severity={severity}
         variant="filled"
-        sx={{
-          width: '100%',
-          borderRadius: 3,
-        }}
+        sx={appStyles.feedback.snackbarAlert}
       >
         {message}
       </Alert>

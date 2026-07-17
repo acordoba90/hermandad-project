@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import RestauracionContrasenaForm from './restauracionContrasenaForm';
 import { restauracionContrasenaData } from './restauracionContrasenaData';
 import { isValidResetToken } from './restauracionContrasenaFunction';
-import { restauracionContrasenaStyles } from './restauracionContrasenaStyle';
+import { appStyles } from '../../../styles/appStyles';
 
 /** Pantalla pública que conserva el token únicamente en memoria durante el envío. */
 const RestauracionContrasena = () => {
+  const restauracionContrasenaStyles = appStyles.gestionLogin.passwordReset;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');

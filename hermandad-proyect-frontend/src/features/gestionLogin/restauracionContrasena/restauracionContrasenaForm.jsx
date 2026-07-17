@@ -21,9 +21,10 @@ import {
 } from '../passwordValidation';
 import { restauracionContrasenaData } from './restauracionContrasenaData';
 import { restablecerContrasena } from './restauracionContrasenaFunction';
-import { restauracionContrasenaStyles } from './restauracionContrasenaStyle';
+import { appStyles } from '../../../styles/appStyles';
 
 const RestauracionContrasenaForm = ({ token, onSuccess }) => {
+  const restauracionContrasenaStyles = appStyles.gestionLogin.passwordReset;
   const passwordRef = useRef(null);
   const requestInProgress = useRef(false);
   const [password, setPassword] = useState('');

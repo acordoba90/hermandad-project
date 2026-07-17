@@ -15,9 +15,10 @@ import {
   solicitarRestauracionContrasena,
   validateResetEmail,
 } from './solicitudRestauracionFunction';
-import { solicitudRestauracionStyles } from './solicitudRestauracionStyles';
+import { appStyles } from '../../../styles/appStyles';
 
 const SolicitudRestauracionDialog = ({ open, onClose }) => {
+  const solicitudRestauracionStyles = appStyles.gestionLogin.passwordResetRequest;
   const requestInProgress = useRef(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');

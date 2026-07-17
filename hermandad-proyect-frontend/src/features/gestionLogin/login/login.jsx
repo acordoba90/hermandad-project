@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import CustomSnackbar from '../../../components/snackbar/snackbar';
 import LoginForm from './loginForm';
 import { validarCredenciales } from './loginFunction';
-import { loginPageStyles } from './loginStyle';
+import { appStyles } from '../../../styles/appStyles';
 import SolicitudRestauracionDialog from '../solicitudRestauracion/solicitudRestauracionDialog';
 
 const LoginPage = () => {
+  const loginPageStyles = appStyles.gestionLogin.login;
   const navigate = useNavigate();
 
   const [snackbar, setSnackbar] = useState({

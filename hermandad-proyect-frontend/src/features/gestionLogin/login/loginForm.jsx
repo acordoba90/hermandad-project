@@ -11,11 +11,12 @@ import {
 
 import LoginIcon from '@mui/icons-material/Login';
 
-import { loginPageStyles } from './loginStyle';
+import { appStyles } from '../../../styles/appStyles';
 import { loginData } from './loginData';
 import { Link as RouterLink } from 'react-router-dom';
 
 const LoginForm = ({ onSubmit, onOpenPasswordReset }) => {
+  const loginPageStyles = appStyles.gestionLogin.login;
   const handleSubmit = async (event) => {
     event.preventDefault();
 

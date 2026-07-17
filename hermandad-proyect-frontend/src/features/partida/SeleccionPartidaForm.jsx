@@ -18,8 +18,10 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 
-import { seleccionPartidaStyles } from './seleccionPartidaStyles';
+import { appStyles } from '../../styles/appStyles';
 import { formatCurrency, getStatColor } from './seleccionPartidaFunction';
+
+const seleccionPartidaStyles = appStyles.seleccionPartida;
 
 const StatRow = ({ icon, label, value }) => (
   <Box sx={seleccionPartidaStyles.statRow}>
