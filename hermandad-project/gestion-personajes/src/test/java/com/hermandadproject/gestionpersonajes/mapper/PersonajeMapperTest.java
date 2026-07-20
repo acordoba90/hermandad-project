@@ -33,7 +33,7 @@ class PersonajeMapperTest {
                 "Manuel",
                 "Rios",
                 47,
-                GenderEnum.MALE,
+                GenderEnum.MASCULINO,
                 "Barrio de la Calzada",
                 "Capataz",
                 "Descripcion breve del personaje",
@@ -53,7 +53,7 @@ class PersonajeMapperTest {
         assertThat(entity.getNombre()).isEqualTo("Manuel");
         assertThat(entity.getApellidos()).isEqualTo("Rios");
         assertThat(entity.getEdad()).isEqualTo(47);
-        assertThat(entity.getGenero()).isEqualTo(GenderEnum.MALE);
+        assertThat(entity.getGenero()).isEqualTo(GenderEnum.MASCULINO);
         assertThat(entity.getOrigen()).isEqualTo("Barrio de la Calzada");
         assertThat(entity.getProfesion()).isEqualTo("Capataz");
         assertThat(entity.getDescripcion()).isEqualTo("Descripcion breve del personaje");
@@ -81,7 +81,7 @@ class PersonajeMapperTest {
         entity.setNombre("Lucia");
         entity.setApellidos("Morales");
         entity.setEdad(32);
-        entity.setGenero(GenderEnum.FEMALE);
+        entity.setGenero(GenderEnum.FEMENINO);
         entity.setOrigen("Centro historico");
         entity.setProfesion("Periodista");
         entity.setDescripcion("Descripcion breve");
@@ -107,7 +107,7 @@ class PersonajeMapperTest {
         assertThat(response.nombre()).isEqualTo("Lucia");
         assertThat(response.apellidos()).isEqualTo("Morales");
         assertThat(response.edad()).isEqualTo(32);
-        assertThat(response.genero()).isEqualTo(GenderEnum.FEMALE);
+        assertThat(response.genero()).isEqualTo(GenderEnum.FEMENINO);
         assertThat(response.origen()).isEqualTo("Centro historico");
         assertThat(response.profesion()).isEqualTo("Periodista");
         assertThat(response.descripcion()).isEqualTo("Descripcion breve");
@@ -135,7 +135,7 @@ class PersonajeMapperTest {
                 "Antonio",
                 "Vargas",
                 54,
-                GenderEnum.MALE,
+                GenderEnum.MASCULINO,
                 "San Lorenzo",
                 "Hermano mayor",
                 "Descripcion actualizada",
@@ -154,7 +154,7 @@ class PersonajeMapperTest {
         assertThat(entity.getNombre()).isEqualTo("Antonio");
         assertThat(entity.getApellidos()).isEqualTo("Vargas");
         assertThat(entity.getEdad()).isEqualTo(54);
-        assertThat(entity.getGenero()).isEqualTo(GenderEnum.MALE);
+        assertThat(entity.getGenero()).isEqualTo(GenderEnum.MASCULINO);
         assertThat(entity.getOrigen()).isEqualTo("San Lorenzo");
         assertThat(entity.getProfesion()).isEqualTo("Hermano mayor");
         assertThat(entity.getDescripcion()).isEqualTo("Descripcion actualizada");
