@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
+        <module>api-gateway</module>
         <module>gestion-usuarios</module>
         <module>gestion-hermandades</module>
         <module>gestion-pasos</module>
