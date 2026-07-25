@@ -7,6 +7,9 @@ import { validarCredenciales } from './loginFunction';
 import { appStyles } from '../../../styles/appStyles';
 import SolicitudRestauracionDialog from '../solicitudRestauracion/solicitudRestauracionDialog';
 
+// TODO: sustituir esta condición por la comprobación real de personaje principal en backend.
+const DEBE_COMPLETAR_CREACION_PERSONAJE = true;
+
 const LoginPage = () => {
   const loginPageStyles = appStyles.gestionLogin.login;
   const navigate = useNavigate();
@@ -36,7 +39,7 @@ const LoginPage = () => {
 
     if (result.success) {
       setTimeout(() => {
-        navigate('/partida');
+        navigate(DEBE_COMPLETAR_CREACION_PERSONAJE ? '/personaje' : '/partida');
       }, 1000);
     }
   };

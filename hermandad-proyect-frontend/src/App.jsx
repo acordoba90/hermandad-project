@@ -15,6 +15,7 @@ function App() {
       <Route path="/partida" element={<SeleccionPartidaPage />} />
       <Route path="/activar-cuenta" element={<AccountActivation />} />
       <Route path="/restaurar-contrasena" element={<RestauracionContrasena />} />
+      <Route path="/personaje" element={<CharacterOnboardingPage />} />
       <Route path="/crear-personaje" element={<CharacterOnboardingPage />} />
     </Routes>
   );
