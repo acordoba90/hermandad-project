@@ -1,0 +1,82 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-migrar-tipo-personaje-a-perfil
+      author: codex
+      changes:
+        - sql:
+            dbms: mysql
+            splitStatements: false
+            sql: |
+              UPDATE perfiles_personaje pp
+              JOIN personajes p
+                ON p.id = pp.personaje_id
+              JOIN arquetipos_perfil ap
+                ON UPPER(TRIM(ap.codigo)) = UPPER(TRIM(p.tipo_personaje))
+              SET pp.arquetipo_origen_id = ap.id
+              WHERE p.tipo_personaje IS NOT NULL
+                AND pp.arquetipo_origen_id IS NULL;
+        - sql:
+            dbms: mysql
+            splitStatements: false
+            sql: |
+              UPDATE perfiles_personaje pp
+              JOIN personajes p
+                ON p.id = pp.personaje_id
+              JOIN arquetipos_perfil ap
+                ON UPPER(TRIM(ap.nombre)) = UPPER(TRIM(p.tipo_personaje))
+              SET pp.arquetipo_origen_id = ap.id
+              WHERE p.tipo_personaje IS NOT NULL
+                AND pp.arquetipo_origen_id IS NULL;
+      rollback:
+        - sql:
+            dbms: mysql
+            splitStatements: false
+            sql: |
+              UPDATE perfiles_personaje pp
+              JOIN personajes p
+                ON p.id = pp.personaje_id
+              SET pp.arquetipo_origen_id = NULL
+              WHERE p.tipo_personaje IS NOT NULL;
+
+  - changeSet:
+      id: 006-eliminar-tipo-personaje-de-personajes
+      author: codex
+      preConditions:
+        - onFail: HALT
+        - sqlCheck:
+            expectedResult: 0
+            sql: >
+              SELECT COUNT(*)
+              FROM personajes p
+              LEFT JOIN perfiles_personaje pp
+                ON pp.personaje_id = p.id
+              LEFT JOIN arquetipos_perfil ap
+                ON ap.id = pp.arquetipo_origen_id
+                AND (
+                  UPPER(TRIM(ap.codigo)) = UPPER(TRIM(p.tipo_personaje))
+                  OR UPPER(TRIM(ap.nombre)) = UPPER(TRIM(p.tipo_personaje))
+                )
+              WHERE p.tipo_personaje IS NOT NULL
+                AND ap.id IS NULL
+      changes:
+        - dropColumn:
+            tableName: personajes
+            columnName: tipo_personaje
+      rollback:
+        - addColumn:
+            tableName: personajes
+            columns:
+              - column:
+                  name: tipo_personaje
+                  type: VARCHAR(100)
+        - sql:
+            dbms: mysql
+            splitStatements: false
+            sql: |
+              UPDATE personajes p
+              JOIN perfiles_personaje pp
+                ON pp.personaje_id = p.id
+              JOIN arquetipos_perfil ap
+                ON ap.id = pp.arquetipo_origen_id
+              SET p.tipo_personaje = ap.nombre
+              WHERE pp.arquetipo_origen_id IS NOT NULL;

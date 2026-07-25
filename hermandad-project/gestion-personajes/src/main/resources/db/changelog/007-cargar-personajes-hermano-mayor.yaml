@@ -1,0 +1,262 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-cargar-arquetipo-joven-prometedor
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: "SELECT COUNT(*) FROM arquetipos_perfil WHERE codigo = 'JOVEN_PROMETEDOR'"
+      changes:
+        - insert:
+            tableName: arquetipos_perfil
+            columns:
+              - column: { name: id, valueComputed: UUID() }
+              - column: { name: codigo, value: JOVEN_PROMETEDOR }
+              - column: { name: nombre, value: "Joven prometedor" }
+              - column: { name: descripcion, value: "Persona joven, comunicativa y con proyección, capaz de conectar con nuevas generaciones sin perder la identidad de la hermandad." }
+              - column: { name: liderazgo_base, valueNumeric: 68 }
+              - column: { name: carisma_base, valueNumeric: 82 }
+              - column: { name: diplomacia_base, valueNumeric: 70 }
+              - column: { name: organizacion_base, valueNumeric: 62 }
+              - column: { name: comunicacion_base, valueNumeric: 88 }
+              - column: { name: influencia_base, valueNumeric: 74 }
+              - column: { name: conocimiento_cofrade_base, valueNumeric: 66 }
+              - column: { name: protocolo_base, valueNumeric: 64 }
+              - column: { name: devocion_base, valueNumeric: 70 }
+              - column: { name: disciplina_base, valueNumeric: 64 }
+              - column: { name: empatia_base, valueNumeric: 78 }
+              - column: { name: lealtad_base, valueNumeric: 76 }
+              - column: { name: integridad_base, valueNumeric: 78 }
+              - column: { name: ambicion_base, valueNumeric: 58 }
+              - column: { name: conflictividad_base, valueNumeric: 24 }
+              - column: { name: popularidad_base, valueNumeric: 84 }
+              - column: { name: reputacion_base, valueNumeric: 70 }
+              - column: { name: activo, valueBoolean: true }
+              - column: { name: fecha_creacion, valueComputed: CURRENT_TIMESTAMP }
+      rollback:
+        - sql:
+            dbms: mysql
+            splitStatements: false
+            sql: |
+              DELETE ap
+              FROM arquetipos_perfil ap
+              LEFT JOIN perfiles_personaje pp
+                ON pp.arquetipo_origen_id = ap.id
+              WHERE ap.codigo = 'JOVEN_PROMETEDOR'
+                AND pp.id IS NULL;
+
+  - changeSet:
+      id: 007-cargar-personajes-genericos-hermano-mayor
+      author: codex
+      preConditions:
+        - onFail: HALT
+        - sqlCheck:
+            expectedResult: 1
+            sql: "SELECT COUNT(*) FROM colectivos WHERE codigo = 'JUNTA_GOBIERNO'"
+        - sqlCheck:
+            expectedResult: 1
+            sql: >
+              SELECT COUNT(*)
+              FROM roles_personaje rp
+              INNER JOIN colectivos c
+                ON c.id = rp.colectivo_id
+              WHERE rp.codigo = 'HERMANO_MAYOR'
+                AND c.codigo = 'JUNTA_GOBIERNO'
+        - sqlCheck:
+            expectedResult: 0
+            sql: >
+              SELECT COUNT(*)
+              FROM personajes
+              WHERE codigo IN (
+                'HM_EDUARDO_MARTIN',
+                'HM_CARMEN_ROMERO',
+                'HM_MANUEL_RUIZ',
+                'HM_ALVARO_JIMENEZ',
+                'HM_LUCIA_MENDOZA',
+                'HM_ISABEL_FERNANDEZ'
+              )
+      changes:
+        - sql:
+            dbms: mysql
+            splitStatements: false
+            sql: |
+              INSERT INTO personajes (
+                id, codigo, id_colectivo, rol_personaje_id, nombre, apellidos, edad, genero,
+                origen, profesion, descripcion, biografia, motivacion, personalizado, activo, fecha_creacion
+              )
+              SELECT
+                UUID(),
+                datos.codigo,
+                c.id,
+                rp.id,
+                datos.nombre,
+                datos.apellidos,
+                datos.edad,
+                datos.genero,
+                datos.origen,
+                datos.profesion,
+                datos.descripcion,
+                datos.biografia,
+                datos.motivacion,
+                FALSE,
+                TRUE,
+                CURRENT_TIMESTAMP
+              FROM (
+                SELECT 'HM_EDUARDO_MARTIN' AS codigo, 'Eduardo Martín' AS nombre, 'de la Vega' AS apellidos, 62 AS edad, 'MASCULINO' AS genero, 'Sevilla' AS origen, 'Abogado' AS profesion,
+                  'Cofrade veterano, prudente y profundamente conocedor de las reglas, la historia y las costumbres de la hermandad.' AS descripcion,
+                  'Eduardo pertenece a la hermandad desde su juventud y ha ocupado distintos cargos dentro de la junta de gobierno. Su formación jurídica y su experiencia institucional le han convertido en una persona respetada, serena y conocedora de las normas. Defiende la continuidad de las tradiciones y considera que cada decisión debe preservar la identidad recibida de generaciones anteriores.' AS biografia,
+                  'Conservar el legado histórico de la hermandad, reforzar el cumplimiento de sus reglas y garantizar una gestión prudente y estable.' AS motivacion
+                UNION ALL SELECT 'HM_CARMEN_ROMERO', 'Carmen', 'Romero Valdés', 55, 'FEMENINO', 'Sevilla', 'Empresaria',
+                  'Hermana comprometida, con una gran capacidad de gestión y una visión moderna de la organización cofrade.',
+                  'Carmen ha desarrollado su trayectoria profesional al frente de una empresa familiar. Dentro de la hermandad ha colaborado en proyectos de financiación, organización y acción social. Defiende la modernización de los procesos internos, la transparencia y la incorporación de nuevas generaciones sin renunciar a las raíces de la corporación.',
+                  'Modernizar la gestión, abrir la hermandad a nuevas generaciones y asegurar que la tradición pueda mantenerse mediante una organización eficaz.'
+                UNION ALL SELECT 'HM_MANUEL_RUIZ', 'Manuel', 'Ruiz Márquez', 48, 'MASCULINO', 'Córdoba', 'Profesor',
+                  'Hermano cercano, dialogante y respetado, acostumbrado a escuchar y alcanzar acuerdos entre sensibilidades diferentes.',
+                  'Manuel es profesor y ha participado durante años en actividades formativas y juveniles de la hermandad. Su capacidad para escuchar, explicar y mediar le ha permitido ganarse la confianza de hermanos de distintas edades. Considera que la unidad de la corporación es el punto de partida para cualquier proyecto.',
+                  'Fortalecer la convivencia entre los hermanos, reducir los conflictos internos y construir un proyecto común basado en el diálogo.'
+                UNION ALL SELECT 'HM_ALVARO_JIMENEZ', 'Álvaro', 'Jiménez Pardo', 39, 'MASCULINO', 'Málaga', 'Economista',
+                  'Profesional metódico y responsable, centrado en la planificación, la estabilidad económica y el uso eficiente de los recursos.',
+                  'Álvaro ha trabajado como economista y asesor financiero. Su participación en la hermandad comenzó en el área de mayordomía, donde impulsó mejoras en la elaboración de presupuestos y el control del gasto. Cree que una economía saneada permite desarrollar mejores cultos, proyectos patrimoniales y acciones sociales.',
+                  'Sanear las cuentas, profesionalizar la gestión y construir una hermandad económicamente sostenible.'
+                UNION ALL SELECT 'HM_LUCIA_MENDOZA', 'Lucía', 'Mendoza Torres', 32, 'FEMENINO', 'Sevilla', 'Periodista',
+                  'Hermana joven, carismática y comunicativa, con capacidad para conectar la hermandad con las nuevas generaciones.',
+                  'Lucía es periodista y ha colaborado en la comunicación de cultos, actividades solidarias y proyectos culturales. Conoce las nuevas formas de comunicación y entiende la importancia de preservar la imagen pública de la hermandad. Su juventud se combina con una sólida formación cofrade adquirida desde la infancia.',
+                  'Acercar la hermandad a los jóvenes, mejorar su comunicación y aumentar su presencia social sin perder su identidad.'
+                UNION ALL SELECT 'HM_ISABEL_FERNANDEZ', 'Isabel', 'Fernández Lozano', 60, 'FEMENINO', 'Cádiz', 'Enfermera',
+                  'Hermana serena, empática y comprometida con los cultos, la asistencia a los hermanos y la dimensión cristiana de la corporación.',
+                  'Isabel ha dedicado su vida profesional al cuidado de otras personas. En la hermandad ha participado en diputaciones de caridad, visitas a hermanos enfermos y organización de cultos. Entiende la corporación como una comunidad cristiana cuyo patrimonio y estación de penitencia deben estar acompañados por una verdadera vida de fe.',
+                  'Reforzar la formación cristiana, la atención a los hermanos y la dimensión espiritual de todas las actividades de la hermandad.'
+              ) datos
+              INNER JOIN colectivos c
+                ON c.codigo = 'JUNTA_GOBIERNO'
+              INNER JOIN roles_personaje rp
+                ON rp.codigo = 'HERMANO_MAYOR'
+                AND rp.colectivo_id = c.id;
+      rollback:
+        - sql:
+            dbms: mysql
+            splitStatements: false
+            sql: |
+              DELETE FROM personajes
+              WHERE codigo IN (
+                'HM_EDUARDO_MARTIN',
+                'HM_CARMEN_ROMERO',
+                'HM_MANUEL_RUIZ',
+                'HM_ALVARO_JIMENEZ',
+                'HM_LUCIA_MENDOZA',
+                'HM_ISABEL_FERNANDEZ'
+              );
+
+  - changeSet:
+      id: 007-cargar-perfiles-personajes-genericos-hermano-mayor
+      author: codex
+      preConditions:
+        - onFail: HALT
+        - sqlCheck:
+            expectedResult: 6
+            sql: >
+              SELECT COUNT(*)
+              FROM personajes
+              WHERE codigo IN (
+                'HM_EDUARDO_MARTIN',
+                'HM_CARMEN_ROMERO',
+                'HM_MANUEL_RUIZ',
+                'HM_ALVARO_JIMENEZ',
+                'HM_LUCIA_MENDOZA',
+                'HM_ISABEL_FERNANDEZ'
+              )
+        - sqlCheck:
+            expectedResult: 6
+            sql: >
+              SELECT COUNT(*)
+              FROM arquetipos_perfil
+              WHERE codigo IN (
+                'TRADICIONALISTA',
+                'RENOVADOR',
+                'CONCILIADOR',
+                'GESTOR',
+                'JOVEN_PROMETEDOR',
+                'DEVOTO'
+              )
+        - sqlCheck:
+            expectedResult: 0
+            sql: >
+              SELECT COUNT(*)
+              FROM perfiles_personaje pp
+              INNER JOIN personajes p
+                ON p.id = pp.personaje_id
+              WHERE p.codigo IN (
+                'HM_EDUARDO_MARTIN',
+                'HM_CARMEN_ROMERO',
+                'HM_MANUEL_RUIZ',
+                'HM_ALVARO_JIMENEZ',
+                'HM_LUCIA_MENDOZA',
+                'HM_ISABEL_FERNANDEZ'
+              )
+      changes:
+        - sql:
+            dbms: mysql
+            splitStatements: false
+            sql: |
+              INSERT INTO perfiles_personaje (
+                id, personaje_id, arquetipo_origen_id, nivel, experiencia, puntos_desarrollo,
+                liderazgo, carisma, diplomacia, organizacion, comunicacion, influencia,
+                conocimiento_cofrade, protocolo, devocion, disciplina, empatia, lealtad,
+                integridad, ambicion, conflictividad, popularidad, reputacion, activo, fecha_creacion
+              )
+              SELECT
+                UUID(),
+                p.id,
+                ap.id,
+                1,
+                0,
+                0,
+                ap.liderazgo_base,
+                ap.carisma_base,
+                ap.diplomacia_base,
+                ap.organizacion_base,
+                ap.comunicacion_base,
+                ap.influencia_base,
+                ap.conocimiento_cofrade_base,
+                ap.protocolo_base,
+                ap.devocion_base,
+                ap.disciplina_base,
+                ap.empatia_base,
+                ap.lealtad_base,
+                ap.integridad_base,
+                ap.ambicion_base,
+                ap.conflictividad_base,
+                ap.popularidad_base,
+                ap.reputacion_base,
+                TRUE,
+                CURRENT_TIMESTAMP
+              FROM (
+                SELECT 'HM_EDUARDO_MARTIN' AS personaje_codigo, 'TRADICIONALISTA' AS arquetipo_codigo
+                UNION ALL SELECT 'HM_CARMEN_ROMERO', 'RENOVADOR'
+                UNION ALL SELECT 'HM_MANUEL_RUIZ', 'CONCILIADOR'
+                UNION ALL SELECT 'HM_ALVARO_JIMENEZ', 'GESTOR'
+                UNION ALL SELECT 'HM_LUCIA_MENDOZA', 'JOVEN_PROMETEDOR'
+                UNION ALL SELECT 'HM_ISABEL_FERNANDEZ', 'DEVOTO'
+              ) mapa
+              INNER JOIN personajes p
+                ON p.codigo = mapa.personaje_codigo
+              INNER JOIN arquetipos_perfil ap
+                ON ap.codigo = mapa.arquetipo_codigo;
+      rollback:
+        - sql:
+            dbms: mysql
+            splitStatements: false
+            sql: |
+              DELETE pp
+              FROM perfiles_personaje pp
+              INNER JOIN personajes p
+                ON p.id = pp.personaje_id
+              WHERE p.codigo IN (
+                'HM_EDUARDO_MARTIN',
+                'HM_CARMEN_ROMERO',
+                'HM_MANUEL_RUIZ',
+                'HM_ALVARO_JIMENEZ',
+                'HM_LUCIA_MENDOZA',
+                'HM_ISABEL_FERNANDEZ'
+              );
