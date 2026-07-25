@@ -9,3 +9,7 @@ databaseChangeLog:
       file: db/changelog/004-crear-arquetipos-y-perfiles.yaml
   - include:
       file: db/changelog/005-crear-roles-personaje.yaml
+  - include:
+      file: db/changelog/006-normalizar-tipo-personaje-en-perfil.yaml
+  - include:
+      file: db/changelog/007-cargar-personajes-hermano-mayor.yaml
