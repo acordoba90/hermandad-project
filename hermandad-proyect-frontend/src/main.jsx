@@ -9,15 +9,18 @@ import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
 import { appGlobalStyles, appTheme } from './styles/appStyles';
+import { AppSessionProvider } from './context/AppSessionContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider theme={appTheme}>
-        <CssBaseline />
-        <GlobalStyles styles={appGlobalStyles} />
-        <App />
-      </ThemeProvider>
+      <AppSessionProvider>
+        <ThemeProvider theme={appTheme}>
+          <CssBaseline />
+          <GlobalStyles styles={appGlobalStyles} />
+          <App />
+        </ThemeProvider>
+      </AppSessionProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

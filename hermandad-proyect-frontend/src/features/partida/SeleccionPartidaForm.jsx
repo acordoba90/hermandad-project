@@ -46,6 +46,7 @@ const StatRow = ({ icon, label, value }) => (
 
 const SeleccionPartidaForm = ({
   partidas,
+  usuarioNombre,
   onContinuarPartida,
   onCrearNuevaPartida,
 }) => {
@@ -74,7 +75,7 @@ const SeleccionPartidaForm = ({
           <ShieldIcon sx={seleccionPartidaStyles.userIcon} />
           <Box>
             <Typography variant="body1" fontWeight={700}>
-              Juan de la Cruz
+              {usuarioNombre}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Bienvenido de nuevo

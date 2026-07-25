@@ -9,10 +9,12 @@ import CreacionHermanoMayor from './components/CreacionHermanoMayor';
 import { ONBOARDING_VIEWS } from './hermanoMayorConstants';
 import { characterOnboardingTexts as texts } from './characterOnboardingTexts';
 import { appStyles } from '../../styles/appStyles';
+import { useAppSession } from '../../context/useAppSession';
 
 /** Coordina la navegación interna del primer acceso sin persistir su estado. */
 const CharacterOnboardingPage = () => {
   const styles = appStyles.characterOnboarding;
+  const { establecerPersonajeActivo } = useAppSession();
   const [currentView, setCurrentView] = useState(ONBOARDING_VIEWS.INITIAL);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
@@ -26,12 +28,17 @@ const CharacterOnboardingPage = () => {
     setCurrentView(ONBOARDING_VIEWS.INITIAL);
   };
 
+  const confirmarPersonaje = (personaje) => {
+    establecerPersonajeActivo(personaje);
+  };
+
   const renderCurrentView = () => {
     if (currentView === ONBOARDING_VIEWS.SELECTION) {
       return (
         <SeleccionHermanoMayor
           seleccionado={selectedCharacter}
           onSeleccionar={setSelectedCharacter}
+          onConfirmar={confirmarPersonaje}
           onVolver={goToInitialView}
           onNotify={showReadyMessage}
         />
@@ -39,7 +46,13 @@ const CharacterOnboardingPage = () => {
     }
 
     if (currentView === ONBOARDING_VIEWS.CREATION) {
-      return <CreacionHermanoMayor onVolver={goToInitialView} onNotify={showReadyMessage} />;
+      return (
+        <CreacionHermanoMayor
+          onConfirmar={confirmarPersonaje}
+          onVolver={goToInitialView}
+          onNotify={showReadyMessage}
+        />
+      );
     }
 
     return (

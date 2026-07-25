@@ -20,7 +20,7 @@ import { characterOnboardingTexts as texts } from '../characterOnboardingTexts';
 import { appStyles } from '../../../styles/appStyles';
 
 /** Formulario progresivo que prepara un Hermano Mayor personalizado solo en memoria. */
-const CreacionHermanoMayor = ({ onVolver, onNotify }) => {
+const CreacionHermanoMayor = ({ onConfirmar, onVolver, onNotify }) => {
   const styles = appStyles.characterOnboarding;
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -83,6 +83,7 @@ const CreacionHermanoMayor = ({ onVolver, onNotify }) => {
       setActiveStep(CREATION_STEPS.IDENTITY);
       return;
     }
+    onConfirmar(personaje);
     // TODO: crear el personaje mediante gestion-personajes cuando se cierre el contrato REST definitivo.
     onNotify(texts.creation.ready);
   };

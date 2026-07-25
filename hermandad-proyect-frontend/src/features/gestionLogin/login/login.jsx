@@ -6,6 +6,7 @@ import LoginForm from './loginForm';
 import { validarCredenciales } from './loginFunction';
 import { appStyles } from '../../../styles/appStyles';
 import SolicitudRestauracionDialog from '../solicitudRestauracion/solicitudRestauracionDialog';
+import { useAppSession } from '../../../context/useAppSession';
 
 // TODO: sustituir esta condición por la comprobación real de personaje principal en backend.
 const DEBE_COMPLETAR_CREACION_PERSONAJE = true;
@@ -13,6 +14,7 @@ const DEBE_COMPLETAR_CREACION_PERSONAJE = true;
 const LoginPage = () => {
   const loginPageStyles = appStyles.gestionLogin.login;
   const navigate = useNavigate();
+  const { iniciarSesion } = useAppSession();
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -38,6 +40,7 @@ const LoginPage = () => {
     });
 
     if (result.success) {
+      iniciarSesion(result.user);
       setTimeout(() => {
         navigate(DEBE_COMPLETAR_CREACION_PERSONAJE ? '/personaje' : '/partida');
       }, 1000);

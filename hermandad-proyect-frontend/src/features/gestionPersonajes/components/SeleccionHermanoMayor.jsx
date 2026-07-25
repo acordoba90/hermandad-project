@@ -8,11 +8,18 @@ import { characterOnboardingTexts as texts } from '../characterOnboardingTexts';
 import { appStyles } from '../../../styles/appStyles';
 
 /** Pantalla de selección local de un candidato predefinido. */
-const SeleccionHermanoMayor = ({ seleccionado, onSeleccionar, onVolver, onNotify }) => {
+const SeleccionHermanoMayor = ({
+  seleccionado,
+  onSeleccionar,
+  onConfirmar,
+  onVolver,
+  onNotify,
+}) => {
   const styles = appStyles.characterOnboarding;
 
   const handleConfirmarSeleccion = () => {
     if (!seleccionado) return;
+    onConfirmar(seleccionado);
     // TODO: enviar la selección al servicio gestion-personajes cuando exista el contrato de asignación.
     onNotify(texts.selection.ready);
   };

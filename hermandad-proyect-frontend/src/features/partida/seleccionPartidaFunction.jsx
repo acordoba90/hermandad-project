@@ -22,13 +22,6 @@ export const getStatColor = (value) => {
   return 'error';
 };
 
-export const handleContinuarPartida = (partida) => {
-  console.log('Continuar partida:', partida);
-
-  // Aquí más adelante navegarás al dashboard:
-  // navigate(`/partidas/${partida.id}`);
-};
-
 export const handleCrearNuevaPartida = () => {
   console.log('Crear nueva partida');
 
