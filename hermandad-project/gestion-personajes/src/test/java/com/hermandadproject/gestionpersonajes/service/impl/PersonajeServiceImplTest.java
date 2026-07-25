@@ -67,7 +67,6 @@ class PersonajeServiceImplTest {
                 null,
                 null,
                 null,
-                null,
                 true,
                 arquetipoId,
                 null
@@ -204,6 +203,10 @@ class PersonajeServiceImplTest {
     }
 
     private PersonajeCreateRequest request(UUID colectivoId, UUID rolPersonajeId) {
+        return request(colectivoId, rolPersonajeId, null);
+    }
+
+    private PersonajeCreateRequest request(UUID colectivoId, UUID rolPersonajeId, UUID arquetipoPerfilId) {
         return new PersonajeCreateRequest(
                 "PERSONAJE_TEST",
                 null,
@@ -219,10 +222,10 @@ class PersonajeServiceImplTest {
                 null,
                 null,
                 null,
-                null,
                 true,
-                null,
+                arquetipoPerfilId,
                 null
         );
     }
+
 }

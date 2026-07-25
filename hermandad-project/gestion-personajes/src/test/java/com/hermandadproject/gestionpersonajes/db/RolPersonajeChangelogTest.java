@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,15 +35,17 @@ class RolPersonajeChangelogTest {
     }
 
     @Test
-    void insertaRolesInicialesActivosConUuidFijosYUnicos() throws IOException {
+    void insertaRolesInicialesActivosConUuidGeneradosAutomaticamente() throws IOException {
         String changelog = readChangelog();
 
         assertThat(EXPECTED_CODES).allSatisfy(code -> assertThat(changelog).contains("'" + code + "'"));
         assertThat(countMatches(changelog, "UNION ALL SELECT")).isEqualTo(135);
         assertThat(changelog).contains("TRUE, CURRENT_TIMESTAMP");
-        assertThat(extract(changelog, "(50000000-0000-0000-0000-[0-9]{12})"))
-                .doesNotHaveDuplicates()
-                .hasSize(136);
+        assertThat(changelog).contains("SELECT UUID(), colectivos.id");
+        assertThat(countMatches(changelog, "UUID()")).isEqualTo(1);
+        assertThat(changelog).doesNotContainPattern(
+                "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+        );
     }
 
     @Test
@@ -80,12 +81,5 @@ class RolPersonajeChangelogTest {
 
     private int countMatches(String text, String value) {
         return text.split(Pattern.quote(value), -1).length - 1;
-    }
-
-    private List<String> extract(String text, String regex) {
-        Matcher matcher = Pattern.compile(regex).matcher(text);
-        return matcher.results()
-                .map(result -> result.group(1))
-                .toList();
     }
 }

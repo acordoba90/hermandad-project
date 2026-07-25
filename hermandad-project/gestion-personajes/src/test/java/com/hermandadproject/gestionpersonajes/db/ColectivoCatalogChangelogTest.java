@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,12 +58,14 @@ class ColectivoCatalogChangelogTest {
     }
 
     @Test
-    void codigosYUuidSonUnicos() throws IOException {
+    void codigosSonUnicosYLosUuidSeGeneranAutomaticamente() throws IOException {
         String changelog = readCatalogChangelog();
 
-        assertThat(extract(changelog, "value: (30000000-0000-0000-0000-[0-9]{12})"))
-                .doesNotHaveDuplicates()
-                .hasSize(25);
+        assertThat(countMatches(changelog, "name: id, valueComputed: UUID()"))
+                .isEqualTo(25);
+        assertThat(changelog).doesNotContainPattern(
+                "name: id, value: [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+        );
         assertThat(EXPECTED_CODES).doesNotHaveDuplicates();
     }
 
@@ -81,12 +82,5 @@ class ColectivoCatalogChangelogTest {
 
     private int countMatches(String text, String value) {
         return text.split(Pattern.quote(value), -1).length - 1;
-    }
-
-    private List<String> extract(String text, String regex) {
-        Matcher matcher = Pattern.compile(regex).matcher(text);
-        return matcher.results()
-                .map(result -> result.group(1))
-                .toList();
     }
 }

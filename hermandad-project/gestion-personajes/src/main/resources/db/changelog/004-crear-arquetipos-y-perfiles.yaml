@@ -149,7 +149,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000001 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: CONCILIADOR }
               - column: { name: nombre, value: Conciliador }
               - column: { name: descripcion, value: "Persona prudente, empática y dialogante, especializada en mediar entre distintas sensibilidades y resolver conflictos internos." }
@@ -182,7 +182,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000002 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: TRADICIONALISTA }
               - column: { name: nombre, value: Tradicionalista }
               - column: { name: descripcion, value: "Persona profundamente vinculada a la historia, las normas y las costumbres de la hermandad, reacia a los cambios que puedan alterar su identidad." }
@@ -215,7 +215,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000003 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: RENOVADOR }
               - column: { name: nombre, value: Renovador }
               - column: { name: descripcion, value: "Persona innovadora que propone nuevas formas de organización, comunicación y participación, manteniendo el respeto por la identidad de la hermandad." }
@@ -248,7 +248,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000004 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: INFLUYENTE }
               - column: { name: nombre, value: Influyente }
               - column: { name: descripcion, value: "Persona con amplias relaciones sociales, empresariales o institucionales, capaz de obtener apoyos y recursos para la hermandad." }
@@ -281,7 +281,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000005 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: DEVOTO }
               - column: { name: nombre, value: Devoto }
               - column: { name: descripcion, value: "Persona caracterizada por una profunda espiritualidad, fuerte compromiso religioso y especial vinculación con los titulares de la hermandad." }
@@ -314,7 +314,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000006 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: GESTOR }
               - column: { name: nombre, value: Gestor }
               - column: { name: descripcion, value: "Persona organizada, metódica y eficaz, especializada en administración, planificación, control económico y coordinación de recursos." }
@@ -347,7 +347,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000007 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: POPULAR }
               - column: { name: nombre, value: Popular }
               - column: { name: descripcion, value: "Persona cercana, conocida y apreciada por hermanos, vecinos y devotos, con facilidad para movilizar apoyos y generar entusiasmo." }
@@ -380,7 +380,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000008 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: AMBICIOSO }
               - column: { name: nombre, value: Ambicioso }
               - column: { name: descripcion, value: "Persona con gran deseo de ascender, asumir responsabilidades y aumentar su poder e influencia dentro de la hermandad." }
@@ -413,7 +413,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000009 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: CONFLICTIVO }
               - column: { name: nombre, value: Conflictivo }
               - column: { name: descripcion, value: "Persona impulsiva y crítica, propensa a provocar enfrentamientos, alimentar polémicas y cuestionar las decisiones de los demás." }
@@ -446,7 +446,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000010 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: DISCRETO }
               - column: { name: nombre, value: Discreto }
               - column: { name: descripcion, value: "Persona prudente, reservada y fiable, que trabaja sin buscar protagonismo y mantiene la confidencialidad en asuntos delicados." }
@@ -479,7 +479,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000011 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: CARISMATICO }
               - column: { name: nombre, value: Carismático }
               - column: { name: descripcion, value: "Persona con gran capacidad de comunicación, liderazgo y persuasión, capaz de inspirar entusiasmo y atraer seguidores." }
@@ -512,7 +512,7 @@ databaseChangeLog:
         - insert:
             tableName: arquetipos_perfil
             columns:
-              - column: { name: id, value: 40000000-0000-0000-0000-000000000012 }
+              - column: { name: id, valueComputed: UUID() }
               - column: { name: codigo, value: ESTRATEGA }
               - column: { name: nombre, value: Estratega }
               - column: { name: descripcion, value: "Persona analítica y previsora, especializada en planificar a largo plazo, anticipar problemas y tomar decisiones complejas." }

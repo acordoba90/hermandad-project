@@ -39,7 +39,6 @@ class PersonajeMapperTest {
                 "Descripcion breve del personaje",
                 "Biografia completa del personaje",
                 "Mantener la cuadrilla unida",
-                "COSTALERO",
                 true,
                 null,
                 "https://example.com/avatar.png"
@@ -59,7 +58,6 @@ class PersonajeMapperTest {
         assertThat(entity.getDescripcion()).isEqualTo("Descripcion breve del personaje");
         assertThat(entity.getBiografia()).isEqualTo("Biografia completa del personaje");
         assertThat(entity.getMotivacion()).isEqualTo("Mantener la cuadrilla unida");
-        assertThat(entity.getTipoPersonaje()).isEqualTo("COSTALERO");
         assertThat(entity.getPersonalizado()).isTrue();
         assertThat(entity.getUrlAvatar()).isEqualTo("https://example.com/avatar.png");
         assertThat(entity.getActivo()).isTrue();
@@ -87,7 +85,6 @@ class PersonajeMapperTest {
         entity.setDescripcion("Descripcion breve");
         entity.setBiografia("Biografia completa");
         entity.setMotivacion("Cubrir la actualidad cofrade");
-        entity.setTipoPersonaje("PRENSA");
         entity.setPersonalizado(false);
         entity.setUrlAvatar("https://example.com/lucia.png");
         entity.setActivo(true);
@@ -113,7 +110,6 @@ class PersonajeMapperTest {
         assertThat(response.descripcion()).isEqualTo("Descripcion breve");
         assertThat(response.biografia()).isEqualTo("Biografia completa");
         assertThat(response.motivacion()).isEqualTo("Cubrir la actualidad cofrade");
-        assertThat(response.tipoPersonaje()).isEqualTo("PRENSA");
         assertThat(response.personalizado()).isFalse();
         assertThat(response.urlAvatar()).isEqualTo("https://example.com/lucia.png");
         assertThat(response.activo()).isTrue();
@@ -141,7 +137,6 @@ class PersonajeMapperTest {
                 "Descripcion actualizada",
                 "Biografia actualizada",
                 "Servir a la hermandad",
-                "JUNTA",
                 true,
                 "https://example.com/antonio.png",
                 false
@@ -160,7 +155,6 @@ class PersonajeMapperTest {
         assertThat(entity.getDescripcion()).isEqualTo("Descripcion actualizada");
         assertThat(entity.getBiografia()).isEqualTo("Biografia actualizada");
         assertThat(entity.getMotivacion()).isEqualTo("Servir a la hermandad");
-        assertThat(entity.getTipoPersonaje()).isEqualTo("JUNTA");
         assertThat(entity.getPersonalizado()).isTrue();
         assertThat(entity.getUrlAvatar()).isEqualTo("https://example.com/antonio.png");
         assertThat(entity.getActivo()).isFalse();
@@ -184,4 +178,5 @@ class PersonajeMapperTest {
         rol.setActivo(activo);
         return rol;
     }
+
 }

@@ -45,15 +45,17 @@ class ArquetipoPerfilChangelogTest {
     }
 
     @Test
-    void insertaDoceArquetiposActivosConUuidFijosYUnicos() throws IOException {
+    void insertaDoceArquetiposActivosConUuidGeneradosAutomaticamente() throws IOException {
         String changelog = readChangelog();
 
         assertThat(EXPECTED_CODES).allSatisfy(code -> assertThat(changelog).contains("value: " + code));
         assertThat(countMatches(changelog, "name: codigo, value:")).isEqualTo(12);
         assertThat(countMatches(changelog, "name: activo, valueBoolean: true")).isEqualTo(12);
-        assertThat(extract(changelog, "value: (40000000-0000-0000-0000-[0-9]{12})"))
-                .doesNotHaveDuplicates()
-                .hasSize(12);
+        assertThat(countMatches(changelog, "name: id, valueComputed: UUID()"))
+                .isEqualTo(12);
+        assertThat(changelog).doesNotContainPattern(
+                "name: id, value: [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+        );
         assertThat(EXPECTED_CODES).doesNotHaveDuplicates();
     }
 
