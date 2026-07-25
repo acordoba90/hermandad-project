@@ -148,4 +148,5 @@ public class PersonajeServiceImpl implements PersonajeService {
         }
         return colectivo;
     }
+
 }

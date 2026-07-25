@@ -8,6 +8,12 @@ import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
 
+/**
+ * Peticion de creacion de personaje.
+ *
+ * <p>El arquetipo se selecciona por identificador mediante {@code arquetipoPerfilId};
+ * el nombre visible procede del catalogo de arquetipos y no se persiste en personajes.</p>
+ */
 public record PersonajeCreateRequest(
         @NotBlank @Size(max = 100) String codigo,
         UUID usuarioId,
@@ -23,7 +29,6 @@ public record PersonajeCreateRequest(
         @Size(max = 500) String descripcion,
         String biografia,
         String motivacion,
-        @Size(max = 100) String tipoPersonaje,
         Boolean personalizado,
         UUID arquetipoPerfilId,
         @Size(max = 255) String urlAvatar

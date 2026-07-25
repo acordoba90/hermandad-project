@@ -5,6 +5,9 @@ import com.hermandadproject.gestionpersonajes.model.enums.GenderEnum;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Respuesta publica de personaje sin exponer entidades JPA ni relaciones completas.
+ */
 public record PersonajeResponse(
         UUID id,
         String codigo,
@@ -25,7 +28,6 @@ public record PersonajeResponse(
         String descripcion,
         String biografia,
         String motivacion,
-        String tipoPersonaje,
         Boolean personalizado,
         String urlAvatar,
         Boolean activo,

@@ -19,6 +19,9 @@ import org.hibernate.type.SqlTypes;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Personaje jugable o narrativo asociado a un colectivo y a un rol funcional.
+ */
 @Entity
 @Table(name = "personajes")
 public class PersonajeEntity {
@@ -74,9 +77,6 @@ public class PersonajeEntity {
 
     @Column(columnDefinition = "TEXT")
     private String motivacion;
-
-    @Column(name = "tipo_personaje", length = 100)
-    private String tipoPersonaje;
 
     @Column
     private Boolean personalizado;
@@ -214,14 +214,6 @@ public class PersonajeEntity {
 
     public void setMotivacion(String motivacion) {
         this.motivacion = motivacion;
-    }
-
-    public String getTipoPersonaje() {
-        return tipoPersonaje;
-    }
-
-    public void setTipoPersonaje(String tipoPersonaje) {
-        this.tipoPersonaje = tipoPersonaje;
     }
 
     public Boolean getPersonalizado() {

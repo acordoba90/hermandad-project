@@ -8,6 +8,11 @@ import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
 
+/**
+ * Peticion de actualizacion de personaje.
+ *
+ * <p>El arquetipo del personaje se gestiona desde su perfil asociado.</p>
+ */
 public record PersonajeUpdateRequest(
         UUID usuarioId,
         UUID avatarId,
@@ -22,7 +27,6 @@ public record PersonajeUpdateRequest(
         @Size(max = 500) String descripcion,
         String biografia,
         String motivacion,
-        @Size(max = 100) String tipoPersonaje,
         Boolean personalizado,
         @Size(max = 255) String urlAvatar,
         @NotNull Boolean activo

@@ -45,13 +45,18 @@ public class PersonajeMapper {
         entity.setDescripcion(request.descripcion());
         entity.setBiografia(request.biografia());
         entity.setMotivacion(request.motivacion());
-        entity.setTipoPersonaje(request.tipoPersonaje());
         entity.setPersonalizado(request.personalizado());
         entity.setUrlAvatar(request.urlAvatar());
         entity.setActivo(true);
         return entity;
     }
 
+    /**
+     * Convierte una entidad de personaje en respuesta API sin exponer relaciones JPA completas.
+     *
+     * @param entity entidad persistida
+     * @return respuesta del personaje
+     */
     public PersonajeResponse toResponse(PersonajeEntity entity) {
         ColectivoEntity colectivo = entity.getColectivo();
         RolPersonajeEntity rolPersonaje = entity.getRolPersonaje();
@@ -75,7 +80,6 @@ public class PersonajeMapper {
                 entity.getDescripcion(),
                 entity.getBiografia(),
                 entity.getMotivacion(),
-                entity.getTipoPersonaje(),
                 entity.getPersonalizado(),
                 entity.getUrlAvatar(),
                 entity.getActivo(),
@@ -112,7 +116,6 @@ public class PersonajeMapper {
         entity.setDescripcion(request.descripcion());
         entity.setBiografia(request.biografia());
         entity.setMotivacion(request.motivacion());
-        entity.setTipoPersonaje(request.tipoPersonaje());
         entity.setPersonalizado(request.personalizado());
         entity.setUrlAvatar(request.urlAvatar());
         entity.setActivo(request.activo());
