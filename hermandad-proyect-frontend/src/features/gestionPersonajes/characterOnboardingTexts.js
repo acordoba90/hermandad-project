@@ -28,13 +28,15 @@ export const characterOnboardingTexts = {
     summaryTitle: 'Tu candidato',
     summaryEmpty: 'Selecciona un candidato para revisar aquí su perfil antes de confirmar.',
     confirm: 'Confirmar Hermano Mayor',
-    ready: 'La selección está preparada para conectarse con gestion-personajes.',
+    ready: 'Hermano Mayor seleccionado correctamente.',
+    loadError: 'No se han podido cargar los Hermanos Mayores. Comprueba la conexión e inténtalo de nuevo.',
   },
   creation: {
     title: 'Crea a tu Hermano Mayor',
     subtitle: 'Define su identidad, su trayectoria y la forma en la que liderará la hermandad.',
-    steps: ['Identidad', 'Apariencia', 'Trayectoria', 'Personalidad', 'Revisión'],
+    steps: ['Identidad', 'Apariencia', 'Trayectoria', 'Estilo de liderazgo', 'Revisión'],
     ready: 'Los datos del personaje están listos para enviarse a gestion-personajes.',
+    leadershipLoadError: 'No se han podido cargar los estilos de liderazgo. Inténtalo de nuevo.',
   },
   common: {
     back: 'Volver',

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Alert, Box, Button, Card, CardContent, Step, StepLabel, Stepper, TextField,
   Typography, useMediaQuery,
@@ -11,23 +11,56 @@ import SelectorAvatar from './SelectorAvatar';
 import SelectorTipoPersonaje from './SelectorTipoPersonaje';
 import ResumenHermanoMayor from './ResumenHermanoMayor';
 import {
-  CHARACTER_FIELD_LIMITS, CREATION_STEPS, INITIAL_CHARACTER_FORM, MAX_TRAITS,
+  CHARACTER_FIELD_LIMITS, CREATION_STEPS, INITIAL_CHARACTER_FORM,
 } from '../hermanoMayorConstants';
 import {
   buildCustomCharacter, validateCustomCharacter, validateIdentity,
 } from '../characterOnboardingFunctions';
 import { characterOnboardingTexts as texts } from '../characterOnboardingTexts';
 import { appStyles } from '../../../styles/appStyles';
+import { useAppSession } from '../../../context/useAppSession';
 
 /** Formulario progresivo que prepara un Hermano Mayor personalizado solo en memoria. */
 const CreacionHermanoMayor = ({ onConfirmar, onVolver, onNotify }) => {
   const styles = appStyles.characterOnboarding;
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { catalogos, cargarArquetipos } = useAppSession();
   const [activeStep, setActiveStep] = useState(CREATION_STEPS.IDENTITY);
   const [form, setForm] = useState(INITIAL_CHARACTER_FORM);
   const [errors, setErrors] = useState({});
-  const personaje = useMemo(() => buildCustomCharacter(form), [form]);
+  const [loadingArquetipos, setLoadingArquetipos] = useState(catalogos.arquetipos === null);
+  const [arquetiposError, setArquetiposError] = useState('');
+  const arquetipos = catalogos.arquetipos || [];
+  const arquetipoSeleccionado = arquetipos.find(
+    (arquetipo) => arquetipo.id === form.arquetipoPerfilId,
+  );
+  const personaje = useMemo(
+    () => buildCustomCharacter(form, arquetipoSeleccionado),
+    [form, arquetipoSeleccionado],
+  );
+
+  useEffect(() => {
+    let active = true;
+    cargarArquetipos()
+      .catch(() => {
+        if (active) setArquetiposError(texts.creation.leadershipLoadError);
+      })
+      .finally(() => {
+        if (active) setLoadingArquetipos(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [cargarArquetipos]);
+
+  const retryArquetipos = () => {
+    setLoadingArquetipos(true);
+    setArquetiposError('');
+    cargarArquetipos({ forzar: true })
+      .catch(() => setArquetiposError(texts.creation.leadershipLoadError))
+      .finally(() => setLoadingArquetipos(false));
+  };
 
   const updateField = (event) => {
     const { name, value } = event.target;
@@ -40,27 +73,14 @@ const CreacionHermanoMayor = ({ onConfirmar, onVolver, onNotify }) => {
     setErrors((current) => ({ ...current, [name]: undefined }));
   };
 
-  const toggleTrait = (trait) => {
-    setForm((current) => {
-      const selected = current.rasgos.includes(trait);
-      if (!selected && current.rasgos.length >= MAX_TRAITS) return current;
-      return {
-        ...current,
-        rasgos: selected
-          ? current.rasgos.filter((item) => item !== trait)
-          : [...current.rasgos, trait],
-      };
-    });
-  };
-
   const validateCurrentStep = () => {
     let nextErrors = {};
     if (activeStep === CREATION_STEPS.IDENTITY) nextErrors = validateIdentity(form);
     if (activeStep === CREATION_STEPS.APPEARANCE && !form.avatarId) {
       nextErrors.avatarId = 'Selecciona una apariencia.';
     }
-    if (activeStep === CREATION_STEPS.PERSONALITY && !form.tipoPersonaje) {
-      nextErrors.tipoPersonaje = 'Selecciona un tipo de liderazgo.';
+    if (activeStep === CREATION_STEPS.PERSONALITY && !form.arquetipoPerfilId) {
+      nextErrors.arquetipoPerfilId = 'Selecciona un estilo de liderazgo.';
     }
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -84,7 +104,6 @@ const CreacionHermanoMayor = ({ onConfirmar, onVolver, onNotify }) => {
       return;
     }
     onConfirmar(personaje);
-    // TODO: crear el personaje mediante gestion-personajes cuando se cierre el contrato REST definitivo.
     onNotify(texts.creation.ready);
   };
 
@@ -184,11 +203,13 @@ const CreacionHermanoMayor = ({ onConfirmar, onVolver, onNotify }) => {
     if (activeStep === CREATION_STEPS.PERSONALITY) {
       return (
         <SelectorTipoPersonaje
-          tipo={form.tipoPersonaje}
-          rasgos={form.rasgos}
-          onTipoChange={(value) => updateValue('tipoPersonaje', value)}
-          onRasgoToggle={toggleTrait}
-          error={errors.tipoPersonaje}
+          arquetipos={arquetipos}
+          value={form.arquetipoPerfilId}
+          onChange={(value) => updateValue('arquetipoPerfilId', value)}
+          loading={loadingArquetipos}
+          loadError={arquetiposError}
+          onRetry={retryArquetipos}
+          error={errors.arquetipoPerfilId}
         />
       );
     }

@@ -31,7 +31,7 @@ export const mappedService = {
     personajes: {
       basePath: PersonajeController,
       crearHermanoMayor: PersonajeController,
-      preestablecidosJuntaGobierno: `${PersonajeController}/colectivo/codigo/JUNTA_GOBIERNO`,
+      preestablecidosJuntaGobierno: `${PersonajeController}/predefinidos/hermanos-mayores`,
     },
     arquetipos: {
       activos: ArquetipoPerfilController,

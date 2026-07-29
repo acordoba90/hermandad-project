@@ -15,14 +15,14 @@ export const validateIdentity = (form) => {
 export const validateCustomCharacter = (form) => ({
   ...validateIdentity(form),
   ...(!form.avatarId ? { avatarId: 'Selecciona una apariencia.' } : {}),
-  ...(!form.tipoPersonaje ? { tipoPersonaje: 'Selecciona un tipo de liderazgo.' } : {}),
+  ...(!form.arquetipoPerfilId ? { arquetipoPerfilId: 'Selecciona un estilo de liderazgo.' } : {}),
 });
 
 /**
  * Construye en memoria el futuro contrato de creación sin inventar identificadores
  * ni realizar ninguna operación de persistencia.
  */
-export const buildCustomCharacter = (form) => ({
+export const buildCustomCharacter = (form, arquetipo) => ({
   id: null,
   usuarioId: null,
   avatarId: form.avatarId,
@@ -32,8 +32,19 @@ export const buildCustomCharacter = (form) => ({
   profesion: form.profesion.trim(),
   biografia: form.biografia.trim(),
   motivacion: form.motivacion.trim(),
-  tipoPersonaje: form.tipoPersonaje,
-  rasgos: [...form.rasgos],
+  arquetipoPerfilId: form.arquetipoPerfilId,
+  perfil: arquetipo ? {
+    arquetipoOrigenId: arquetipo.id,
+    arquetipoOrigenCodigo: arquetipo.codigo,
+    arquetipoOrigenNombre: arquetipo.nombre,
+    arquetipoOrigenDescripcion: arquetipo.descripcion,
+  } : null,
   personalizado: true,
   fechaCreacion: null,
+});
+
+/** Obtiene la información visible del estilo de liderazgo de un personaje. */
+export const getLeadershipStyle = (personaje) => ({
+  nombre: personaje?.perfil?.arquetipoOrigenNombre || 'Sin estilo definido',
+  descripcion: personaje?.perfil?.arquetipoOrigenDescripcion || '',
 });

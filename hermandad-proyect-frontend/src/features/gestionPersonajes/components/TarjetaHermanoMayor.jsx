@@ -1,57 +1,77 @@
-import { Box, Button, Card, CardContent, Chip, Typography } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CharacterAvatar from './CharacterAvatar';
+import { useState } from 'react';
+import { Box, Card } from '@mui/material';
+import HistoriaTarjetaPersonaje from './HistoriaTarjetaPersonaje';
+import PerfilTarjetaPersonaje from './PerfilTarjetaPersonaje';
+import PresentacionTarjetaPersonaje from './PresentacionTarjetaPersonaje';
+import { CHARACTER_CARD_FACES } from '../hermanoMayorConstants';
 import { appStyles } from '../../../styles/appStyles';
-import { characterOnboardingTexts as texts } from '../characterOnboardingTexts';
 
-/**
- * Tarjeta reutilizable de candidato.
- * @param {{ personaje: object, seleccionado: boolean, onSeleccionar: Function }} props
- */
+const FACE_ORDER = [
+  CHARACTER_CARD_FACES.PRESENTATION,
+  CHARACTER_CARD_FACES.STORY,
+  CHARACTER_CARD_FACES.PROFILE,
+];
+
+/** Tarjeta navegable con presentación, historia y habilidades del Hermano Mayor. */
 const TarjetaHermanoMayor = ({ personaje, seleccionado, onSeleccionar }) => {
   const styles = appStyles.characterOnboarding;
+  const [activeFace, setActiveFace] = useState(CHARACTER_CARD_FACES.PRESENTATION);
+  const activeIndex = FACE_ORDER.indexOf(activeFace);
+
+  const faceStyles = (face) => {
+    const faceIndex = FACE_ORDER.indexOf(face);
+    if (face === activeFace) return [styles.cardFace, styles.cardFaceActive];
+    return [
+      styles.cardFace,
+      faceIndex < activeIndex ? styles.cardFaceBefore : styles.cardFaceAfter,
+    ];
+  };
 
   return (
-    <Card sx={[styles.candidateCard, seleccionado && styles.candidateCardSelected]}>
-      <Box sx={styles.candidatePortrait}>
-        <CharacterAvatar
-          avatarId={personaje.avatarId}
-          nombre={personaje.nombre}
-          apellidos={personaje.apellidos}
-          large
-        />
-        <Chip label={personaje.tipoPersonaje} sx={styles.candidateType} />
-        {seleccionado && (
-          <Box sx={styles.selectedBadge}>
-            <CheckCircleIcon fontSize="small" />
-            <Typography variant="caption" fontWeight={700}>Seleccionado</Typography>
-          </Box>
-        )}
-      </Box>
-      <CardContent sx={styles.candidateContent}>
-        <Box>
-          <Typography component="h2" variant="h5">{personaje.nombre} {personaje.apellidos}</Typography>
-          <Typography color="secondary.main">{personaje.edad} años · {personaje.profesion}</Typography>
-        </Box>
-        <Typography variant="body2" color="text.secondary">{personaje.biografia}</Typography>
-        <Box>
-          <Typography variant="overline" color="secondary.main">Motivación</Typography>
-          <Typography variant="body2" color="text.secondary">{personaje.motivacion}</Typography>
-        </Box>
-        <Box sx={styles.traits}>
-          {personaje.rasgos.map((rasgo) => <Chip key={rasgo} label={rasgo} size="small" variant="outlined" />)}
-        </Box>
-        <Button
-          fullWidth
-          variant={seleccionado ? 'contained' : 'outlined'}
-          color={seleccionado ? 'secondary' : 'primary'}
-          startIcon={seleccionado ? <CheckCircleIcon /> : undefined}
-          aria-pressed={seleccionado}
-          onClick={() => onSeleccionar(personaje)}
+    <Card
+      component="article"
+      aria-label={`Hermano Mayor ${personaje.nombre} ${personaje.apellidos || ''}`.trim()}
+      sx={[styles.candidateCard, seleccionado && styles.candidateCardSelected]}
+    >
+      <Box sx={styles.cardStage}>
+        <Box
+          sx={faceStyles(CHARACTER_CARD_FACES.PRESENTATION)}
+          aria-hidden={activeFace !== CHARACTER_CARD_FACES.PRESENTATION}
+          inert={activeFace !== CHARACTER_CARD_FACES.PRESENTATION ? '' : undefined}
         >
-          {seleccionado ? texts.common.selected : texts.common.select}
-        </Button>
-      </CardContent>
+          <PresentacionTarjetaPersonaje
+            personaje={personaje}
+            seleccionado={seleccionado}
+            onShowStory={() => setActiveFace(CHARACTER_CARD_FACES.STORY)}
+            onShowProfile={() => setActiveFace(CHARACTER_CARD_FACES.PROFILE)}
+          />
+        </Box>
+
+        <Box
+          sx={faceStyles(CHARACTER_CARD_FACES.STORY)}
+          aria-hidden={activeFace !== CHARACTER_CARD_FACES.STORY}
+          inert={activeFace !== CHARACTER_CARD_FACES.STORY ? '' : undefined}
+        >
+          <HistoriaTarjetaPersonaje
+            personaje={personaje}
+            onBack={() => setActiveFace(CHARACTER_CARD_FACES.PRESENTATION)}
+            onShowProfile={() => setActiveFace(CHARACTER_CARD_FACES.PROFILE)}
+          />
+        </Box>
+
+        <Box
+          sx={faceStyles(CHARACTER_CARD_FACES.PROFILE)}
+          aria-hidden={activeFace !== CHARACTER_CARD_FACES.PROFILE}
+          inert={activeFace !== CHARACTER_CARD_FACES.PROFILE ? '' : undefined}
+        >
+          <PerfilTarjetaPersonaje
+            personaje={personaje}
+            seleccionado={seleccionado}
+            onBack={() => setActiveFace(CHARACTER_CARD_FACES.STORY)}
+            onSelect={() => onSeleccionar(personaje)}
+          />
+        </Box>
+      </Box>
     </Card>
   );
 };

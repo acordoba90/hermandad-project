@@ -1,4 +1,4 @@
-import { Alert, Box, ButtonBase, Chip, Typography } from '@mui/material';
+import { Alert, Box, Button, ButtonBase, CircularProgress, Typography } from '@mui/material';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import BalanceIcon from '@mui/icons-material/Balance';
@@ -8,44 +8,83 @@ import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import SavingsIcon from '@mui/icons-material/Savings';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { hermanoMayorTraits, hermanoMayorTypes } from '../hermanoMayorData';
-import { MAX_TRAITS } from '../hermanoMayorConstants';
 import { appStyles } from '../../../styles/appStyles';
 
-const typeIcons = {
-  history: <HistoryEduIcon />,
-  order: <ViewListIcon />,
-  agreement: <BalanceIcon />,
-  renew: <LightbulbIcon />,
-  faith: <AutoAwesomeIcon />,
-  management: <SavingsIcon />,
-  neighborhood: <GroupsIcon />,
-  future: <AccountBalanceIcon />,
+const styleIcons = {
+  CONCILIADOR: <BalanceIcon />,
+  TRADICIONALISTA: <HistoryEduIcon />,
+  RENOVADOR: <LightbulbIcon />,
+  INFLUYENTE: <GroupsIcon />,
+  DEVOTO: <AutoAwesomeIcon />,
+  GESTOR: <SavingsIcon />,
+  POPULAR: <GroupsIcon />,
+  AMBICIOSO: <AccountBalanceIcon />,
+  CONFLICTIVO: <AutoAwesomeIcon />,
+  DISCRETO: <ViewListIcon />,
+  CARISMATICO: <GroupsIcon />,
+  ESTRATEGA: <AccountBalanceIcon />,
 };
 
-/** Selector del arquetipo principal y de un máximo de tres rasgos personales. */
-const SelectorTipoPersonaje = ({ tipo, rasgos, onTipoChange, onRasgoToggle, error }) => {
+/** Selector de estilo de liderazgo respaldado por el catálogo de arquetipos. */
+const SelectorTipoPersonaje = ({
+  arquetipos,
+  value,
+  onChange,
+  loading,
+  loadError,
+  onRetry,
+  error,
+}) => {
   const styles = appStyles.characterOnboarding;
-  const remaining = MAX_TRAITS - rasgos.length;
+
+  if (loading) {
+    return (
+      <Box sx={styles.catalogFeedback} role="status">
+        <CircularProgress color="secondary" />
+        <Typography color="text.secondary">Cargando estilos de liderazgo...</Typography>
+      </Box>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <Alert
+        severity="error"
+        action={<Button color="inherit" onClick={onRetry}>Reintentar</Button>}
+      >
+        {loadError}
+      </Alert>
+    );
+  }
+
+  if (arquetipos.length === 0) {
+    return <Alert severity="warning">No hay estilos de liderazgo disponibles.</Alert>;
+  }
 
   return (
     <Box sx={styles.personalityLayout}>
       <Box>
-        <Typography component="h2" variant="h5" sx={styles.sectionTitle}>Estilo de liderazgo</Typography>
+        <Typography color="text.secondary" sx={styles.leadershipHelp}>
+          El estilo elegido determinará los atributos iniciales del perfil del personaje.
+        </Typography>
         <Box sx={styles.personalityGrid}>
-          {hermanoMayorTypes.map((option) => {
-            const selected = tipo === option.id;
+          {arquetipos.map((arquetipo) => {
+            const selected = value === arquetipo.id;
             return (
               <ButtonBase
-                key={option.id}
+                key={arquetipo.id}
                 aria-pressed={selected}
-                onClick={() => onTipoChange(option.id)}
+                onClick={() => onChange(arquetipo.id)}
                 sx={[styles.personalityOption, selected && styles.compactSelection]}
               >
-                <Box sx={styles.personalityIcon}>{typeIcons[option.icon]}</Box>
+                <Box sx={styles.personalityIcon}>
+                  {styleIcons[arquetipo.codigo] || <AccountBalanceIcon />}
+                </Box>
                 <Box sx={styles.personalityCopy}>
-                  <Typography fontWeight={700}>{option.id}</Typography>
-                  <Typography variant="body2" color="text.secondary">{option.description}</Typography>
+                  <Typography fontWeight={700}>{arquetipo.nombre}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {arquetipo.descripcion}
+                  </Typography>
                 </Box>
                 {selected && <CheckCircleIcon sx={styles.optionCheck} />}
               </ButtonBase>
@@ -53,36 +92,6 @@ const SelectorTipoPersonaje = ({ tipo, rasgos, onTipoChange, onRasgoToggle, erro
           })}
         </Box>
         {error && <Alert severity="error" sx={styles.inlineAlert}>{error}</Alert>}
-      </Box>
-      <Box>
-        <Box sx={styles.traitHeading}>
-          <Box>
-            <Typography component="h2" variant="h5">Rasgos personales</Typography>
-            <Typography color="text.secondary">Escoge hasta tres cualidades que definan su carácter.</Typography>
-          </Box>
-          <Chip
-            label={remaining > 0 ? `${remaining} disponibles` : 'Selección completa'}
-            color={remaining > 0 ? 'default' : 'secondary'}
-          />
-        </Box>
-        <Box sx={styles.traits}>
-          {hermanoMayorTraits.map((trait) => {
-            const selected = rasgos.includes(trait);
-            const disabled = !selected && remaining === 0;
-            return (
-              <Chip
-                key={trait}
-                label={trait}
-                clickable
-                disabled={disabled}
-                color={selected ? 'secondary' : 'default'}
-                variant={selected ? 'filled' : 'outlined'}
-                aria-pressed={selected}
-                onClick={() => onRasgoToggle(trait)}
-              />
-            );
-          })}
-        </Box>
       </Box>
     </Box>
   );
