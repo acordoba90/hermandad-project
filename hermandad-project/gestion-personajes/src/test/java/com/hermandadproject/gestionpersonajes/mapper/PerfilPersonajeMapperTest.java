@@ -14,6 +14,22 @@ public class PerfilPersonajeMapperTest {
     private final PerfilPersonajeMapper mapper = new PerfilPersonajeMapper();
 
     @Test
+    void toResponseIncluyeLaDescripcionDelEstiloDeLiderazgo() {
+        PersonajeEntity personaje = new PersonajeEntity();
+        personaje.setId(UUID.randomUUID());
+        PerfilPersonajeEntity perfil = new PerfilPersonajeEntity();
+        perfil.setId(UUID.randomUUID());
+        perfil.setPersonaje(personaje);
+        perfil.setArquetipoOrigen(arquetipoConciliador());
+
+        var response = mapper.toResponse(perfil);
+
+        assertThat(response.arquetipoOrigenCodigo()).isEqualTo("CONCILIADOR");
+        assertThat(response.arquetipoOrigenNombre()).isEqualTo("Conciliador");
+        assertThat(response.arquetipoOrigenDescripcion()).isEqualTo("Descripcion");
+    }
+
+    @Test
     void crearDesdeArquetipoCopiaTodosLosAtributosBase() {
         PersonajeEntity personaje = new PersonajeEntity();
         personaje.setId(UUID.randomUUID());

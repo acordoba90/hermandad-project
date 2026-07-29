@@ -61,6 +61,7 @@ public class PerfilPersonajeMapper {
                 arquetipo == null ? null : arquetipo.getId(),
                 arquetipo == null ? null : arquetipo.getCodigo(),
                 arquetipo == null ? null : arquetipo.getNombre(),
+                arquetipo == null ? null : arquetipo.getDescripcion(),
                 entity.getNivel(),
                 entity.getExperiencia(),
                 entity.getPuntosDesarrollo(),

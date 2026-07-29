@@ -16,6 +16,7 @@ import com.hermandadproject.gestionpersonajes.service.PerfilPersonajeService;
 import com.hermandadproject.gestionpersonajes.service.RolPersonajeService;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +30,44 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class PersonajeServiceImplTest {
+
+    @Test
+    void findHermanosMayoresPredefinidosAplicaLosCodigosFuncionales() {
+        PersonajeRepository personajeRepository = mock(PersonajeRepository.class);
+        ColectivoRepository colectivoRepository = mock(ColectivoRepository.class);
+        PerfilPersonajeService perfilPersonajeService = mock(PerfilPersonajeService.class);
+        RolPersonajeService rolPersonajeService = mock(RolPersonajeService.class);
+        PersonajeServiceImpl service = service(
+                personajeRepository,
+                colectivoRepository,
+                perfilPersonajeService,
+                rolPersonajeService
+        );
+        ColectivoEntity colectivo = colectivo("JUNTA_GOBIERNO", "Junta de Gobierno", true);
+        RolPersonajeEntity rol = rol(colectivo, "HERMANO_MAYOR", "Hermano Mayor", true);
+        PersonajeEntity personaje = new PersonajeEntity();
+        personaje.setId(UUID.randomUUID());
+        personaje.setColectivo(colectivo);
+        personaje.setRolPersonaje(rol);
+        personaje.setNombre("Carmen");
+        personaje.setPersonalizado(false);
+        personaje.setActivo(true);
+        when(personajeRepository.findPredefinidosByColectivoAndRol("JUNTA_GOBIERNO", "HERMANO_MAYOR"))
+                .thenReturn(List.of(personaje));
+
+        List<PersonajeResponse> response = service.findHermanosMayoresPredefinidos();
+
+        assertThat(response).singleElement().satisfies(item -> {
+            assertThat(item.id()).isEqualTo(personaje.getId());
+            assertThat(item.colectivoCode()).isEqualTo("JUNTA_GOBIERNO");
+            assertThat(item.rolPersonajeCodigo()).isEqualTo("HERMANO_MAYOR");
+            assertThat(item.personalizado()).isFalse();
+        });
+        verify(personajeRepository).findPredefinidosByColectivoAndRol(
+                "JUNTA_GOBIERNO",
+                "HERMANO_MAYOR"
+        );
+    }
 
     @Test
     void createCreaPerfilCuandoRecibeArquetipo() {

@@ -65,6 +65,16 @@ public class PersonajeController {
         return personajeService.findByColectivoCode(colectivoCode);
     }
 
+    /**
+     * Lista los personajes predefinidos que pueden ejercer como Hermano Mayor.
+     *
+     * @return personajes activos de la Junta de Gobierno con rol de Hermano Mayor
+     */
+    @GetMapping("/predefinidos/hermanos-mayores")
+    public List<PersonajeResponse> findHermanosMayoresPredefinidos() {
+        return personajeService.findHermanosMayoresPredefinidos();
+    }
+
     @PutMapping("/{id}")
     public PersonajeResponse update(@PathVariable UUID id, @Valid @RequestBody PersonajeUpdateRequest request) {
         return personajeService.update(id, request);

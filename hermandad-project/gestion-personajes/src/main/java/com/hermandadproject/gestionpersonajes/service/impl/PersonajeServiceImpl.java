@@ -26,6 +26,9 @@ import java.util.UUID;
 @Transactional
 public class PersonajeServiceImpl implements PersonajeService {
 
+    private static final String COLECTIVO_JUNTA_GOBIERNO = "JUNTA_GOBIERNO";
+    private static final String ROL_HERMANO_MAYOR = "HERMANO_MAYOR";
+
     private final PersonajeRepository personajeRepository;
     private final ColectivoRepository colectivoRepository;
     private final PersonajeMapper personajeMapper;
@@ -108,6 +111,18 @@ public class PersonajeServiceImpl implements PersonajeService {
         }
 
         return personajeRepository.findByColectivoCodigoAndActivoTrue(colectivoCode)
+                .stream()
+                .map(personajeMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PersonajeResponse> findHermanosMayoresPredefinidos() {
+        return personajeRepository.findPredefinidosByColectivoAndRol(
+                        COLECTIVO_JUNTA_GOBIERNO,
+                        ROL_HERMANO_MAYOR
+                )
                 .stream()
                 .map(personajeMapper::toResponse)
                 .toList();

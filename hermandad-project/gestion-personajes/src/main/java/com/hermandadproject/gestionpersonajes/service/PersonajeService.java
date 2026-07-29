@@ -20,6 +20,13 @@ public interface PersonajeService {
 
     List<PersonajeResponse> findByColectivoCode(String colectivoCode);
 
+    /**
+     * Obtiene los Hermanos Mayores predefinidos disponibles para la Junta de Gobierno.
+     *
+     * @return personajes que cumplen el colectivo, rol y tipo de personalizacion requeridos
+     */
+    List<PersonajeResponse> findHermanosMayoresPredefinidos();
+
     PersonajeResponse update(UUID id, PersonajeUpdateRequest request);
 
     void delete(UUID id);

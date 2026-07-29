@@ -12,6 +12,7 @@ public record PerfilPersonajeResponse(
         UUID arquetipoOrigenId,
         String arquetipoOrigenCodigo,
         String arquetipoOrigenNombre,
+        String arquetipoOrigenDescripcion,
         Integer nivel,
         Long experiencia,
         Integer puntosDesarrollo,
