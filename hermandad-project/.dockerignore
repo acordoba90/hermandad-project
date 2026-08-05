@@ -2,3 +2,6 @@
 .idea
 **/target
 *.iml
+.env.security
+.env.security.local
+.local-backups

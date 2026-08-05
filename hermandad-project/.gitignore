@@ -37,3 +37,11 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+*.md
+!docs/seguridad/**/*.md
+
+# Secretos locales de la infraestructura de seguridad
+.env.security
+.env.security.local
+.local-backups/
